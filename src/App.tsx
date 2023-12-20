@@ -1,13 +1,7 @@
-import Main from './pages/Main';
-
-import './App.css';
+import { Router } from 'pages';
 
 const App = () => {
-  return (
-    <>
-      <Main />
-    </>
-  );
+  return <Router />;
 };
 
 export default App;
