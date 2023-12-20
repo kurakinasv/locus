@@ -1,0 +1,48 @@
+:root {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  font-family: 'Source Sans 3', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+
+  outline: none;
+  text-decoration: none;
+  border: none;
+  background-color: transparent;
+}
+
+html {
+  width: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 100%;
+  color: $black;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+button,
+a {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+ul,
+li,
+ol {
+  list-style: none;
+}

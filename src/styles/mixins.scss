@@ -1,0 +1,17 @@
+@import './fonts/fonts.scss';
+@import './colors.scss';
+@import './global.scss';
+
+@mixin square($dimension) {
+  width: $dimension;
+  height: $dimension;
+}
+
+@mixin elementText($color: $black) {
+  font-family: 'Avenir Next Cyr';
+  font-size: 14px;
+  font-weight: 700;
+
+  color: $color;
+  text-align: center;
+}
