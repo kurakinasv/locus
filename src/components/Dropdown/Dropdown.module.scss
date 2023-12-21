@@ -1,0 +1,66 @@
+@import 'styles/mixins';
+
+.container {
+  position: relative;
+  width: 240px;
+}
+
+.wrapper {
+  position: relative;
+  height: 40px;
+  width: 240px;
+  padding: 10px;
+
+  border-radius: 6px;
+  background-color: $grey100;
+
+  font-family: 'Avenir Next';
+  font-size: 14px;
+  font-weight: 600;
+  color: $grey400;
+  text-align: left;
+}
+
+.icon {
+  position: absolute;
+  top: 46%;
+  right: 5px;
+  transform: translate3d(-50%, 0, 0);
+}
+
+.content {
+  min-width: 240px;
+  padding: 5px;
+  margin-top: 5px;
+
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+}
+
+.item {
+  padding: 10px;
+
+  font-size: 14px;
+  color: $black;
+
+  border-radius: 6px;
+
+  &:hover {
+    background-color: $grey100;
+    cursor: pointer;
+  }
+
+  &_active {
+    background-color: $turquoise200;
+
+    &:hover {
+      background-color: $turquoise200;
+    }
+  }
+}
+
+.label {
+  font-weight: 400;
+  color: $black;
+}

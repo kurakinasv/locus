@@ -1,0 +1,28 @@
+@import 'styles/mixins';
+
+.logo {
+  display: flex;
+  align-items: center;
+
+  @include disableSelect;
+
+  &__name {
+    font-family: 'Avenir Next', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+
+    &_default {
+      color: $turquoiseMain;
+    }
+
+    &_alt {
+      color: $white;
+    }
+  }
+
+  &__image {
+    @include square(30px);
+    margin-right: 14px;
+    object-fit: contain;
+  }
+}
