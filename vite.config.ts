@@ -5,7 +5,13 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), svgr()],
+  plugins: [
+    react(),
+    tsconfigPaths(),
+    svgr({
+      include: '**/*.svg?react',
+    }),
+  ],
   css: {
     preprocessorOptions: {
       scss: {
