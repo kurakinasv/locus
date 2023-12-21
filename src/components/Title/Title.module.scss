@@ -1,0 +1,21 @@
+@import 'styles/mixins';
+
+.wrapper {
+  font-family: 'Avenir Next';
+  font-weight: 600;
+  color: $black;
+
+  &_h1 {
+    font-size: 20px;
+    text-transform: uppercase;
+  }
+
+  &_h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+  &_modal {
+    font-size: 22px;
+  }
+}

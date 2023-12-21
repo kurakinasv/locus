@@ -1,0 +1,16 @@
+@mixin elementText($color: $black) {
+  font-family: 'Avenir Next';
+  font-size: 14px;
+  font-weight: 700;
+
+  color: $color;
+  text-align: center;
+}
+
+@mixin regularText($color: $black) {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+
+  color: $color;
+}

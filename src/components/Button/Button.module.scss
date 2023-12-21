@@ -1,0 +1,45 @@
+@import 'styles/mixins.scss';
+
+.wrapper {
+  height: 40px;
+  min-width: 120px;
+  padding: 0 20px;
+
+  @include flexCenter;
+
+  background-color: $turquoiseMain;
+  border-radius: 100px;
+
+  @include animate(all);
+
+  &:hover {
+    background-color: $turquoise400;
+  }
+
+  &:disabled {
+    background-color: $grey100;
+    @include disableSelect;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &_stretched {
+    width: 100%;
+  }
+}
+
+.icon {
+  max-width: 24px;
+  max-height: 24px;
+
+  & svg {
+    max-width: 24px;
+    max-height: 24px;
+  }
+}
+
+.label {
+  @include elementText($white);
+}

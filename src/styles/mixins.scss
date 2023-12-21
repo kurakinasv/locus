@@ -1,17 +1,24 @@
 @import './fonts/fonts.scss';
 @import './colors.scss';
 @import './global.scss';
+@import './typography.scss';
 
 @mixin square($dimension) {
   width: $dimension;
   height: $dimension;
 }
 
-@mixin elementText($color: $black) {
-  font-family: 'Avenir Next Cyr';
-  font-size: 14px;
-  font-weight: 700;
+@mixin flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  color: $color;
-  text-align: center;
+@mixin animate($properties, $sec: 0.2s) {
+  transition: $properties $sec ease;
+}
+
+@mixin disableSelect {
+  user-select: none;
+  pointer-events: none;
 }

@@ -1,0 +1,39 @@
+@import 'styles/mixins';
+
+.wrapper {
+  height: 40px;
+  min-width: 240px;
+  width: 100%;
+  padding: 9px 18px;
+
+  border-radius: 6px;
+  outline: 1px solid $turquoise400;
+  background-color: $white;
+
+  @include regularText;
+
+  &::placeholder {
+    font-family: 'Avenir Next', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: $turquoise400;
+  }
+
+  &:focus {
+    outline: 2px solid $turquoise400;
+    background-color: $turquoise100;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $turquoise400;
+  }
+
+  &:disabled {
+    outline: 1px solid $grey400;
+    background-color: $grey100;
+
+    &::placeholder {
+      color: $grey400;
+    }
+  }
+}
