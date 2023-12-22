@@ -5,7 +5,7 @@ import cn from 'classnames';
 import { Logo, Spacing } from 'components';
 import { RouterPaths } from 'config/routes';
 import { sections } from 'config/sidebar';
-import { useScreenType } from 'hooks/useScreenType';
+import { useScreenType, useAuthContext } from 'store';
 
 import { SidebarButton } from './components/SidebarButton';
 
@@ -15,6 +15,7 @@ const Sidebar: FunctionComponent = () => {
   const nav = useNavigate();
   const location = useLocation();
   const screen = useScreenType();
+  const { setIsAuth } = useAuthContext();
 
   const onProfileContainerClick = useCallback(() => {
     nav(RouterPaths.profileSettings);
@@ -27,7 +28,7 @@ const Sidebar: FunctionComponent = () => {
     <div className={cn(s.container, !isDesktop && s.container_mobile)}>
       <div className={s.wrapper}>
         {isDesktop && (
-          <div>
+          <div onClick={() => setIsAuth(false)}>
             <Logo theme="alt" />
             <Spacing size={90} />
           </div>

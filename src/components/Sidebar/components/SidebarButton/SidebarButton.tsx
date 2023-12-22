@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 
 import { Spacing } from 'components';
-import { useScreenType } from 'hooks/useScreenType';
+import { useScreenType } from 'store';
 
 import s from './SidebarButton.module.scss';
 

@@ -3,15 +3,16 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { RouterPaths, routes } from 'config/routes';
 import { Auth, Chores, Expenses, GroupSettings, Main, ProfileSettings, ShoppingLists } from 'pages';
+import { useAuthContext } from 'store';
 
 const Router: FC = () => {
-  const isAuthenticated = true;
+  const { isAuth } = useAuthContext();
   const inGroup = true;
   const groupId = 123;
 
   return (
     <BrowserRouter>
-      {isAuthenticated ? (
+      {isAuth ? (
         <Routes>
           <Route path={RouterPaths.buffer} element={<div>buffer 2</div>} />
           <Route element={<ProfileSettings />} path={RouterPaths.profileSettings} />

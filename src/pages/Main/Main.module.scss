@@ -1,0 +1,36 @@
+@import 'styles/mixins';
+
+.container {
+  display: flex;
+
+  &_mobile {
+    flex-direction: column-reverse;
+
+    .wrapper {
+      justify-content: stretch;
+    }
+
+    .content {
+      max-width: 100%;
+      padding: 30px 12px 120px;
+    }
+  }
+}
+
+.wrapper {
+  width: 100%;
+  padding-left: 308px;
+
+  display: flex;
+  justify-content: center;
+  flex: 1;
+
+  font-family: 'Avenir Next Cyr';
+  font-weight: 600;
+}
+
+.content {
+  max-width: 90%;
+  padding: 60px 50px;
+  flex: 1 1 auto;
+}
