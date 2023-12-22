@@ -1,0 +1,63 @@
+@import 'styles/mixins';
+
+.wrapper {
+  padding: 6px 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+
+  border-radius: 6px;
+  background-color: $lightGrey;
+  cursor: pointer;
+
+  .left {
+    display: flex;
+    align-items: center;
+  }
+
+  &_completed {
+    opacity: 0.5;
+
+    .name {
+      text-decoration: line-through;
+    }
+  }
+
+  .checkbox {
+    &__wrapper {
+      @include square(25px);
+      @include flexCenter();
+
+      background-color: $white;
+      border-radius: 4px;
+      box-shadow: 0 2px 10px $turquoise200;
+
+      @include animate(background-color);
+
+      &:hover {
+        background-color: $turquoise100;
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 2px black;
+      }
+    }
+
+    &__indicator {
+      color: $turquoiseMain;
+    }
+  }
+
+  .name {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .icon {
+    max-width: 32px;
+    max-height: 32px;
+  }
+}

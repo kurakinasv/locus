@@ -1,0 +1,13 @@
+@import 'styles/mixins';
+
+.controls {
+  display: flex;
+
+  &_mobile {
+    flex-wrap: wrap;
+
+    .spacing {
+      width: 100%;
+    }
+  }
+}
