@@ -1,17 +1,18 @@
 import { FC } from 'react';
 
-import { Header, Dropdown, Input, Button, Logo, Spacing, Title } from 'components';
+import { Header, Dropdown, Input, Button, Spacing, Title } from 'components';
 import { mockOptions } from 'config/mock/options';
 import { noop } from 'utils';
 
-// import s from './GroupSettings.module.scss';
+import Icon from 'img/icons/logo-icon-alt.svg?react';
+
+import s from './GroupSettings.module.scss';
 
 const GroupSettings: FC = () => {
   return (
     <div>
-      <div>GroupSettings</div>
+      <Spacing size={30} />
       <Header />
-      <Header title="предусмотрена поддержка" />
       <Spacing size={30} />
       <Dropdown placeholder="Категория" options={mockOptions} />
       <Spacing size={30} />
@@ -22,17 +23,23 @@ const GroupSettings: FC = () => {
       <Title>предусмотрена поддержка</Title>
       <Title size="h2">предусмотрена поддержка</Title>
       <Spacing size={30} />
+      <p>
+        В Avenir Next Cyr предусмотрена поддержка кириллицы,{' '}
+        <a href="#" className={s.baselink}>
+          латиницы
+        </a>{' '}
+        и греческих символов.
+      </p>
+      <Spacing size={10} />
       <Button onClick={noop}>click</Button>
       <Spacing size={10} />
-      <Button onClick={noop} icon={<Logo />}>
+      <Button onClick={noop} icon={<Icon />}>
         click
       </Button>
       <Spacing size={10} />
       <Button onClick={noop} disabled>
         click
       </Button>
-      <Spacing size={10} />
-      <p>В Avenir Next Cyr предусмотрена поддержка кириллицы, латиницы и греческих символов.</p>
     </div>
   );
 };

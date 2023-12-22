@@ -5,6 +5,11 @@
 
   @include flexCenter;
   flex-direction: column;
+
+  @media (max-width: 480px) {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
 
 .wrapper {
@@ -19,6 +24,10 @@
   border-radius: 18px;
   border: 1px solid $turquoise200;
   background: $white;
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
 }
 
 .baselink {

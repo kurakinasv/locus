@@ -1,0 +1,12 @@
+@import 'styles/mixins';
+
+.baselink {
+  color: $purpleMain;
+  text-decoration: underline;
+  opacity: 1;
+  @include animate(opacity);
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
