@@ -1,6 +1,9 @@
 import { FC } from 'react';
 
-import Logo from 'img/icons/logo-icon-alt.svg?react';
+import ChoresIcon from 'img/sidebar/chores.svg?react';
+import ExpensesIcon from 'img/sidebar/expenses.svg?react';
+import ListIcon from 'img/sidebar/list.svg?react';
+import SettingsIcon from 'img/sidebar/settings.svg?react';
 
 import { RouterPaths } from './routes';
 
@@ -14,25 +17,25 @@ type SidebarButtonType = {
 export const sections: SidebarButtonType[] = [
   {
     id: 1,
-    icon: () => <Logo />,
+    icon: () => <ChoresIcon />,
     title: 'Домашние обязанности',
     path: RouterPaths.chores,
   },
   {
     id: 2,
-    icon: () => <Logo />,
+    icon: () => <ExpensesIcon />,
     title: 'Трекер расходов',
     path: RouterPaths.expenses,
   },
   {
     id: 3,
-    icon: () => <Logo />,
+    icon: () => <ListIcon />,
     title: 'Списки покупок',
     path: RouterPaths.shoppingLists,
   },
   {
     id: 4,
-    icon: () => <Logo />,
+    icon: () => <SettingsIcon />,
     title: 'Настройки группы',
     path: RouterPaths.groupSettings,
   },

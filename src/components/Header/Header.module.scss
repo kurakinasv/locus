@@ -10,3 +10,13 @@
   display: flex;
   align-items: center;
 }
+
+.icon {
+  opacity: 1;
+  cursor: pointer;
+  @include animate(opacity);
+
+  &:hover {
+    opacity: 0.7;
+  }
+}

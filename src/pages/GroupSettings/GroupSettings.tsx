@@ -4,7 +4,7 @@ import { Header, Dropdown, Input, Button, Spacing, Title } from 'components';
 import { mockOptions } from 'config/mock/options';
 import { noop } from 'utils';
 
-import Icon from 'img/icons/logo-icon-alt.svg?react';
+import PlusIcon from 'img/icons/plus.svg?react';
 
 import s from './GroupSettings.module.scss';
 
@@ -33,8 +33,8 @@ const GroupSettings: FC = () => {
       <Spacing size={10} />
       <Button onClick={noop}>click</Button>
       <Spacing size={10} />
-      <Button onClick={noop} icon={<Icon />}>
-        click
+      <Button onClick={noop} icon={<PlusIcon />}>
+        Кнопка с иконкой
       </Button>
       <Spacing size={10} />
       <Button onClick={noop} disabled>

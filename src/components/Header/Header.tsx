@@ -1,12 +1,9 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 import { Logo, Spacing, Title } from 'components';
 
-// @ts-ignore
-import LogoDefault from 'img/icons/logo-icon.svg?react';
-// @ts-ignore
-import LogoAlt from 'img/icons/logo-icon-alt.svg?react';
+import NotificationsIcon from 'img/icons/notifications.svg?react';
+import UserIcon from 'img/icons/user.svg?react';
 
 import s from './Header.module.scss';
 
@@ -22,14 +19,14 @@ const Header: FC<Props> = ({ title, hasGroup = false }) => {
       <div className={s.icons}>
         {hasGroup && (
           <>
-            <LogoAlt />
+            <NotificationsIcon className={s.icon} />
             <Spacing size={15} horizontal />
           </>
         )}
-        <LogoDefault />
+        <UserIcon className={s.icon} />
       </div>
     </div>
   );
 };
 
-export default Header;
+export default memo(Header);

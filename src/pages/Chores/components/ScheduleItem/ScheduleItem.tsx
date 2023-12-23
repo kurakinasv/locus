@@ -3,7 +3,7 @@ import cn from 'classnames';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { CheckIcon } from '@radix-ui/react-icons';
 
-import Icon from 'img/icons/logo-icon.svg?react';
+import ChoresIcon from 'img/chores/chores-item.svg?react';
 import { Spacing } from 'components/Spacing';
 
 import s from './ScheduleItem.module.scss';
@@ -38,7 +38,7 @@ const ScheduleItem: FC<ScheduleItemProps> = ({ name, completed = false, hideChec
         )}
         <div className={s.name}>{name}</div>
       </div>
-      <Icon className={s.icon} />
+      <ChoresIcon className={s.icon} />
     </div>
   );
 };
