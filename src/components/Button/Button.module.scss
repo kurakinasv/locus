@@ -1,23 +1,16 @@
 @import 'styles/mixins.scss';
 
 .wrapper {
-  height: 40px;
   min-width: 120px;
   padding: 0 20px;
+  border-radius: 100px;
 
   @include flexCenter;
 
-  background-color: $turquoiseMain;
-  border-radius: 100px;
-
   @include animate(all);
 
-  &:hover {
-    background-color: $turquoise400;
-  }
-
   &:disabled {
-    background-color: $grey100;
+    background-color: $grey300;
     @include disableSelect;
   }
 
@@ -27,6 +20,57 @@
 
   &_stretched {
     width: 100%;
+  }
+
+  &_size {
+    &-s {
+      height: 30px;
+    }
+    &-m {
+      height: 40px;
+    }
+    &-xl {
+      height: 50px;
+
+      .label {
+        font-size: 16px;
+      }
+    }
+  }
+
+  &_theme {
+    &-filled {
+      background-color: $turquoiseMain;
+
+      &:hover {
+        background-color: $turquoise400;
+      }
+
+      .label {
+        @include elementText($white);
+      }
+
+      .icon svg {
+        fill: $white;
+      }
+    }
+
+    &-outlined {
+      border: $turquoiseMain 2px solid;
+      background-color: transparent;
+
+      &:hover {
+        background-color: $turquoise100;
+      }
+
+      .label {
+        @include elementText($turquoiseMain);
+      }
+
+      .icon svg {
+        fill: $turquoiseMain;
+      }
+    }
   }
 }
 
@@ -38,8 +82,4 @@
     max-width: 24px;
     max-height: 24px;
   }
-}
-
-.label {
-  @include elementText($white);
 }
