@@ -1,4 +1,4 @@
 export const mockOptions = [
-  { value: '1', label: 'qwert' },
-  { value: '2', label: 'asdf' },
+  { value: '1', label: 'Первая опция' },
+  { value: '2', label: 'Вторая опция' },
 ];

@@ -17,7 +17,7 @@ const Sidebar: FunctionComponent = () => {
   const screen = useScreenType();
   const { setIsAuth } = useAuthContext();
 
-  const onProfileContainerClick = useCallback(() => {
+  const onProfileClick = useCallback(() => {
     nav(RouterPaths.profileSettings);
   }, []);
 
@@ -51,7 +51,7 @@ const Sidebar: FunctionComponent = () => {
         </div>
       </div>
       {isDesktop && (
-        <div className={s.profile} onClick={onProfileContainerClick}>
+        <div className={s.profile} onClick={onProfileClick}>
           <div className={s.image} />
           <div className={s.wrapper}>
             <div className={s.name}>Светлана Куракина</div>

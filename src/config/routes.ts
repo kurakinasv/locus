@@ -7,7 +7,7 @@ export enum RouterPaths {
   expenses = 'expenses',
   shoppingLists = 'shoppingLists',
   groupSettings = 'groupSettings',
-  profileSettings = 'profileSettings',
+  profileSettings = '/profileSettings',
 }
 
 export const routes = {

@@ -1,6 +1,8 @@
-import { FC, memo } from 'react';
+import { FC, memo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Logo, Spacing, Title } from 'components';
+import { RouterPaths } from 'config/routes';
 
 import NotificationsIcon from 'img/icons/notifications.svg?react';
 import UserIcon from 'img/icons/user.svg?react';
@@ -13,6 +15,12 @@ type Props = {
 };
 
 const Header: FC<Props> = ({ title, hasGroup = false }) => {
+  const nav = useNavigate();
+
+  const onProfileClick = useCallback(() => {
+    nav(RouterPaths.profileSettings);
+  }, []);
+
   return (
     <div className={s.wrapper}>
       {title ? <Title size="h1">{title}</Title> : <Logo />}
@@ -23,7 +31,7 @@ const Header: FC<Props> = ({ title, hasGroup = false }) => {
             <Spacing size={15} horizontal />
           </>
         )}
-        <UserIcon className={s.icon} />
+        <UserIcon className={s.icon} onClick={onProfileClick} />
       </div>
     </div>
   );
