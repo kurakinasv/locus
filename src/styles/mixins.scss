@@ -2,6 +2,7 @@
 @import './colors.scss';
 @import './global.scss';
 @import './typography.scss';
+@import './consts.scss';
 
 @mixin square($dimension) {
   width: $dimension;

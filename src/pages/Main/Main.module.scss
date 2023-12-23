@@ -13,14 +13,14 @@
 
     .content {
       max-width: 100%;
-      padding: 30px 12px 120px;
+      padding: 30px 12px calc(#{$tabbarHeight} + 30px);
     }
   }
 }
 
 .wrapper {
   width: 100%;
-  padding-left: 308px;
+  padding-left: $sidebarWidth;
 
   display: flex;
   justify-content: center;

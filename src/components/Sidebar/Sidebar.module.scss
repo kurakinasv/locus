@@ -14,16 +14,16 @@
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
 
-  width: 308px;
+  width: $sidebarWidth;
   height: 100vh;
   background-color: $turquoiseMain;
 
   position: fixed;
-  z-index: 100;
+  z-index: $sidebarZIndex;
 
   &_mobile {
     width: 100%;
-    height: 90px;
+    height: $tabbarHeight;
     padding: 0 12px;
 
     flex-direction: row;
