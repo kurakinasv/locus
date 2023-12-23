@@ -11,4 +11,8 @@
     width: calc(var(--size) * 1px);
     padding: 0 calc(math.div(#{var(--size)}, 2px));
   }
+
+  &.stretched.vertical {
+    width: 100%;
+  }
 }

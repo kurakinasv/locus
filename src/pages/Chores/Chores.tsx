@@ -2,6 +2,7 @@ import { FC, ReactNode, useMemo } from 'react';
 
 import { tabs } from 'config/chores';
 import { Button, Spacing, Tabs } from 'components';
+import { useScreenType } from 'store';
 import { noop } from 'utils';
 
 import CalendarIcon from 'img/icons/calendar.svg?react';
@@ -11,6 +12,9 @@ import { ChoresTab, Schedule } from './components';
 import s from './Chores.module.scss';
 
 const Chores: FC = () => {
+  const screen = useScreenType();
+  const isDesktop = screen === 'desktop';
+
   const tabsContent: Array<{ value: string; content: ReactNode }> = useMemo(
     () => [
       { content: <Schedule />, value: 'schedule' },
@@ -26,7 +30,7 @@ const Chores: FC = () => {
         <Button icon={<CalendarIcon />} stretched onClick={noop}>
           Запланировать задачу
         </Button>
-        <Spacing size={16} horizontal />
+        <Spacing size={isDesktop ? 16 : 8} horizontal={isDesktop} stretched />
         <Button icon={<PlusIcon />} stretched onClick={noop}>
           Создать задачу
         </Button>

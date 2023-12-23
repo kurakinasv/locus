@@ -7,12 +7,18 @@ type Props = {
   size: number;
   horizontal?: boolean;
   className?: string;
+  stretched?: boolean;
 };
 
-const Spacing: FC<Props> = ({ size, horizontal = false, className = '' }) => {
+const Spacing: FC<Props> = ({ size, horizontal = false, className = '', stretched = false }) => {
   return (
     <div
-      className={cn(s.wrapper, horizontal ? s.horizontal : s.vertical, className)}
+      className={cn(
+        s.wrapper,
+        horizontal ? s.horizontal : s.vertical,
+        stretched && s.stretched,
+        className
+      )}
       style={{ '--size': size } as CSSProperties}
     />
   );

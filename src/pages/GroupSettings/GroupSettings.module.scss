@@ -10,3 +10,15 @@
     opacity: 0.7;
   }
 }
+
+.inputs {
+  display: flex;
+
+  @media (max-width: 480px) {
+    flex-wrap: wrap;
+  }
+
+  .spacing {
+    flex-shrink: 0;
+  }
+}
