@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
 import { Router } from 'pages';
-import { AuthProvider } from 'store';
+
+import 'styles/global.scss';
 
 const App = () => {
   const [isAuth, setIsAuth] = useState(false);

@@ -2,13 +2,13 @@ import { FC } from 'react';
 
 import { Header, Dropdown, Input, Button, Spacing, Title, ButtonTheme } from 'components';
 import { mockOptions } from 'config/mock/options';
+import { useScreenType } from 'store';
+import { SizeEnum } from 'typings/ui';
 import { noop } from 'utils';
 
 import PlusIcon from 'img/icons/plus.svg?react';
 
 import s from './GroupSettings.module.scss';
-import { useScreenType } from 'store';
-import { SizeEnum } from 'typings/ui';
 
 const mockText =
   'Повседневная практика показывает, что новая модель организационной деятельности в значительной степени обуславливает создание форм развития. Повседневная практика показывает, что новая модель организационной деятельности в значительной степени обуславливает создание модели развития. Идейные соображения высшего порядка, а также укрепление и развитие структуры влечет за собой процесс внедрения и модернизации существенных финансовых и административных условий. Повседневная практика показывает, что консультация с широким активом требуют определения и уточнения систем массового участия.';

@@ -1,6 +1,7 @@
 import { FunctionComponent, useCallback } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+
 import cn from 'classnames';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Logo, Spacing } from 'components';
 import { RouterPaths } from 'config/routes';

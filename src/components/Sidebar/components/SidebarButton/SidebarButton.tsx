@@ -1,5 +1,5 @@
-import { FC, PropsWithChildren, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FC, PropsWithChildren } from 'react';
+
 import cn from 'classnames';
 
 import { Spacing } from 'components';

@@ -1,12 +1,13 @@
 import { FC, ReactNode, useMemo } from 'react';
 
-import { tabs } from 'config/chores';
 import { Button, Spacing, Tabs } from 'components';
+import { tabs } from 'config/chores';
 import { useScreenType } from 'store';
 import { noop } from 'utils';
 
 import CalendarIcon from 'img/icons/calendar.svg?react';
 import PlusIcon from 'img/icons/plus.svg?react';
+
 import { ChoresTab, Schedule } from './components';
 
 import s from './Chores.module.scss';

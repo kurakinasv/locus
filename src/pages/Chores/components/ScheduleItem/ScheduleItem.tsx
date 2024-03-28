@@ -1,10 +1,12 @@
 import { FC, memo, useState } from 'react';
-import cn from 'classnames';
+
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { CheckIcon } from '@radix-ui/react-icons';
+import cn from 'classnames';
+
+import { Spacing } from 'components/Spacing';
 
 import ChoresIcon from 'img/chores/chores-item.svg?react';
-import { Spacing } from 'components/Spacing';
 
 import s from './ScheduleItem.module.scss';
 

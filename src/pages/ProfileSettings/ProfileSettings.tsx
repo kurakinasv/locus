@@ -1,7 +1,8 @@
 import { FC, useCallback } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Spacing } from 'components';
+import { Spacing, Button } from 'components';
 
 // import s from './ProfileSettings.module.scss';
 

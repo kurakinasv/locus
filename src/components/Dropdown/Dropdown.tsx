@@ -1,6 +1,7 @@
 import { FC, memo, useState } from 'react';
-import cn from 'classnames';
+
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import cn from 'classnames';
 
 import ShevronIcon from 'img/icons/chevron-icon.svg?react';
 

@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+
 import cn from 'classnames';
 
 import s from './Title.module.scss';
