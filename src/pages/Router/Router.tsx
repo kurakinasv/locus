@@ -43,7 +43,7 @@ const Router: FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={RouterPaths.main} element={<Main />}>
+        <Route element={<Main />}>
           <Route element={<EnterLayout />} errorElement={<div>EnterLayout error</div>}>
             {!isAuth && <Route path={RouterPaths.auth} element={<Auth />} />}
             {isAuth && !inGroup && authNoGroupRoutes}
