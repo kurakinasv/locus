@@ -1,46 +1,61 @@
 export enum RouterPaths {
+  main = '/',
   auth = 'auth',
-  buffer = 'buffer',
   faq = 'faq',
-  main = '/main/:groupId',
+  entry = 'entry',
+  createGroup = 'createGroup',
+  enterGroup = 'enterGroup',
+  group = 'group',
   chores = 'chores',
   expenses = 'expenses',
   shoppingLists = 'shoppingLists',
-  groupSettings = 'groupSettings',
-  profileSettings = '/profileSettings',
+  groupSettings = 'settings',
+  profileSettings = 'profileSettings',
 }
 
-export const routes = {
-  auth: {
-    mask: RouterPaths.auth,
+export const routes: {
+  [key in keyof typeof RouterPaths]: { mask: RouterPaths; full: string };
+} = {
+  main: { mask: RouterPaths.main, full: RouterPaths.main },
+  auth: { mask: RouterPaths.auth, full: `/${RouterPaths.auth}` },
+  faq: {
+    mask: RouterPaths.faq,
+    full: `/${RouterPaths.faq}`,
   },
-  main: {
-    mask: RouterPaths.main,
-    id: (id: number | string) => `/main/${String(id)}`,
+  entry: {
+    mask: RouterPaths.entry,
+    full: `/${RouterPaths.entry}`,
+  },
+  createGroup: {
+    mask: RouterPaths.createGroup,
+    full: `/${RouterPaths.entry}/${RouterPaths.createGroup}`,
+  },
+  enterGroup: {
+    mask: RouterPaths.enterGroup,
+    full: `/${RouterPaths.entry}/${RouterPaths.enterGroup}`,
+  },
+  group: {
+    mask: RouterPaths.group,
+    full: `/${RouterPaths.group}`,
   },
   chores: {
     mask: RouterPaths.chores,
-    id: (id: number | string) => `/main/${String(id)}/chores`,
+    full: `/${RouterPaths.group}/${RouterPaths.chores}`,
   },
   expenses: {
     mask: RouterPaths.expenses,
-    id: (id: number | string) => `/main/${String(id)}/expenses`,
+    full: `/${RouterPaths.group}/${RouterPaths.expenses}`,
   },
   shoppingLists: {
     mask: RouterPaths.shoppingLists,
-    id: (id: number | string) => `/main/${String(id)}/shoppingLists`,
+    full: `/${RouterPaths.group}/${RouterPaths.shoppingLists}`,
   },
   groupSettings: {
     mask: RouterPaths.groupSettings,
-    id: (id: number | string) => `/main/${String(id)}/groupSettings`,
+    full: `/${RouterPaths.group}/${RouterPaths.groupSettings}`,
   },
   profileSettings: {
     mask: RouterPaths.profileSettings,
-  },
-  buffer: {
-    mask: RouterPaths.buffer,
-  },
-  faq: {
-    mask: RouterPaths.faq,
+    full: `/${RouterPaths.profileSettings}`,
   },
 };

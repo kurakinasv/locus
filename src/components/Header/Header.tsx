@@ -3,7 +3,7 @@ import { FC, memo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Logo, Spacing, Title } from 'components';
-import { RouterPaths } from 'config/routes';
+import { routes } from 'config/routes';
 
 import NotificationsIcon from 'img/icons/notifications.svg?react';
 import UserIcon from 'img/icons/user.svg?react';
@@ -19,7 +19,7 @@ const Header: FC<Props> = ({ title, hasGroup = false }) => {
   const nav = useNavigate();
 
   const onProfileClick = useCallback(() => {
-    nav(RouterPaths.profileSettings);
+    nav(routes.profileSettings.full);
   }, []);
 
   return (

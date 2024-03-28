@@ -1,47 +1,73 @@
 import { FC } from 'react';
+
+import { observer } from 'mobx-react-lite';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-import { RouterPaths, routes } from 'config/routes';
-import { Auth, Chores, Expenses, GroupSettings, Main, ProfileSettings, ShoppingLists } from 'pages';
-import { useAuthContext } from 'store';
+import { EnterLayout } from 'components/layout/EnterLayout';
+import { GroupLayout } from 'components/layout/GroupLayout';
+import { RouterPaths } from 'config/routes';
+import { Auth } from 'pages/Auth';
+import { Chores } from 'pages/Chores';
+import { CreateGroup } from 'pages/CreateGroup';
+import { EnterGroup } from 'pages/EnterGroup';
+import { Entry } from 'pages/Entry';
+import { Expenses } from 'pages/Expenses';
+import { Faq } from 'pages/Faq';
+import { GroupSettings } from 'pages/GroupSettings';
+import { Main } from 'pages/Main';
+import { ProfileSettings } from 'pages/ProfileSettings';
+import { ShoppingLists } from 'pages/ShoppingLists';
+import { useUserStore } from 'store/RootStore/hooks';
 
 const Router: FC = () => {
-  const { isAuth } = useAuthContext();
-  const inGroup = true;
-  const groupId = 123;
+  const { isAuth, inGroup } = useUserStore();
+
+  const authNoGroupRoutes = (
+    <>
+      <Route path={RouterPaths.entry} element={<Entry />} />
+      <Route path={`${RouterPaths.entry}/${RouterPaths.createGroup}`} element={<CreateGroup />} />
+      <Route path={`${RouterPaths.entry}/${RouterPaths.enterGroup}`} element={<EnterGroup />} />
+    </>
+  );
+
+  const inGroupRoutes = (
+    <>
+      <Route path={RouterPaths.chores} element={<Chores />} />
+      <Route path={RouterPaths.expenses} element={<Expenses />} />
+      <Route path={RouterPaths.shoppingLists} element={<ShoppingLists />} />
+      <Route path={RouterPaths.groupSettings} element={<GroupSettings />} />
+      <Route index element={<Navigate to={RouterPaths.chores} replace />} />
+    </>
+  );
 
   return (
     <BrowserRouter>
-      {isAuth ? (
-        <Routes>
-          <Route path={RouterPaths.buffer} element={<div>buffer 2</div>} />
-          <Route element={<ProfileSettings />} path={RouterPaths.profileSettings} />
-          <Route element={<div>faq</div>} path={RouterPaths.faq} />
-          {inGroup && (
-            <Route path={RouterPaths.main} element={<Main />}>
-              <Route element={<Chores />} path={RouterPaths.chores} />
-              <Route element={<Expenses />} path={RouterPaths.expenses} />
-              <Route element={<ShoppingLists />} path={RouterPaths.shoppingLists} />
-              <Route element={<GroupSettings />} path={RouterPaths.groupSettings} />
-              <Route index element={<Navigate to={RouterPaths.chores} replace />} />
+      <Routes>
+        <Route path={RouterPaths.main} element={<Main />}>
+          <Route element={<EnterLayout />} errorElement={<div>EnterLayout error</div>}>
+            {!isAuth && <Route path={RouterPaths.auth} element={<Auth />} />}
+            {isAuth && !inGroup && authNoGroupRoutes}
+            {isAuth && <Route path={RouterPaths.profileSettings} element={<ProfileSettings />} />}
+            <Route path={RouterPaths.faq} element={<Faq />} />
+          </Route>
+          {isAuth && inGroup && (
+            <Route path={RouterPaths.group} element={<GroupLayout />}>
+              {inGroupRoutes}
             </Route>
           )}
-          <Route
-            path="*"
-            element={
-              <Navigate to={inGroup ? routes.main.id(groupId) : RouterPaths.buffer} replace />
-            }
-          />
-        </Routes>
-      ) : (
-        <Routes>
-          <Route element={<Auth />} path={RouterPaths.auth} />
-          <Route element={<div>faq</div>} path={RouterPaths.faq} />
-          <Route path="*" element={<Navigate to={RouterPaths.auth} replace />} />
-        </Routes>
-      )}
+        </Route>
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to={!isAuth ? RouterPaths.auth : !inGroup ? RouterPaths.entry : RouterPaths.group}
+              replace
+            />
+          }
+        />
+      </Routes>
     </BrowserRouter>
   );
 };
 
-export default Router;
+export default observer(Router);

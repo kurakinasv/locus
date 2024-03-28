@@ -6,7 +6,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Logo, Spacing } from 'components';
 import { RouterPaths } from 'config/routes';
 import { sections } from 'config/sidebar';
-import { useScreenType, useAuthContext } from 'store';
+import { useScreenType } from 'store';
+import { useUserStore } from 'store/RootStore/hooks';
 
 import { SidebarButton } from './components/SidebarButton';
 
@@ -16,7 +17,7 @@ const Sidebar: FunctionComponent = () => {
   const nav = useNavigate();
   const location = useLocation();
   const screen = useScreenType();
-  const { setIsAuth } = useAuthContext();
+  const { logout } = useUserStore();
 
   const onProfileClick = useCallback(() => {
     nav(RouterPaths.profileSettings);
@@ -29,14 +30,14 @@ const Sidebar: FunctionComponent = () => {
     <div className={cn(s.container, !isDesktop && s.container_mobile)}>
       <div className={s.wrapper}>
         {isDesktop && (
-          <div onClick={() => setIsAuth(false)}>
+          <div onClick={logout}>
             <Logo theme="alt" />
             <Spacing size={90} />
           </div>
         )}
         <div className={s.buttonsList}>
           {sections.map((btn) => (
-            <div>
+            <div key={btn.id}>
               <Spacing size={10} horizontal={!isDesktop} />
               <SidebarButton
                 key={btn.id}

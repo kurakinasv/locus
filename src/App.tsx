@@ -1,16 +1,13 @@
-import { useState } from 'react';
-
 import { Router } from 'pages';
+import RootStoreProvider from 'store/RootStore/context';
 
 import 'styles/global.scss';
 
 const App = () => {
-  const [isAuth, setIsAuth] = useState(false);
-
   return (
-    <AuthProvider value={{ isAuth, setIsAuth }}>
+    <RootStoreProvider>
       <Router />
-    </AuthProvider>
+    </RootStoreProvider>
   );
 };
 

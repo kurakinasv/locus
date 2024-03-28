@@ -1,0 +1,13 @@
+@import 'styles/mixins';
+
+.container {
+  padding-top: 5rem;
+
+  @include flexCenter;
+  flex-direction: column;
+
+  @media (max-width: 480px) {
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+  }
+}

@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren } from 'react';
 
 import cn from 'classnames';
+import { NavLink } from 'react-router-dom';
 
 import { Spacing } from 'components';
 import { useScreenType } from 'store';
@@ -19,21 +20,16 @@ const SidebarButton: FC<PropsWithChildren<Props>> = ({
   path,
   withText = true,
   children,
-  isActive = false,
 }) => {
-  const nav = useNavigate();
-
   const screen = useScreenType();
   const isMobile = screen === 'mobile';
 
-  const onClick = useCallback(() => {
-    nav(path);
-  }, []);
-
   return (
-    <div
-      className={cn(s.wrapper, isActive && s.active, isMobile && s.wrapper_mobile)}
-      onClick={onClick}
+    <NavLink
+      to={path}
+      className={({ isActive }) =>
+        cn(s.wrapper, isActive && s.active, isMobile && s.wrapper_mobile)
+      }
     >
       <SidebarIcon className={s.image} />
       {withText && (
@@ -42,7 +38,7 @@ const SidebarButton: FC<PropsWithChildren<Props>> = ({
           <div className={s.label}>{children}</div>
         </>
       )}
-    </div>
+    </NavLink>
   );
 };
 
