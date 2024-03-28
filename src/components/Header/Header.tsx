@@ -29,7 +29,7 @@ const Header: FC<Props> = ({ title, hasGroup = false }) => {
         {hasGroup && (
           <>
             <NotificationsIcon className={s.icon} />
-            <Spacing size={15} horizontal />
+            <Spacing size={1.5} horizontal />
           </>
         )}
         <UserIcon className={s.icon} onClick={onProfileClick} />

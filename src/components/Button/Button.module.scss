@@ -1,9 +1,9 @@
 @import 'styles/mixins.scss';
 
 .wrapper {
-  min-width: 120px;
-  padding: 0 20px;
-  border-radius: 100px;
+  min-width: 12rem;
+  padding: 0 2rem;
+  border-radius: 10rem;
 
   @include flexCenter;
 
@@ -20,22 +20,6 @@
 
   &_stretched {
     width: 100%;
-  }
-
-  &_size {
-    &-s {
-      height: 30px;
-    }
-    &-m {
-      height: 40px;
-    }
-    &-xl {
-      height: 50px;
-
-      .label {
-        font-size: 16px;
-      }
-    }
   }
 
   &_theme {
@@ -75,11 +59,33 @@
 }
 
 .icon {
-  max-width: 24px;
-  max-height: 24px;
+  max-width: 2.4rem;
+  max-height: 2.4rem;
 
   & svg {
-    max-width: 24px;
-    max-height: 24px;
+    max-width: 2.4rem;
+    max-height: 2.4rem;
+  }
+}
+
+.wrapper_size {
+  &-s {
+    height: 3rem;
+
+    .label {
+      font-size: 1.2rem;
+    }
+  }
+
+  &-m {
+    height: 4rem;
+  }
+
+  &-xl {
+    height: 5rem;
+
+    .label {
+      font-size: 1.8rem;
+    }
   }
 }

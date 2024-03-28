@@ -27,18 +27,18 @@ const Auth: FC = () => {
     <>
       <div className={s.wrapper}>
         <Title size="modal">{hasAccount ? 'Вход' : 'Регистрация'}</Title>
-        <Spacing size={45} />
+        <Spacing size={4.5} />
         {currentFields.map((field, i) => (
           <React.Fragment key={i}>
             <Input placeholder={field} />
-            {i !== currentFields.length - 1 && <Spacing size={15} />}
+            {i !== currentFields.length - 1 && <Spacing size={1.5} />}
           </React.Fragment>
         ))}
-        <Spacing size={40} />
+        <Spacing size={4} />
         <Button stretched onClick={login}>
           {hasAccount ? 'Войти' : 'Зарегистрироваться'}
         </Button>
-        <Spacing size={10} />
+        <Spacing size={1} />
         <div>
           {hasAccount ? 'Еще не зарегистрированы?' : 'Уже есть аккаунт?'}{' '}
           <button className={s.baselink} onClick={() => setHasAccount((v) => !v)}>
@@ -46,6 +46,7 @@ const Auth: FC = () => {
           </button>
         </div>
       </div>
+      <Spacing size={4} />
       <Button onClick={onClick} theme={ButtonTheme.outlined}>
         FAQ
       </Button>

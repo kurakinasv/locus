@@ -11,6 +11,7 @@ import s from './Button.module.scss';
 
 type Props = {
   children?: ReactNode;
+  className?: string;
   icon?: ReactNode;
   disabled?: boolean;
   loading?: boolean;
@@ -22,6 +23,7 @@ type Props = {
 
 const Button: FC<Props> = ({
   children,
+  className,
   icon,
   disabled,
   stretched,
@@ -35,13 +37,14 @@ const Button: FC<Props> = ({
         s.wrapper,
         stretched && s.wrapper_stretched,
         s[`wrapper_size-${size}`],
-        s[`wrapper_theme-${theme}`]
+        s[`wrapper_theme-${theme}`],
+        className
       )}
       disabled={disabled}
       onClick={onClick}
     >
       {icon && <div className={s.icon}>{icon}</div>}
-      {icon && children && <Spacing size={8} horizontal />}
+      {icon && children && <Spacing horizontal />}
       <div className={s.label}>{children}</div>
     </button>
   );

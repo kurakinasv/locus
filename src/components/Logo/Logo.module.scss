@@ -8,7 +8,7 @@
 
   &__name {
     font-family: 'Avenir Next Cyr', sans-serif;
-    font-size: 22px;
+    font-size: 2.2rem;
     font-weight: 900;
 
     &_default {
@@ -21,8 +21,8 @@
   }
 
   &__image {
-    @include square(30px);
-    margin-right: 14px;
+    @include square(3rem);
+    margin-right: 1.4rem;
     object-fit: contain;
   }
 }

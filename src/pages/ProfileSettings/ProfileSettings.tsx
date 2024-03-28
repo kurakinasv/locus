@@ -19,7 +19,9 @@ const ProfileSettings: FC = () => {
   return (
     <div>
       <div>ProfileSettings</div>
+      <Spacing size={1} />
       <Button onClick={logout}>Logout</Button>
+      <Spacing size={1} />
       <Button onClick={onClick}>Назад</Button>
     </div>
   );

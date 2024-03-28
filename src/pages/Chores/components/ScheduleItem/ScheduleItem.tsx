@@ -35,7 +35,7 @@ const ScheduleItem: FC<ScheduleItemProps> = ({ name, completed = false, hideChec
                 </Checkbox.Indicator>
               </Checkbox.Root>
             </div>
-            <Spacing size={10} horizontal />
+            <Spacing size={1} horizontal />
           </>
         )}
         <div className={s.name}>{name}</div>

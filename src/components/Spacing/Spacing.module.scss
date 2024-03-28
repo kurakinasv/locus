@@ -3,13 +3,13 @@
 
 .wrapper {
   &.vertical {
-    height: calc(var(--size) * 1px);
-    padding: calc(math.div(#{var(--size)}, 2px)) 0;
+    height: calc(var(--size) * 1rem);
+    padding: calc(var(--size) / 2rem) 0;
   }
 
   &.horizontal {
-    width: calc(var(--size) * 1px);
-    padding: 0 calc(math.div(#{var(--size)}, 2px));
+    width: calc(var(--size) * 1rem);
+    padding: 0 calc(var(--size) / 2rem);
   }
 
   &.stretched.vertical {

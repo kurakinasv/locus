@@ -34,7 +34,7 @@ const SidebarButton: FC<PropsWithChildren<Props>> = ({
       <SidebarIcon className={s.image} />
       {withText && (
         <>
-          <Spacing size={8} horizontal />
+          <Spacing horizontal />
           <div className={s.label}>{children}</div>
         </>
       )}

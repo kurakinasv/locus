@@ -26,17 +26,17 @@ const Chores: FC = () => {
 
   return (
     <div>
-      <Spacing size={50} />
+      <Spacing size={5} />
       <div className={s.buttons}>
         <Button icon={<CalendarIcon />} stretched onClick={noop}>
           Запланировать задачу
         </Button>
-        <Spacing size={isDesktop ? 16 : 8} horizontal={isDesktop} stretched />
+        <Spacing size={isDesktop ? 1.6 : 0.8} horizontal={isDesktop} stretched />
         <Button icon={<PlusIcon />} stretched onClick={noop}>
           Создать задачу
         </Button>
       </div>
-      <Spacing size={50} />
+      <Spacing size={5} />
       <div className={s.tabsWrapper}>
         <Tabs tabOptions={tabs} tabsContent={tabsContent} />
       </div>

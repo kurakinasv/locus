@@ -18,17 +18,17 @@ const ChoresTab: FC = () => {
     <div>
       <div className={cn(s.controls, isMobile && s.controls_mobile)}>
         <Input placeholder="Поиск по названию" />
-        <Spacing size={16} horizontal={!isMobile} className={s.spacing} />
+        <Spacing size={1.6} horizontal={!isMobile} className={s.spacing} />
         <Dropdown options={mockOptions} placeholder="Категория" />
       </div>
 
-      <Spacing size={26} />
+      <Spacing size={2.6} />
       <ScheduleItem name="Помыть посуду" hideCheckbox />
-      <Spacing size={10} />
+      <Spacing size={1} />
       <ScheduleItem name="Помыть посуду" hideCheckbox />
-      <Spacing size={10} />
+      <Spacing size={1} />
       <ScheduleItem name="Помыть посуду" hideCheckbox />
-      <Spacing size={10} />
+      <Spacing size={1} />
       <ScheduleItem name="Помыть посуду" hideCheckbox />
     </div>
   );

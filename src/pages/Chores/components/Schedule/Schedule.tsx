@@ -22,24 +22,24 @@ const Schedule: FC = () => {
         <Dropdown options={mockOptions} placeholder="Выберите неделю" />
       </div>
 
-      <Spacing size={26} />
+      <Spacing size={2.6} />
       <Title size="h2">Сегодня, 16 декабря</Title>
-      <Spacing size={10} />
+      <Spacing size={1} />
       <ScheduleItem name="Помыть посуду" completed={false} />
-      <Spacing size={10} />
+      <Spacing size={1} />
       <ScheduleItem name="Помыть посуду" completed={false} />
 
-      <Spacing size={20} />
+      <Spacing size={2} />
       <Title size="h2">Сегодня, 16 декабря</Title>
-      <Spacing size={10} />
+      <Spacing size={1} />
       <ScheduleItem name="Помыть посуду" completed={false} />
-      <Spacing size={10} />
+      <Spacing size={1} />
       <ScheduleItem name="Помыть посуду" completed />
-      <Spacing size={10} />
+      <Spacing size={1} />
       <ScheduleItem name="Помыть посуду" completed />
-      <Spacing size={10} />
+      <Spacing size={1} />
       <ScheduleItem name="Помыть посуду" completed />
-      <Spacing size={10} />
+      <Spacing size={1} />
       <ScheduleItem name="Помыть посуду" completed />
     </div>
   );

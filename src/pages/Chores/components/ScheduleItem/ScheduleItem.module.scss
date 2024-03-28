@@ -1,14 +1,14 @@
 @import 'styles/mixins';
 
 .wrapper {
-  padding: 6px 20px;
+  padding: 0.6rem 2rem;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
 
-  border-radius: 6px;
+  border-radius: 0.6rem;
   background-color: $lightGrey;
   cursor: pointer;
 
@@ -27,11 +27,11 @@
 
   .checkbox {
     &__wrapper {
-      @include square(25px);
+      @include square(2.5rem);
       @include flexCenter();
 
       background-color: $white;
-      border-radius: 4px;
+      border-radius: 0.4rem;
       box-shadow: 0 2px 10px $turquoise200;
 
       @include animate(background-color);
@@ -52,12 +52,12 @@
 
   .name {
     font-family: 'Source Sans 3', sans-serif;
-    font-size: 16px;
+    font-size: 1.6rem;
     font-weight: 400;
   }
 
   .icon {
-    max-width: 32px;
-    max-height: 32px;
+    max-width: 3.2rem;
+    max-height: 3.2rem;
   }
 }

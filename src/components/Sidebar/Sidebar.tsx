@@ -32,13 +32,13 @@ const Sidebar: FunctionComponent = () => {
         {isDesktop && (
           <div onClick={logout}>
             <Logo theme="alt" />
-            <Spacing size={90} />
+            <Spacing size={9} />
           </div>
         )}
         <div className={s.buttonsList}>
           {sections.map((btn) => (
             <div key={btn.id}>
-              <Spacing size={10} horizontal={!isDesktop} />
+              <Spacing size={1} horizontal={!isDesktop} />
               <SidebarButton
                 key={btn.id}
                 path={btn.path}

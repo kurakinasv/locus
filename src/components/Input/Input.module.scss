@@ -1,12 +1,12 @@
 @import 'styles/mixins';
 
 .wrapper {
-  height: 40px;
-  min-width: 240px;
+  height: 4rem;
+  min-width: 24rem;
   width: 100%;
-  padding: 9px 18px;
+  padding: 0.9rem 1.8rem;
 
-  border-radius: 6px;
+  border-radius: 0.6rem;
   outline: 1px solid $turquoise400;
   background-color: $white;
 
@@ -14,7 +14,7 @@
 
   &::placeholder {
     font-family: 'Avenir Next Cyr', sans-serif;
-    font-size: 14px;
+    font-size: 1.4rem;
     font-weight: 400;
     color: $turquoise400;
   }

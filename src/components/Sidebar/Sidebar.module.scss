@@ -3,7 +3,7 @@
 .container {
   position: relative;
 
-  padding: 36px 17px 36px 20px;
+  padding: 3.6rem 1.7rem 3.6rem 2rem;
 
   display: flex;
   flex-direction: column;
@@ -11,8 +11,8 @@
   align-items: flex-start;
   flex-shrink: 0;
 
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
 
   width: $sidebarWidth;
   height: 100vh;
@@ -24,10 +24,10 @@
   &_mobile {
     width: 100%;
     height: $tabbarHeight;
-    padding: 0 12px;
+    padding: 0 1.2rem;
 
     flex-direction: row;
-    border-radius: 10px 10px 0 0;
+    border-radius: 1rem 1rem 0 0;
 
     position: fixed;
     bottom: 0;
@@ -58,8 +58,8 @@
 
 .buttonsList {
   position: relative;
-  width: 271px;
-  height: 238px;
+  width: 27.1rem;
+  height: 23.8rem;
 }
 
 .profile {
@@ -67,9 +67,9 @@
 
   display: flex;
   align-items: center;
-  padding: 8px;
+  padding: 0.8rem;
 
-  border-radius: 8px;
+  border-radius: 0.8rem;
   cursor: pointer;
 
   &:hover {
@@ -78,8 +78,8 @@
 }
 
 .image {
-  @include square(54px);
-  margin-right: 10px;
+  @include square(5.4rem);
+  margin-right: 1rem;
 
   border-radius: 50%;
   border: 2px solid #9bd1d4;
@@ -87,20 +87,20 @@
 }
 
 .wrapper {
-  width: 170px;
-  height: 41px;
+  width: 17rem;
+  height: 4.1rem;
   color: $white;
 }
 
 .name {
   font-family: 'Avenir Next Cyr', sans-serif;
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 0.6rem;
 }
 
 .email {
   font-family: 'Avenir Next Cyr', sans-serif;
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: 400;
 }
