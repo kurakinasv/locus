@@ -1,63 +1,61 @@
-$font-path: '/src/styles/fonts/AvenirNext/AvenirNextCyr';
+$font-path: '/src/styles/fonts/AvenirNexty/AvenirNext';
 
 @font-face {
-  font-family: 'Avenir Next Cyr';
+  font-family: 'Avenir Next Ultra';
   src:
-    local('Avenir Next Cyr Light'),
-    local('AvenirNextCyr-Light'),
-    url('#{$font-path}-Light.woff2') format('woff2'),
-    url('#{$font-path}-Light.woff') format('woff'),
-    url('#{$font-path}-Light.ttf') format('truetype');
-  font-weight: 300;
+    url('#{$font-path}-UltraLight.woff2') format('woff2'),
+    url('#{$font-path}-UltraLight.woff') format('woff');
+  font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Avenir Next Cyr';
+  font-family: 'Avenir Next';
   src:
-    local('Avenir Next Cyr Regular'),
-    local('AvenirNextCyr-Regular'),
     url('#{$font-path}-Regular.woff2') format('woff2'),
-    url('#{$font-path}-Regular.woff') format('woff'),
-    url('#{$font-path}-Regular.ttf') format('truetype');
-  font-weight: 400;
+    url('#{$font-path}-Regular.woff') format('woff');
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Avenir Next Cyr';
+  font-family: 'Avenir Next';
   src:
-    local('Avenir Next Cyr Medium'),
-    local('AvenirNextCyr-Medium'),
     url('#{$font-path}-Medium.woff2') format('woff2'),
-    url('#{$font-path}-Medium.woff') format('woff'),
-    url('#{$font-path}-Medium.ttf') format('truetype');
+    url('#{$font-path}-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Avenir Next Cyr';
+  font-family: 'Avenir Next Demi';
   src:
-    local('Avenir Next Cyr Demi'),
-    local('AvenirNextCyr-Demi'),
-    url('#{$font-path}-Demi.woff2') format('woff2'),
-    url('#{$font-path}-Demi.woff') format('woff'),
-    url('#{$font-path}-Demi.ttf') format('truetype');
+    url('#{$font-path}-DemiBold.woff2') format('woff2'),
+    url('#{$font-path}-DemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Avenir Next Cyr';
+  font-family: 'Avenir Next';
   src:
-    local('Avenir Next Cyr Bold'),
-    local('AvenirNextCyr-Bold'),
     url('#{$font-path}-Bold.woff2') format('woff2'),
-    url('#{$font-path}-Bold.woff') format('woff'),
-    url('#{$font-path}-Bold.ttf') format('truetype');
-  font-weight: 700;
+    url('#{$font-path}-Bold.woff') format('woff');
+  font-weight: bold;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenir Next';
+  src:
+    url('#{$font-path}-Heavy.woff2') format('woff2'),
+    url('#{$font-path}-Heavy.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
 }
