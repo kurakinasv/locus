@@ -1,7 +1,7 @@
-$font-path: '/src/styles/fonts/AvenirNexty/AvenirNext';
+$font-path: '/src/styles/fonts/AvenirNext/AvenirNext';
 
 @font-face {
-  font-family: 'Avenir Next Ultra';
+  font-family: 'Avenir Next';
   src:
     url('#{$font-path}-UltraLight.woff2') format('woff2'),
     url('#{$font-path}-UltraLight.woff') format('woff');
@@ -31,7 +31,7 @@ $font-path: '/src/styles/fonts/AvenirNexty/AvenirNext';
 }
 
 @font-face {
-  font-family: 'Avenir Next Demi';
+  font-family: 'Avenir Next';
   src:
     url('#{$font-path}-DemiBold.woff2') format('woff2'),
     url('#{$font-path}-DemiBold.woff') format('woff');
