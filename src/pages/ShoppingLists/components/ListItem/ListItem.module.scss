@@ -1,0 +1,60 @@
+@import 'styles/mixins';
+
+.wrapper {
+  position: relative;
+  padding: 0.6rem 2rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+
+  border-radius: 0.6rem;
+  background-color: $lightGrey;
+  cursor: pointer;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 0.4rem;
+    height: 100%;
+    background-color: $turquoise200;
+  }
+
+  .left {
+    display: flex;
+    align-items: center;
+  }
+
+  &_completed {
+    opacity: 0.5;
+
+    .name {
+      text-decoration: line-through;
+    }
+  }
+
+  .name {
+    font-family: $sourceSans3;
+    font-size: 1.6rem;
+    font-weight: 400;
+
+    user-select: none;
+  }
+
+  .icon {
+    max-width: 3.2rem;
+    max-height: 3.2rem;
+  }
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  color: $greyMain;
+}
