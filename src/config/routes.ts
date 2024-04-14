@@ -11,6 +11,8 @@ export enum RouterPaths {
   shoppingLists = 'shoppingLists',
   groupSettings = 'settings',
   profileSettings = 'profileSettings',
+
+  uiKit = 'uiKit',
 }
 
 export const routes: {
@@ -57,5 +59,10 @@ export const routes: {
   profileSettings: {
     mask: RouterPaths.profileSettings,
     full: `/${RouterPaths.profileSettings}`,
+  },
+
+  uiKit: {
+    mask: RouterPaths.uiKit,
+    full: `/${RouterPaths.group}/${RouterPaths.uiKit}`,
   },
 };

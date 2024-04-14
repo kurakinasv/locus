@@ -17,9 +17,11 @@ import { GroupSettings } from 'pages/GroupSettings';
 import { Main } from 'pages/Main';
 import { ProfileSettings } from 'pages/ProfileSettings';
 import { ShoppingLists } from 'pages/ShoppingLists';
-import { useUserStore } from 'store/RootStore/hooks';
+import { UIKit } from 'pages/UIKit';
+import { useRootStore, useUserStore } from 'store/RootStore/hooks';
 
 const Router: FC = () => {
+  const { isDev } = useRootStore();
   const { isAuth, inGroup } = useUserStore();
 
   const authNoGroupRoutes = (
@@ -36,6 +38,7 @@ const Router: FC = () => {
       <Route path={RouterPaths.expenses} element={<Expenses />} />
       <Route path={RouterPaths.shoppingLists} element={<ShoppingLists />} />
       <Route path={RouterPaths.groupSettings} element={<GroupSettings />} />
+      {isDev && <Route path={RouterPaths.uiKit} element={<UIKit />} />}
       <Route index element={<Navigate to={RouterPaths.chores} replace />} />
     </>
   );
@@ -48,7 +51,7 @@ const Router: FC = () => {
             {!isAuth && <Route path={RouterPaths.auth} element={<Auth />} />}
             {isAuth && !inGroup && authNoGroupRoutes}
             {isAuth && <Route path={RouterPaths.profileSettings} element={<ProfileSettings />} />}
-            <Route path={RouterPaths.faq} element={<Faq />} />
+            {isDev && <Route path={RouterPaths.faq} element={<Faq />} />}
           </Route>
           {isAuth && inGroup && (
             <Route path={RouterPaths.group} element={<GroupLayout />}>

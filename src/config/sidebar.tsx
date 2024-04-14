@@ -14,6 +14,17 @@ type SidebarButtonType = {
   path: string;
 };
 
+const devSections: SidebarButtonType[] = import.meta.env.DEV
+  ? [
+      {
+        id: 5,
+        icon: () => <SettingsIcon />,
+        title: 'UI Kit',
+        path: RouterPaths.uiKit,
+      },
+    ]
+  : [];
+
 export const sections: SidebarButtonType[] = [
   {
     id: 1,
@@ -39,4 +50,5 @@ export const sections: SidebarButtonType[] = [
     title: 'Настройки группы',
     path: RouterPaths.groupSettings,
   },
+  ...devSections,
 ];

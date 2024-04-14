@@ -1,3 +1,5 @@
+const path = require('path');
+
 const importOrderRule = [
   'warn',
   {
@@ -32,32 +34,34 @@ const importOrderRule = [
 
 module.exports = {
   root: true,
-  env: { browser: true, es2021: true },
-  plugins: ['react-refresh', 'react', 'prettier'],
+  env: { browser: true, es2022: true },
+  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'prettier', 'import'],
   extends: [
     'eslint:recommended',
-    'plugin:import/recommended',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     'plugin:compat/recommended',
     'plugin:prettier/recommended',
+    'plugin:import/recommended',
   ],
   settings: {
     'import/resolver': {
-      node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      },
       typescript: {
-        project: 'src',
+        project: path.resolve('./tsconfig.paths.json'),
       },
+    },
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    react: {
+      version: 'detect',
     },
   },
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   rules: {
     'prettier/prettier': 'warn',
-    'import/order': importOrderRule,
 
     'no-console': 'warn',
     'no-debugger': 'warn',
@@ -68,11 +72,13 @@ module.exports = {
     'prefer-const': 'warn',
 
     'react/jsx-key': 'warn',
+    'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
-    'react-refresh/only-export-components': ['off', { allowConstantExport: true }],
 
     '@typescript-eslint/no-unused-vars': 'off',
 
     'compat/compat': 'warn',
+
+    'import/order': importOrderRule,
   },
 };
