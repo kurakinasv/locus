@@ -22,7 +22,7 @@ const Entry: React.FC = () => {
       </Button>
       <Spacing size={2.4} />
       <Button onClick={toGroupEnter(RouterPaths.enterGroup)} size={SizeEnum.xl} stretched>
-        Присоединиться к существующей группе
+        Присоединиться к&nbsp;существующей группе
       </Button>
     </div>
   );

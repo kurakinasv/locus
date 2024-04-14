@@ -1,7 +1,11 @@
 @import 'styles/mixins';
 
+.container {
+  padding-bottom: 25%;
+  display: flex;
+  flex: 1;
+}
+
 .wrapper {
-  width: 100%;
   max-width: 47.4rem;
-  padding-top: 15%;
 }

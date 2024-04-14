@@ -80,5 +80,6 @@ module.exports = {
     'compat/compat': 'warn',
 
     'import/order': importOrderRule,
+    'import/no-named-as-default-member': 'off',
   },
 };
