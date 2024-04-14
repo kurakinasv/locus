@@ -1,0 +1,12 @@
+@import 'styles/mixins';
+
+.text {
+  font-family: $sourceSans3;
+
+  &_size {
+    &-m {
+      font-size: 1.4rem;
+      font-weight: 400;
+    }
+  }
+}

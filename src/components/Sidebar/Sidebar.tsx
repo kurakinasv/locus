@@ -4,10 +4,9 @@ import cn from 'classnames';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Logo, Spacing } from 'components';
-import { RouterPaths } from 'config/routes';
+import { routes } from 'config/routes';
 import { sections } from 'config/sidebar';
 import { useScreenType } from 'store';
-import { useUserStore } from 'store/RootStore/hooks';
 
 import { SidebarButton } from './components/SidebarButton';
 
@@ -17,10 +16,9 @@ const Sidebar: FunctionComponent = () => {
   const nav = useNavigate();
   const location = useLocation();
   const screen = useScreenType();
-  const { logout } = useUserStore();
 
   const onProfileClick = useCallback(() => {
-    nav(RouterPaths.profileSettings);
+    nav(routes.profileSettings.full);
   }, []);
 
   const isDesktop = screen === 'desktop';
@@ -30,7 +28,7 @@ const Sidebar: FunctionComponent = () => {
     <div className={cn(s.container, !isDesktop && s.container_mobile)}>
       <div className={s.wrapper}>
         {isDesktop && (
-          <div onClick={logout}>
+          <div>
             <Logo theme="alt" />
             <Spacing size={9} />
           </div>

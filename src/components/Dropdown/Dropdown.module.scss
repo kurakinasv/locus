@@ -1,10 +1,5 @@
 @import 'styles/mixins';
 
-.container {
-  position: relative;
-  width: 24rem;
-}
-
 .wrapper {
   position: relative;
   height: 4rem;
@@ -14,11 +9,27 @@
   border-radius: 0.6rem;
   background-color: $grey100;
 
-  font-family: 'Avenir Next', sans-serif;
+  font-family: $avenirNext;
   font-size: 1.4rem;
   font-weight: 600;
   color: $grey400;
   text-align: left;
+
+  &_stretched {
+    width: 100%;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px $grey300;
+  }
+}
+
+.placeholder {
+  font-family: $avenirNext;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: $grey400;
+  pointer-events: none;
 }
 
 .icon {
@@ -26,10 +37,22 @@
   top: 46%;
   right: 0.5rem;
   transform: translate3d(-50%, 0, 0);
+  @include animate(transform);
+  pointer-events: none;
+
+  &_open {
+    transform: translate3d(-50%, -25%, 0) rotate(180deg);
+  }
+
+  &__close {
+    pointer-events: all;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+  }
 }
 
 .content {
-  min-width: 24rem;
+  min-width: var(--radix-dropdown-menu-trigger-width);
   padding: 0.5rem;
   margin-top: 0.5rem;
 
@@ -38,6 +61,17 @@
   box-shadow:
     0px 10px 38px -10px rgba(22, 23, 24, 0.35),
     0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+
+  &[data-side='bottom'] {
+    animation-name: slideDownAndFade;
+  }
+  &[data-side='top'] {
+    animation-name: slideUpAndFade;
+  }
 }
 
 .item {
@@ -65,4 +99,27 @@
 .label {
   font-weight: 400;
   color: $black;
+  pointer-events: none;
+}
+
+@keyframes slideUpAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDownAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

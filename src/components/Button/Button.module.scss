@@ -2,7 +2,7 @@
 
 .wrapper {
   min-width: 12rem;
-  padding: 0 2rem;
+  padding: 0.8rem 2.4rem;
   border-radius: 10rem;
 
   @include flexCenter;
@@ -24,6 +24,7 @@
 
   &_theme {
     &-filled {
+      color: $white;
       background-color: $turquoiseMain;
 
       &:hover {
@@ -33,13 +34,10 @@
       .label {
         @include elementText($white);
       }
-
-      .icon svg {
-        fill: $white;
-      }
     }
 
     &-outlined {
+      color: $turquoiseMain;
       border: $turquoiseMain 2px solid;
       background-color: transparent;
 
@@ -50,9 +48,26 @@
       .label {
         @include elementText($turquoiseMain);
       }
+    }
 
-      .icon svg {
-        fill: $turquoiseMain;
+    &-text {
+      min-width: 0;
+      padding: 1rem;
+
+      color: $turquoiseMain;
+      opacity: 1;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &:disabled {
+        background-color: transparent;
+        color: $grey300;
+      }
+
+      .label {
+        @include elementText($turquoiseMain);
       }
     }
   }
@@ -70,22 +85,24 @@
 
 .wrapper_size {
   &-s {
-    height: 3rem;
+    min-height: 3rem;
 
     .label {
       font-size: 1.2rem;
+      line-height: 1.4rem;
     }
   }
 
   &-m {
-    height: 4rem;
+    min-height: 4rem;
   }
 
   &-xl {
-    height: 5rem;
+    min-height: 5rem;
 
     .label {
       font-size: 1.8rem;
+      line-height: 2rem;
     }
   }
 }

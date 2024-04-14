@@ -1,4 +1,4 @@
-import { FC, ReactNode, memo } from 'react';
+import { ButtonHTMLAttributes, FC, MouseEvent, ReactNode, memo } from 'react';
 
 import cn from 'classnames';
 
@@ -9,7 +9,7 @@ import { ButtonTheme } from './types';
 
 import s from './Button.module.scss';
 
-type Props = {
+type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   children?: ReactNode;
   className?: string;
   icon?: ReactNode;
@@ -18,7 +18,7 @@ type Props = {
   stretched?: boolean;
   size?: SizeEnum;
   theme?: ButtonTheme;
-  onClick: VoidFunction;
+  onClick: ((e: MouseEvent<HTMLButtonElement>) => void) | VoidFunction;
 };
 
 const Button: FC<Props> = ({

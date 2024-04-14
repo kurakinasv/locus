@@ -1,39 +1,59 @@
 @import 'styles/mixins';
 
 .wrapper {
-  height: 4rem;
-  min-width: 24rem;
   width: 100%;
-  padding: 0.9rem 1.8rem;
+  min-width: 24rem;
+  position: relative;
 
-  border-radius: 0.6rem;
-  outline: 1px solid $turquoise400;
-  background-color: $white;
+  .input {
+    height: 4rem;
+    width: 100%;
+    padding: 0.9rem 1.8rem;
 
-  @include regularText;
+    border-radius: 0.6rem;
+    outline: 1px solid $turquoise400;
+    background-color: $white;
 
-  &::placeholder {
-    font-family: 'Avenir Next', sans-serif;
-    font-size: 1.4rem;
-    font-weight: 400;
-    color: $turquoise400;
-  }
-
-  &:focus {
-    outline: 2px solid $turquoise400;
-    background-color: $turquoise100;
-  }
-
-  &:focus-visible {
-    outline: 2px solid $turquoise400;
-  }
-
-  &:disabled {
-    outline: 1px solid $grey400;
-    background-color: $grey100;
+    @include regularText;
 
     &::placeholder {
-      color: $grey400;
+      font-family: $avenirNext;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: $turquoise400;
+    }
+
+    &:focus {
+      outline: 2px solid $turquoise400;
+      background-color: $turquoise100;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $turquoise400;
+    }
+
+    &:disabled {
+      outline: 1px solid $grey400;
+      background-color: $grey100;
+
+      &::placeholder {
+        color: $grey400;
+      }
+    }
+  }
+
+  & .icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1.8rem;
+
+    color: $turquoiseMain;
+    @include animate(color);
+
+    &:hover {
+      color: rgba($turquoiseMain, 0.8);
+      cursor: pointer;
     }
   }
 }

@@ -2,6 +2,8 @@
 @import 'styles/mixins.scss';
 
 .wrapper {
+  flex-shrink: 0;
+
   &.vertical {
     height: calc(var(--size) * 1rem);
     padding: calc(var(--size) / 2rem) 0;

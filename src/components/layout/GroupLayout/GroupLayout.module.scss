@@ -1,6 +1,7 @@
 @import 'styles/mixins';
 
 .container {
+  min-height: 100vh;
   display: flex;
 
   &_mobile {
