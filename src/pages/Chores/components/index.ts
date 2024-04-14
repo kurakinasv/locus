@@ -1,4 +1,4 @@
-export * from './Schedule';
+export * from './ScheduleTab';
 
 export * from './ScheduleItem';
 

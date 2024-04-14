@@ -8,7 +8,7 @@ import { noop } from 'utils';
 import CalendarIcon from 'img/icons/calendar.svg?react';
 import PlusIcon from 'img/icons/plus.svg?react';
 
-import { ChoresTab, Schedule } from './components';
+import { ChoresTab, ScheduleTab } from './components';
 
 import s from './Chores.module.scss';
 
@@ -18,15 +18,14 @@ const Chores: FC = () => {
 
   const tabsContent: Array<{ value: string; content: ReactNode }> = useMemo(
     () => [
-      { content: <Schedule />, value: 'schedule' },
+      { content: <ScheduleTab />, value: 'schedule' },
       { content: <ChoresTab />, value: 'chores' },
     ],
     []
   );
 
   return (
-    <div>
-      <Spacing size={5} />
+    <>
       <div className={s.buttons}>
         <Button icon={<CalendarIcon />} stretched onClick={noop}>
           Запланировать задачу
@@ -40,7 +39,7 @@ const Chores: FC = () => {
       <div className={s.tabsWrapper}>
         <Tabs tabOptions={tabs} tabsContent={tabsContent} />
       </div>
-    </div>
+    </>
   );
 };
 
