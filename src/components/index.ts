@@ -18,4 +18,6 @@ export * from './Tabs';
 
 export * from './Text';
 
+export * from './Price';
+
 export * from './Checkbox';

@@ -1,0 +1,40 @@
+@import 'styles/mixins';
+
+.buttons {
+  display: flex;
+
+  @include mobile {
+    flex-wrap: wrap;
+  }
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  @include flexGap(0.8rem);
+
+  @include mediaScreen($desktop) {
+    @include flexGap(1.5rem, 4rem);
+  }
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+
+  &_mobile {
+    flex-wrap: wrap;
+
+    .spacing {
+      width: 100%;
+    }
+
+    .input {
+      max-width: 100%;
+    }
+  }
+}
+
+.input {
+  max-width: 20rem;
+}

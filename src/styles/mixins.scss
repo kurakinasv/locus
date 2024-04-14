@@ -22,3 +22,42 @@
   user-select: none;
   pointer-events: none;
 }
+
+// Некорректно работает с flex-wrap: wrap;
+@mixin flexGap($row, $column: $row) {
+  @supports (gap: $row $column) {
+    gap: $row $column;
+  }
+
+  @supports not (gap: $row $column) {
+    & > * {
+      margin-bottom: $row;
+      margin-right: $column;
+
+      &:last-child {
+        margin-bottom: 0;
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+@mixin mediaScreen($minWidth) {
+  @media (min-width: $minWidth) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: $mobile) {
+    @content;
+  }
+}
+
+@mixin textEllipsis($lines: 1) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -1,0 +1,80 @@
+@import 'styles/mixins';
+
+.expense {
+  width: 100%;
+  padding: 0.6rem 2rem 0.6rem 1rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: $lightGrey;
+  border-radius: 0.6rem;
+
+  .right {
+    display: flex;
+    align-items: center;
+  }
+
+  .date {
+    font-family: $avenirNext;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: $grey300;
+    letter-spacing: -0.2rem;
+
+    @include mediaScreen($desktop) {
+      font-size: 3.2rem;
+    }
+  }
+
+  .text {
+    .category {
+      font-family: $avenirNext;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: $black;
+
+      @include mediaScreen($desktop) {
+        font-size: 2rem;
+      }
+    }
+
+    .description {
+      font-family: $sourceSans3;
+      font-size: 1.2rem;
+      line-height: 1.4rem;
+      font-weight: 400;
+      color: $greyMain;
+
+      @include textEllipsis(3);
+
+      @include mediaScreen($desktop) {
+        font-size: 1.4rem;
+        line-height: 1.6rem;
+      }
+    }
+  }
+
+  .left {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    color: $greyMain;
+
+    .icon {
+      padding: 0.8rem;
+      @include flexCenter;
+      flex-shrink: 0;
+
+      color: $white;
+      background-color: $turquoiseMain;
+      border-radius: 50%;
+
+      & > svg {
+        @include square(1.6rem);
+      }
+    }
+  }
+}
