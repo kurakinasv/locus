@@ -1,0 +1,10 @@
+@import 'styles/mixins';
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+
+  @include mobile {
+    flex-direction: column;
+  }
+}

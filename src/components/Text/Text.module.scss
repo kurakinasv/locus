@@ -6,7 +6,17 @@
   &_size {
     &-m {
       font-size: 1.4rem;
+      line-height: 1.6rem;
       font-weight: 400;
+    }
+  }
+
+  &_color {
+    &-black {
+      color: $black;
+    }
+    &-gray {
+      color: $grey600;
     }
   }
 }

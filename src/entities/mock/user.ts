@@ -1,0 +1,58 @@
+import { User } from 'entities/user';
+
+export const MOCK_USERS: User[] = [
+  {
+    id: 1,
+    name: 'Константин Константинопольский',
+    email: 'mock@gmail.com',
+    image: 'https://loremflickr.com/300/200',
+    phone: '+7 (999) 999-99-99',
+    birthday: '01.01.2000',
+    createdAt: '01.01.2023',
+  },
+  {
+    id: 2,
+    name: 'Аполлинария Константинопольская',
+    email: 'mock2@gmail.com',
+    phone: '+7 (999) 999-99-99',
+    birthday: '01.01.2000',
+    createdAt: '01.01.2023',
+    adminInGroups: [1, 2],
+  },
+  {
+    id: 3,
+    name: 'Александра Крупчатникова',
+    email: 'mock3@gmail.com',
+    image: 'https://loremflickr.com/300/500',
+    phone: '+7 (999) 999-99-99',
+    birthday: '01.01.2000',
+    createdAt: '01.01.2023',
+  },
+  {
+    id: 4,
+    name: 'Константин Константинопольский',
+    email: 'mock4@gmail.com',
+    image: 'https://loremflickr.com/300/200',
+    phone: '+7 (999) 999-99-99',
+    birthday: '01.01.2000',
+    createdAt: '01.01.2023',
+  },
+  {
+    id: 5,
+    name: 'Аполлинария Константинопольская',
+    email: 'mock5@gmail.com',
+    image: 'https://loremflickr.com/300/500',
+    phone: '+7 (999) 999-99-99',
+    birthday: '01.01.2000',
+    createdAt: '01.01.2023',
+  },
+  {
+    id: 6,
+    name: 'Александра Крупчатникова',
+    email: 'mock6@gmail.com',
+    image: 'https://loremflickr.com/300/200',
+    phone: '+7 (999) 999-99-99',
+    birthday: '01.01.2000',
+    createdAt: '01.01.2023',
+  },
+];
