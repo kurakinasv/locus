@@ -53,13 +53,11 @@
     align-items: center;
     color: $turquoiseMain;
 
-    .button {
-    }
-
     .wrapper {
       display: flex;
       flex-wrap: wrap;
       flex: 1;
+
       @include flexGap(0.8rem);
     }
 

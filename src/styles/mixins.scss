@@ -1,7 +1,7 @@
-@import './fonts/fonts.scss';
-@import './colors.scss';
-@import './typography.scss';
-@import './consts.scss';
+@import './fonts/fonts';
+@import './colors';
+@import './typography';
+@import './consts';
 
 @mixin square($dimension) {
   width: $dimension;

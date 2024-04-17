@@ -1,6 +1,5 @@
 import { FunctionComponent, useCallback } from 'react';
 
-import cn from 'classnames';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Logo, Spacing } from 'components';
@@ -25,7 +24,7 @@ const Sidebar: FunctionComponent = () => {
   const currentPage = location.pathname.split('/');
 
   return (
-    <div className={cn(s.container, !isDesktop && s.container_mobile)}>
+    <div className={s.container}>
       <div className={s.wrapper}>
         {isDesktop && (
           <div>

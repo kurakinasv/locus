@@ -3,7 +3,7 @@
 .checkbox {
   &__wrapper {
     @include square(2.5rem);
-    @include flexCenter();
+    @include flexCenter;
 
     background-color: $white;
     border-radius: 6px;

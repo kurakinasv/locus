@@ -82,7 +82,7 @@ const Accordion: React.FC<Props> = ({ isOpenDefault = false, name, products, pur
           <Spacing size={2} />
           <div className={s.inputs}>
             <Button
-              icon={<PlusIcon className={s.button} />}
+              icon={<PlusIcon />}
               onClick={noop}
               theme={ButtonTheme.text}
               aria-label="Добавить продукт"

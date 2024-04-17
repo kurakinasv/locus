@@ -1,4 +1,4 @@
-@import 'styles/mixins.scss';
+@import 'styles/mixins';
 
 .wrapper {
   width: 27.1rem;
@@ -38,7 +38,7 @@
 }
 
 .label {
-  font-family: 'Avenir Next', sans-serif;
+  font-family: $avenirNext;
   font-size: 1.6rem;
   font-weight: 600;
   color: $white;
