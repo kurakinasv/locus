@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, FC, MouseEvent, ReactNode, memo, FormEvent } from 'react';
+import { ButtonHTMLAttributes, FC, MouseEvent, ReactNode, memo } from 'react';
 
 import cn from 'classnames';
 
