@@ -1,33 +1,15 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 
-import cn from 'classnames';
-
-import { Input, Dropdown, Spacing, Title } from 'components';
+import { Spacing, Title } from 'components';
 import { mockOptions } from 'config/mock/options';
 import { MOCK_SCHEDULE_LIST } from 'entities/mock/schedule';
-import { useScreenType } from 'store';
 
-import { ScheduleItem } from '..';
+import { Controls, ScheduleItem } from '..';
 
-import s from './ScheduleTab.module.scss';
-
-const Schedule: FC = () => {
-  const screen = useScreenType();
-  const isMobile = screen === 'mobile';
-
-  const [search, setSearch] = useState('');
-
+const ScheduleTab: FC = () => {
   return (
     <div>
-      <div className={cn(s.controls, isMobile && s.controls_mobile)}>
-        <Input
-          placeholder="Поиск по названию"
-          value={search}
-          onChange={(v) => setSearch(v.currentTarget.value)}
-        />
-        <Spacing size={1.6} horizontal={!isMobile} className={s.spacing} />
-        <Dropdown options={mockOptions} placeholder="Выберите неделю" stretched />
-      </div>
+      <Controls dropdownOptions={mockOptions} dropdownPlaceholder="Выберите неделю" />
 
       <Spacing size={2.6} />
       <Title size="h2">Сегодня, 16 декабря</Title>
@@ -51,4 +33,4 @@ const Schedule: FC = () => {
   );
 };
 
-export default Schedule;
+export default ScheduleTab;

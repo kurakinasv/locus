@@ -7,7 +7,7 @@ import { routes } from 'config/routes';
 import { sections } from 'config/sidebar';
 import { useScreenType } from 'store';
 
-import { SidebarButton } from './components/SidebarButton';
+import { SidebarButton } from './components';
 
 import s from './Sidebar.module.scss';
 
@@ -16,8 +16,8 @@ const Sidebar: FunctionComponent = () => {
   const location = useLocation();
   const screen = useScreenType();
 
-  const onProfileClick = useCallback(() => {
-    nav(routes.profileSettings.full);
+  const onGroupClick = useCallback(() => {
+    nav(routes.groupSettings.full);
   }, []);
 
   const isDesktop = screen === 'desktop';
@@ -50,12 +50,9 @@ const Sidebar: FunctionComponent = () => {
         </div>
       </div>
       {isDesktop && (
-        <div className={s.profile} onClick={onProfileClick}>
+        <div className={s.group} onClick={onGroupClick}>
           <div className={s.image} />
-          <div className={s.wrapper}>
-            <div className={s.name}>Светлана Куракина</div>
-            <div className={s.email}>svetakurakina2002@gmail.com</div>
-          </div>
+          <div className={s.name}>Название группы</div>
         </div>
       )}
     </div>

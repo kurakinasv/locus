@@ -5,50 +5,6 @@
   min-width: 24rem;
   position: relative;
 
-  &_error {
-    .input {
-      outline: 2px solid $redMain;
-      background-color: $red100;
-    }
-  }
-
-  .input {
-    height: 4rem;
-    width: 100%;
-    padding: 0.9rem 1.8rem;
-
-    border-radius: 0.6rem;
-    outline: 1px solid $turquoise400;
-    background-color: $white;
-
-    @include regularText;
-
-    &::placeholder {
-      font-family: $avenirNext;
-      font-size: 1.4rem;
-      font-weight: 400;
-      color: $turquoise400;
-    }
-
-    &:focus {
-      outline: 2px solid $turquoise400;
-      background-color: $turquoise100;
-    }
-
-    &:focus-visible {
-      outline: 2px solid $turquoise400;
-    }
-
-    &:disabled {
-      outline: 1px solid $grey400;
-      background-color: $grey100;
-
-      &::placeholder {
-        color: $grey400;
-      }
-    }
-  }
-
   & .icon {
     position: absolute;
     top: 50%;
@@ -65,9 +21,67 @@
   }
 }
 
+.input {
+  height: 4rem;
+  width: 100%;
+  padding: 0.9rem 1.8rem;
+
+  border-radius: 0.6rem;
+  outline: 1px solid $turquoise400;
+  background-color: $white;
+
+  @include regularText;
+
+  &::placeholder {
+    font-family: $avenirNext;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: $turquoise400;
+  }
+
+  &:focus {
+    outline: 2px solid $turquoise400;
+    background-color: $turquoise100;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $turquoise400;
+  }
+
+  &:disabled {
+    color: $greyMain;
+    outline: 1px solid $grey400;
+    background-color: $grey100;
+
+    &::placeholder {
+      color: $grey400;
+    }
+  }
+
+  &_error {
+    outline: 1px solid $redMain;
+
+    &::placeholder {
+      color: $redMain;
+    }
+
+    &:focus {
+      outline: 1px solid $redMain;
+      background-color: $red100;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $redMain;
+      background-color: $red100;
+    }
+  }
+}
+
 .error {
+  margin-top: 0.2rem;
+
+  font-family: $avenirNext;
+  font-size: 1.2rem;
   color: $redMain;
-  margin-top: 0.4rem;
-  margin-left: 1.8rem;
   text-align: left;
 }

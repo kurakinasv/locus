@@ -21,3 +21,5 @@ export * from './ProfileSettings';
 export * from './Router';
 
 export * from './ShoppingLists';
+
+export * from './UIKit';

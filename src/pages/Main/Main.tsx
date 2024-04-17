@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 
 import { Outlet } from 'react-router-dom';
 
+import { BREAKPOINTS } from 'config/app';
 import { ScreenTypeProvider, ScreenType } from 'store';
 
 // import s from './Main.module.scss';
@@ -11,7 +12,7 @@ const Main: FC = () => {
 
   useEffect(() => {
     const width = window.screen.width;
-    const isMobile = width < 1000;
+    const isMobile = width < BREAKPOINTS.desktop;
 
     setViewport(isMobile ? 'mobile' : 'desktop');
   }, []);

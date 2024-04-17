@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button, ButtonTheme, Input, Spacing, Title } from 'components';
 import { routes } from 'config/routes';
-import { useUserStore } from 'store/RootStore/hooks';
+import { useRootStore, useUserStore } from 'store/RootStore/hooks';
 
 import s from './Auth.module.scss';
 
@@ -12,10 +12,12 @@ const registerFields = ['Юзернейм', 'Почта', 'Пароль', 'Вв�
 const loginFields = ['Почта', 'Пароль'];
 
 const Auth: FC = () => {
+  const { isDev } = useRootStore();
   const { login } = useUserStore();
   const nav = useNavigate();
 
   const [hasAccount, setHasAccount] = useState(false);
+  const [value, setValue] = useState('');
 
   const currentFields = hasAccount ? loginFields : registerFields;
 
@@ -30,7 +32,11 @@ const Auth: FC = () => {
         <Spacing size={4.5} />
         {currentFields.map((field, i) => (
           <React.Fragment key={i}>
-            <Input placeholder={field} />
+            <Input
+              placeholder={field}
+              value={value}
+              onChange={(v) => setValue(v.currentTarget.value)}
+            />
             {i !== currentFields.length - 1 && <Spacing size={1.5} />}
           </React.Fragment>
         ))}
@@ -46,10 +52,14 @@ const Auth: FC = () => {
           </button>
         </div>
       </div>
-      <Spacing size={4} />
-      <Button onClick={onClick} theme={ButtonTheme.outlined}>
-        FAQ
-      </Button>
+      {isDev && (
+        <>
+          <Spacing size={4} />
+          <Button onClick={onClick} theme={ButtonTheme.outlined}>
+            FAQ
+          </Button>
+        </>
+      )}
     </>
   );
 };

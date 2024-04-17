@@ -2,6 +2,7 @@
 
 .controls {
   display: flex;
+  justify-content: space-between;
 
   &_mobile {
     flex-wrap: wrap;
@@ -9,5 +10,9 @@
     .spacing {
       width: 100%;
     }
+  }
+
+  .inputWrapper {
+    max-width: 28rem;
   }
 }
