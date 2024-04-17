@@ -1,0 +1,10 @@
+@import 'styles/mixins';
+
+.buttonGroup {
+  width: 100%;
+  display: flex;
+
+  @include mobile {
+    flex-direction: column;
+  }
+}

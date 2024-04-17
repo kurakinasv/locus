@@ -3,7 +3,9 @@ import { User } from 'entities/user';
 export const MOCK_USERS: User[] = [
   {
     id: 1,
-    name: 'Константин Константинопольский',
+    name: '',
+    surname: 'Константинопольский',
+    username: 'konst123',
     email: 'mock@gmail.com',
     image: 'https://loremflickr.com/300/200',
     phone: '+7 (999) 999-99-99',
@@ -12,7 +14,9 @@ export const MOCK_USERS: User[] = [
   },
   {
     id: 2,
-    name: 'Аполлинария Константинопольская',
+    name: 'Аполлинария',
+    surname: 'Константинопольская',
+    username: 'apollinariya',
     email: 'mock2@gmail.com',
     phone: '+7 (999) 999-99-99',
     birthday: '01.01.2000',
@@ -21,7 +25,9 @@ export const MOCK_USERS: User[] = [
   },
   {
     id: 3,
-    name: 'Александра Крупчатникова',
+    name: 'Александра',
+    surname: 'Крупчатникова',
+    username: 'krupchatnikova',
     email: 'mock3@gmail.com',
     image: 'https://loremflickr.com/300/500',
     phone: '+7 (999) 999-99-99',
@@ -31,6 +37,8 @@ export const MOCK_USERS: User[] = [
   {
     id: 4,
     name: 'Константин Константинопольский',
+    surname: 'Константинопольский',
+    username: 'konst_konst',
     email: 'mock4@gmail.com',
     image: 'https://loremflickr.com/300/200',
     phone: '+7 (999) 999-99-99',
@@ -39,7 +47,9 @@ export const MOCK_USERS: User[] = [
   },
   {
     id: 5,
-    name: 'Аполлинария Константинопольская',
+    name: 'Аполлинария',
+    surname: 'Константинопольская',
+    username: 'apollinariya_konst',
     email: 'mock5@gmail.com',
     image: 'https://loremflickr.com/300/500',
     phone: '+7 (999) 999-99-99',
@@ -48,7 +58,9 @@ export const MOCK_USERS: User[] = [
   },
   {
     id: 6,
-    name: 'Александра Крупчатникова',
+    name: 'Александра',
+    surname: 'Крупчатникова',
+    username: 'krupchatnikova_alex',
     email: 'mock6@gmail.com',
     image: 'https://loremflickr.com/300/200',
     phone: '+7 (999) 999-99-99',

@@ -1,0 +1,12 @@
+@import 'styles/mixins';
+
+.wrapper {
+  width: 100%;
+  max-width: 28rem;
+  @include flexCenter;
+  flex-direction: column;
+
+  @include mediaScreen($tablet) {
+    max-width: 47.4rem;
+  }
+}

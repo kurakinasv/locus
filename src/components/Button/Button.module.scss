@@ -1,4 +1,4 @@
-@import 'styles/mixins.scss';
+@import 'styles/mixins';
 
 .wrapper {
   min-width: 12rem;
@@ -6,6 +6,8 @@
   border-radius: 10rem;
 
   @include flexCenter;
+
+  user-select: none;
 
   @include animate(all);
 

@@ -60,7 +60,7 @@ const RightsSettings: React.FC = () => {
           {users.map((user) => (
             <SwiperSlide key={user.id}>
               <UserCard
-                name={user.name}
+                name={user.name || user.username}
                 image={user.image}
                 selected={user.selected}
                 onClick={onUserClick(user.id)}

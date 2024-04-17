@@ -2,6 +2,8 @@ export * from './Sidebar';
 
 export * from './Logo';
 
+export * from './PhotoUpload';
+
 export * from './Spacing';
 
 export * from './Button';
