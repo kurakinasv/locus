@@ -31,6 +31,7 @@ const Accordion: React.FC<Props> = ({ isOpenDefault = false, name, products, pur
   // const [products, setProducts] = React.useState<ProductType[]>(MOCK_PRODUCTS);
 
   const screen = useScreenType();
+  const isDesktop = screen === 'desktop';
 
   const handleHeaderClick = () => {
     setIsOpen(!isOpen);
@@ -88,7 +89,7 @@ const Accordion: React.FC<Props> = ({ isOpenDefault = false, name, products, pur
               aria-label="Добавить продукт"
               disabled={!newProduct || !price}
             />
-            <Spacing size={screen === 'desktop' ? 1.6 : 0.6} horizontal />
+            <Spacing size={isDesktop ? 1.6 : 0.6} horizontal />
             <div className={s.wrapper}>
               <Input
                 className={s.nameInput}
@@ -108,14 +109,14 @@ const Accordion: React.FC<Props> = ({ isOpenDefault = false, name, products, pur
           </div>
           <Spacing size={2} />
           <ul>
-            {products.map((product) => (
+            {products.map((product, i) => (
               <React.Fragment key={product.id}>
                 <ListItem name={product.name} completed={product.bought} price={product.price} />
-                <Spacing size={1} />
+                {i !== products.length - 1 && <Spacing size={1} />}
               </React.Fragment>
             ))}
           </ul>
-          <Spacing size={2} />
+          <Spacing size={isDesktop ? 2 : 1.4} />
           <div className={s.buttons}>
             <Button size={SizeEnum.s} onClick={editList}>
               Редактировать

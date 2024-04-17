@@ -8,7 +8,7 @@ import { noop } from 'utils/noop';
 import s from './CommonSettings.module.scss';
 
 const CommonSettings: React.FC = () => {
-  const image = 'https://picsum.photos/200/200';
+  const image = 'https://place.dog/300/200';
 
   return (
     <>

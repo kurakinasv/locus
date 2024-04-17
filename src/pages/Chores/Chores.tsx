@@ -35,7 +35,7 @@ const Chores: FC = () => {
           Создать задачу
         </Button>
       </div>
-      <Spacing size={5} />
+      <Spacing size={2.4} />
       <div className={s.tabsWrapper}>
         <Tabs tabOptions={tabs} tabsContent={tabsContent} />
       </div>
