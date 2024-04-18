@@ -3,7 +3,10 @@ import { makeAutoObservable, observable } from 'mobx';
 import { MOCK_USERS } from 'entities/mock/user';
 import { UserModel } from 'store/models/UserModel';
 
+// todo: logic
 class UserStore {
+  isAuth = true;
+  inGroup = true;
 
   user: UserModel | null = null;
 
