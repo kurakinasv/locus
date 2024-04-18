@@ -5,8 +5,8 @@ import { UserModel } from 'store/models/UserModel';
 
 // todo: logic
 class UserStore {
-  isAuth = true;
-  inGroup = true;
+  isAuth = false;
+  inGroup = false;
 
   user: UserModel | null = null;
 
@@ -23,6 +23,12 @@ class UserStore {
 
   logout = () => {
     this.isAuth = false;
+    this.inGroup = false;
+  };
+
+  deleteAccount = () => {
+    this.isAuth = false;
+    this.inGroup = false;
   };
 
   enterGroup = () => {
@@ -34,6 +40,10 @@ class UserStore {
   };
 
   exitGroup = () => {
+    this.inGroup = false;
+  };
+
+  deleteGroup = () => {
     this.inGroup = false;
   };
 }

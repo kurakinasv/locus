@@ -10,7 +10,7 @@ import TrashIcon from 'img/icons/trash.svg?react';
 import s from './ButtonGroup.module.scss';
 
 const ButtonGroup: React.FC = () => {
-  const { logout } = useUserStore();
+  const { logout, deleteAccount } = useUserStore();
   const screen = useScreenType();
 
   return (
@@ -19,7 +19,7 @@ const ButtonGroup: React.FC = () => {
         Выйти
       </Button>
       <Spacing size={1.5} horizontal={screen === 'desktop'} />
-      <Button onClick={logout} icon={<TrashIcon />} stretched>
+      <Button onClick={deleteAccount} icon={<TrashIcon />} stretched>
         Удалить аккаунт
       </Button>
     </div>
