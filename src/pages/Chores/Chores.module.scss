@@ -7,7 +7,7 @@
 .buttons {
   display: flex;
 
-  @media (max-width: 480px) {
+  @include mobile {
     flex-wrap: wrap;
   }
 }

@@ -19,7 +19,7 @@
     flex: 1;
   }
 
-  @media (max-width: 480px) {
+  @include mobile {
     padding-left: 1.2rem;
     padding-right: 1.2rem;
   }

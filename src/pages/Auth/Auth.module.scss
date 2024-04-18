@@ -13,7 +13,7 @@
   border: 1px solid $turquoise200;
   background: $white;
 
-  @media (max-width: 480px) {
+  @include mobile {
     width: 100%;
   }
 }

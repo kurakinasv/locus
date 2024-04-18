@@ -1,7 +1,6 @@
 export enum RouterPaths {
   main = '/',
   auth = 'auth',
-  faq = 'faq',
   entry = 'entry',
   createGroup = 'createGroup',
   enterGroup = 'enterGroup',
@@ -12,6 +11,8 @@ export enum RouterPaths {
   groupSettings = 'settings',
   profileSettings = 'profileSettings',
 
+  // dev
+  faq = 'faq',
   uiKit = 'uiKit',
 }
 

@@ -54,7 +54,6 @@ const Expenses: FC = () => {
         <Dropdown options={mockOptions} placeholder="Категория" stretched={!isDesktop} />
         <Spacing size={1.6} horizontal={isDesktop} className={s.spacing} />
         <Input
-          stretched={!isDesktop}
           placeholder="Дата"
           icon={CalendarIcon}
           className={s.input}

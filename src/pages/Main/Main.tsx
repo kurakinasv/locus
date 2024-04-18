@@ -5,8 +5,6 @@ import { Outlet } from 'react-router-dom';
 import { BREAKPOINTS } from 'config/app';
 import { ScreenTypeProvider, ScreenType } from 'store';
 
-// import s from './Main.module.scss';
-
 const Main: FC = () => {
   const [viewport, setViewport] = useState<ScreenType>('desktop');
 
