@@ -1,16 +1,22 @@
 import { CSSProperties, FC } from 'react';
+
 import cn from 'classnames';
 
 import s from './Spacing.module.scss';
 
 type Props = {
-  size: number;
+  size?: number;
   horizontal?: boolean;
   className?: string;
   stretched?: boolean;
 };
 
-const Spacing: FC<Props> = ({ size, horizontal = false, className = '', stretched = false }) => {
+const Spacing: FC<Props> = ({
+  size = 0.8,
+  horizontal = false,
+  className = '',
+  stretched = false,
+}) => {
   return (
     <div
       className={cn(

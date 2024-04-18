@@ -1,11 +1,13 @@
-@import 'styles/mixins.scss';
+@import 'styles/mixins';
 
 .wrapper {
-  min-width: 120px;
-  padding: 0 20px;
-  border-radius: 100px;
+  min-width: 12rem;
+  padding: 0.8rem 2.4rem;
+  border-radius: 10rem;
 
   @include flexCenter;
+
+  user-select: none;
 
   @include animate(all);
 
@@ -22,24 +24,9 @@
     width: 100%;
   }
 
-  &_size {
-    &-s {
-      height: 30px;
-    }
-    &-m {
-      height: 40px;
-    }
-    &-xl {
-      height: 50px;
-
-      .label {
-        font-size: 16px;
-      }
-    }
-  }
-
   &_theme {
     &-filled {
+      color: $white;
       background-color: $turquoiseMain;
 
       &:hover {
@@ -49,13 +36,10 @@
       .label {
         @include elementText($white);
       }
-
-      .icon svg {
-        fill: $white;
-      }
     }
 
     &-outlined {
+      color: $turquoiseMain;
       border: $turquoiseMain 2px solid;
       background-color: transparent;
 
@@ -66,20 +50,61 @@
       .label {
         @include elementText($turquoiseMain);
       }
+    }
 
-      .icon svg {
-        fill: $turquoiseMain;
+    &-text {
+      min-width: 0;
+      padding: 1rem;
+
+      color: $turquoiseMain;
+      opacity: 1;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &:disabled {
+        background-color: transparent;
+        color: $grey300;
+      }
+
+      .label {
+        @include elementText($turquoiseMain);
       }
     }
   }
 }
 
 .icon {
-  max-width: 24px;
-  max-height: 24px;
+  max-width: 2.4rem;
+  max-height: 2.4rem;
 
   & svg {
-    max-width: 24px;
-    max-height: 24px;
+    max-width: 2.4rem;
+    max-height: 2.4rem;
+  }
+}
+
+.wrapper_size {
+  &-s {
+    min-height: 3rem;
+
+    .label {
+      font-size: 1.2rem;
+      line-height: 1.4rem;
+    }
+  }
+
+  &-m {
+    min-height: 4rem;
+  }
+
+  &-xl {
+    min-height: 5rem;
+
+    .label {
+      font-size: 1.8rem;
+      line-height: 2rem;
+    }
   }
 }

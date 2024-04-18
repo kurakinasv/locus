@@ -1,6 +1,7 @@
 @mixin elementText($color: $black) {
-  font-family: 'Avenir Next';
-  font-size: 14px;
+  font-family: 'Avenir Next', sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.6rem;
   font-weight: 700;
 
   color: $color;
@@ -9,7 +10,8 @@
 
 @mixin regularText($color: $black) {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
+  font-size: 1.4rem;
+  line-height: 1.6rem;
   font-weight: 400;
 
   color: $color;

@@ -1,0 +1,20 @@
+@import 'styles/mixins';
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+
+  &_mobile {
+    flex-wrap: wrap;
+
+    .spacing {
+      width: 100%;
+    }
+  }
+
+  @include mediaScreen($tablet) {
+    .inputWrapper {
+      max-width: 28rem;
+    }
+  }
+}

@@ -2,6 +2,8 @@ export * from './Sidebar';
 
 export * from './Logo';
 
+export * from './PhotoUpload';
+
 export * from './Spacing';
 
 export * from './Button';
@@ -15,3 +17,9 @@ export * from './Input';
 export * from './Dropdown';
 
 export * from './Tabs';
+
+export * from './Text';
+
+export * from './Price';
+
+export * from './Checkbox';

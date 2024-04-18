@@ -1,14 +1,11 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { FC } from 'react';
+
 import cn from 'classnames';
 
-import s from './Logo.module.scss';
-
-// todo: fix
-// @ts-ignore
-import LogoDefault from 'img/icons/logo-icon.svg?react';
-// @ts-ignore
 import LogoAlt from 'img/icons/logo-icon-alt.svg?react';
+import LogoDefault from 'img/icons/logo-icon.svg?react';
+
+import s from './Logo.module.scss';
 
 type Props = {
   theme?: 'default' | 'alt';

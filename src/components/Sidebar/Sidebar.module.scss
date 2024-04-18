@@ -1,9 +1,9 @@
 @import 'styles/mixins';
 
 .container {
-  position: relative;
+  position: fixed;
 
-  padding: 36px 17px 36px 20px;
+  padding: 3.6rem 1.7rem 3.6rem 2rem;
 
   display: flex;
   flex-direction: column;
@@ -11,42 +11,26 @@
   align-items: flex-start;
   flex-shrink: 0;
 
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
 
   width: $sidebarWidth;
   height: 100vh;
   background-color: $turquoiseMain;
 
-  position: fixed;
   z-index: $sidebarZIndex;
 
-  &_mobile {
+  @include mobile {
     width: 100%;
     height: $tabbarHeight;
-    padding: 0 12px;
+    padding: 0 1.2rem;
 
     flex-direction: row;
-    border-radius: 10px 10px 0 0;
+    border-radius: 1rem 1rem 0 0;
 
     position: fixed;
     bottom: 0;
     left: 0;
-
-    .wrapper {
-      height: 100%;
-      flex: 1 1 auto;
-    }
-
-    .buttonsList {
-      width: 100%;
-
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      position: relative;
-    }
   }
 }
 
@@ -54,53 +38,58 @@
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+
+  @include mobile {
+    height: 100%;
+    flex: 1 1 auto;
+  }
 }
 
 .buttonsList {
   position: relative;
-  width: 271px;
-  height: 238px;
+  width: 27.1rem;
+  height: 23.8rem;
+
+  @include mobile {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    position: relative;
+  }
 }
 
-.profile {
+.group {
   width: 100%;
 
   display: flex;
   align-items: center;
-  padding: 8px;
+  padding: 0.8rem;
 
-  border-radius: 8px;
+  border-radius: 0.8rem;
   cursor: pointer;
 
   &:hover {
     background-color: rgba(118, 199, 204, 0.45);
   }
-}
 
-.image {
-  @include square(54px);
-  margin-right: 10px;
+  .image {
+    @include square(5.4rem);
+    margin-right: 1rem;
 
-  border-radius: 50%;
-  border: 2px solid #9bd1d4;
-  background-color: #edfcfc;
-}
+    border-radius: 50%;
+    border: 2px solid $turquoise300;
+    background-color: $turquoise100;
+  }
 
-.wrapper {
-  width: 170px;
-  height: 41px;
-  color: $white;
-}
+  .name {
+    max-width: 17rem;
 
-.name {
-  font-family: 'Avenir Next';
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.email {
-  font-family: 'Avenir Next';
-  font-size: 12px;
-  font-weight: 400;
+    font-family: $avenirNext;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: $white;
+  }
 }

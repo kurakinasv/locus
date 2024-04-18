@@ -1,0 +1,31 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-standard-scss"],
+  "rules": {
+    "alpha-value-notation": "number",
+    "at-rule-empty-line-before": [
+      "always",
+      {
+        "except": ["first-nested"],
+        "ignore": ["after-comment"],
+        "ignoreAtRules": ["include", "import"]
+      }
+    ],
+    "color-function-notation": null,
+    "declaration-empty-line-before": null,
+    "keyframes-name-pattern": null,
+    "media-feature-range-notation": "prefix",
+    "no-descending-specificity": null,
+    "no-duplicate-selectors": true,
+    "rule-empty-line-before": null,
+    "selector-class-pattern": null,
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ],
+
+    "scss/at-mixin-pattern": null,
+    "scss/dollar-variable-pattern": null
+  }
+}

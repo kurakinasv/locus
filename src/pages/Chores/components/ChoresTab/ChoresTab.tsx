@@ -1,34 +1,28 @@
-import { FC } from 'react';
-import cn from 'classnames';
+import React, { FC } from 'react';
 
-import { Input, Dropdown, Spacing } from 'components';
+import { Spacing } from 'components';
 import { mockOptions } from 'config/mock/options';
-import { useScreenType } from 'store';
+import { MOCK_SCHEDULE_LIST } from 'entities/mock/schedule';
 
-import { ScheduleItem } from '..';
-
-import s from './ChoresTab.module.scss';
+import { Controls, ScheduleItem } from '..';
 
 const ChoresTab: FC = () => {
-  const screen = useScreenType();
-  const isMobile = screen === 'mobile';
-
   return (
     <div>
-      <div className={cn(s.controls, isMobile && s.controls_mobile)}>
-        <Input placeholder="Поиск по названию" />
-        <Spacing size={16} horizontal={!isMobile} className={s.spacing} />
-        <Dropdown options={mockOptions} placeholder="Категория" />
-      </div>
+      <Controls dropdownOptions={mockOptions} dropdownPlaceholder="Категория" />
 
-      <Spacing size={26} />
-      <ScheduleItem name="Помыть посуду" hideCheckbox />
-      <Spacing size={10} />
-      <ScheduleItem name="Помыть посуду" hideCheckbox />
-      <Spacing size={10} />
-      <ScheduleItem name="Помыть посуду" hideCheckbox />
-      <Spacing size={10} />
-      <ScheduleItem name="Помыть посуду" hideCheckbox />
+      <Spacing size={2.6} />
+      {MOCK_SCHEDULE_LIST.map((schedule) => (
+        <React.Fragment key={schedule.id}>
+          <ScheduleItem
+            key={schedule.id}
+            hideCheckbox
+            name={schedule.chore.name}
+            category={schedule.chore.category.name}
+          />
+          <Spacing size={1} />
+        </React.Fragment>
+      ))}
     </div>
   );
 };

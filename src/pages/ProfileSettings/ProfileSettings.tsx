@@ -1,24 +1,44 @@
-import { FC, useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
+
+import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Spacing } from 'components';
+import { Spacing, Button, Title } from 'components';
+import { useUserStore } from 'store/RootStore/hooks';
 
-// import s from './ProfileSettings.module.scss';
+import { SettingsForm, ButtonGroup } from './components';
+
+import s from './ProfileSettings.module.scss';
 
 const ProfileSettings: FC = () => {
   const nav = useNavigate();
 
-  const onClick = useCallback(() => {
+  const { user, login } = useUserStore();
+
+  React.useEffect(() => {
+    if (!user) {
+      login();
+    }
+  }, []);
+
+  const onGoBack = useCallback(() => {
     nav(-1);
   }, []);
 
   return (
-    <div>
-      <div>ProfileSettings</div>
-      <Spacing size={10} />
-      <Button onClick={onClick}>Назад</Button>
+    <div className={s.wrapper}>
+      <Spacing size={6} />
+      <Title size="h1">Настройки</Title>
+      <Spacing size={3} />
+      <SettingsForm />
+      <Spacing size={1.5} />
+      <Button onClick={onGoBack} stretched>
+        Назад
+      </Button>
+      <Spacing size={4.5} />
+      <ButtonGroup />
     </div>
   );
 };
 
-export default ProfileSettings;
+export default observer(ProfileSettings);
