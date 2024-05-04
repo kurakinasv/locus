@@ -15,3 +15,7 @@ export const useRootStore = () => {
 export const useUserStore = () => {
   return useRootStore().userStore;
 };
+
+export const useUIStore = () => {
+  return useRootStore().uiStore;
+};

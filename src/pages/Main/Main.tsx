@@ -1,7 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 
+import * as Dialog from '@radix-ui/react-dialog';
 import { Outlet } from 'react-router-dom';
 
+import { ModalRoot } from 'components/modals';
 import { BREAKPOINTS } from 'config/app';
 import { ScreenTypeProvider, ScreenType } from 'store';
 
@@ -17,7 +19,10 @@ const Main: FC = () => {
 
   return (
     <ScreenTypeProvider value={viewport}>
-      <Outlet />
+      <Dialog.Root>
+        <Outlet />
+        <ModalRoot />
+      </Dialog.Root>
     </ScreenTypeProvider>
   );
 };
