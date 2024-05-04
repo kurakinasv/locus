@@ -1,7 +1,10 @@
 import { FC, ReactNode, useMemo } from 'react';
 
 import { Button, Spacing, Tabs } from 'components';
+import { Snackbar } from 'components/Snackbar';
 import { tabs } from 'config/chores';
+import { SnackbarTheme } from 'config/snackbar';
+import { useSnackbar } from 'hooks/useSnackbar';
 import { useScreenType } from 'store';
 import { noop } from 'utils';
 
@@ -15,6 +18,8 @@ import s from './Chores.module.scss';
 const Chores: FC = () => {
   const screen = useScreenType();
   const isDesktop = screen === 'desktop';
+
+  const { isOpen, openSnackbar, closeSnackbar } = useSnackbar();
 
   const tabsContent: Array<{ value: string; content: ReactNode }> = useMemo(
     () => [
@@ -31,7 +36,7 @@ const Chores: FC = () => {
           Запланировать задачу
         </Button>
         <Spacing size={isDesktop ? 1.6 : 0.8} horizontal={isDesktop} stretched />
-        <Button icon={<PlusIcon />} stretched onClick={noop}>
+        <Button icon={<PlusIcon />} stretched onClick={openSnackbar}>
           Создать задачу
         </Button>
       </div>
@@ -39,6 +44,9 @@ const Chores: FC = () => {
       <div className={s.tabsWrapper}>
         <Tabs tabOptions={tabs} tabsContent={tabsContent} />
       </div>
+      <Snackbar isVisible={isOpen} onDismiss={closeSnackbar} theme={SnackbarTheme.info}>
+        Задача успешно создана
+      </Snackbar>
     </>
   );
 };
