@@ -23,3 +23,5 @@ export * from './Text';
 export * from './Price';
 
 export * from './Checkbox';
+
+export * from './DatePickerInput';

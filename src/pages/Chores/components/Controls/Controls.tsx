@@ -1,16 +1,17 @@
 import * as React from 'react';
 
 import cn from 'classnames';
+import { DateRange } from 'react-day-picker';
 
-import { Dropdown, Input, Spacing } from 'components';
+import { DatePickerInput, Dropdown, Input, Spacing } from 'components';
 import { useScreenType } from 'store';
 import { OptionType } from 'typings/ui';
 
 import s from './Controls.module.scss';
 
 type Props = {
-  dropdownPlaceholder: string;
-  dropdownOptions: OptionType<string>[];
+  dropdownPlaceholder?: string;
+  dropdownOptions?: OptionType<string>[];
 };
 
 const Controls: React.FC<Props> = ({ dropdownPlaceholder, dropdownOptions }) => {
@@ -23,6 +24,8 @@ const Controls: React.FC<Props> = ({ dropdownPlaceholder, dropdownOptions }) => 
     setSearch(e.currentTarget.value);
   };
 
+  const [range, setRange] = React.useState<DateRange | undefined>();
+
   return (
     <div className={cn(s.controls, isMobile && s.controls_mobile)}>
       <Input
@@ -32,7 +35,21 @@ const Controls: React.FC<Props> = ({ dropdownPlaceholder, dropdownOptions }) => 
         onChange={onSearchChange}
       />
       <Spacing size={1.6} horizontal={!isMobile} className={s.spacing} />
-      <Dropdown options={dropdownOptions} placeholder={dropdownPlaceholder} stretched={isMobile} />
+      {!dropdownPlaceholder && (
+        <DatePickerInput
+          range={range}
+          setRange={setRange}
+          placeholder="Выберите даты"
+          stretched={isMobile}
+        />
+      )}
+      {dropdownPlaceholder && dropdownOptions && (
+        <Dropdown
+          options={dropdownOptions}
+          placeholder={dropdownPlaceholder}
+          stretched={isMobile}
+        />
+      )}
     </div>
   );
 };
