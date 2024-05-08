@@ -81,6 +81,11 @@
   }
 }
 
+.defalt-wrapper {
+  @include flexCenter;
+  color: $white;
+}
+
 .icon {
   max-width: 2.4rem;
   max-height: 2.4rem;

@@ -4,22 +4,13 @@
   position: fixed; // !
   overflow: auto; // Allow scrolling within the modal if content overflows
 
-  width: 100%;
-  height: 100%;
-  max-width: 56rem;
-  max-height: 70rem;
-  padding: 3rem 3.6rem;
-
-  top: 50%;
-  left: 50%;
-  transform: translate3d(-50%, -50%, 0);
+  @include centerAbsolute;
   z-index: calc(#{$modalZIndex} + 2);
 
+  @include square(100%);
+
   background-color: $white;
-  border-radius: 24px;
-  box-shadow:
-    hsl(206deg 22% 7% / 0.35) 0 10px 38px -10px,
-    hsl(206deg 22% 7% / 0.2) 0 10px 20px -15px;
+  box-shadow: $dropdownShadow;
 
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -27,14 +18,22 @@
     outline: none;
   }
 
+  &__title {
+    text-align: center;
+  }
+}
+
+.dialog-modal {
+  max-width: 56rem;
+  max-height: 70rem;
+  padding: 3rem 3.6rem;
+
+  border-radius: 24px;
+
   @include mobile {
     padding: 2rem 1.2rem calc(#{$maxMobileHeaderHeight} + 4rem);
     top: calc(50% + #{$maxMobileHeaderHeight});
     animation: contentShowMobile 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  &__title {
-    text-align: center;
   }
 
   &__close {
@@ -47,6 +46,24 @@
     & > svg {
       @include square(100%);
     }
+  }
+}
+
+.dialog-confirm {
+  width: 40rem;
+  max-height: 28rem;
+  min-height: 20rem;
+  height: fit-content;
+  padding: 3rem 3.6rem;
+
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 16px;
+
+  @include mobile {
+    width: calc(100vw - #{$contentVerticalIndentMobile} * 2);
+    padding: 2rem 3rem 2.4rem;
   }
 }
 

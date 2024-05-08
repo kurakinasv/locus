@@ -38,3 +38,8 @@ $green100: #f0ffe6;
 $redMain: #db6658;
 $red100: #ffe8e5;
 $red300: #fab0a7;
+
+// box-shadow
+$dropdownShadow:
+  hsl(206deg 22% 7% / 0.35) 0 10px 38px -10px,
+  hsl(206deg 22% 7% / 0.2) 0 10px 20px -15px;
