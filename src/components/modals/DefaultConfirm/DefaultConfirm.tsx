@@ -9,7 +9,7 @@ type Props = React.PropsWithChildren & {
   cancelButton?: string;
   confirmButton: string;
   cancelAction?: VoidFunction;
-  confirmAction: VoidFunction;
+  confirmAction?: VoidFunction;
 };
 
 const DefaultConfirm: React.FC<Props> = ({

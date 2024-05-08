@@ -16,6 +16,11 @@ class UserStore {
     });
   }
 
+  getUserDebt() {
+    // todo: add logic
+    return Math.floor(Math.random() * 10) > 4;
+  }
+
   login = () => {
     this.isAuth = true;
     this.user = new UserModel(MOCK_USERS[0]);

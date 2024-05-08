@@ -27,9 +27,11 @@ const ModalRoot: React.FC = () => {
       >
         {!!modal && (
           <>
-            <Dialog.Title className={s['dialog-content__title']}>
-              <Title>{ModalConfig[modal].title}</Title>
-            </Dialog.Title>
+            {ModalConfig[modal].title && (
+              <Dialog.Title className={s['dialog-content__title']}>
+                <Title>{ModalConfig[modal].title}</Title>
+              </Dialog.Title>
+            )}
             {!ModalConfig[modal].confirm && (
               <Dialog.Close className={s['dialog-modal__close']}>
                 <CloseIcon />
