@@ -12,10 +12,22 @@ export const useRootStore = () => {
   return store;
 };
 
+export const useUIStore = () => {
+  return useRootStore().uiStore;
+};
+
 export const useUserStore = () => {
   return useRootStore().userStore;
 };
 
-export const useUIStore = () => {
-  return useRootStore().uiStore;
+export const useAuthStore = () => {
+  return useRootStore().authStore;
+};
+
+export const useGroupStore = () => {
+  return useRootStore().groupStore;
+};
+
+export const useChoresStore = () => {
+  return useRootStore().choresStore;
 };

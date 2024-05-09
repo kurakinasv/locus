@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import { DefaultConfirm } from 'components/modals/DefaultConfirm';
-import { useUIStore, useUserStore } from 'store/RootStore/hooks';
+import { useAuthStore, useUIStore } from 'store/RootStore/hooks';
 import { noop } from 'utils/noop';
 import { sleep } from 'utils/sleep';
 
 const ProfileDelete: React.FC = () => {
-  const { logout } = useUserStore();
+  const { logout } = useAuthStore();
   const { closeModal } = useUIStore();
 
   const deleteAction = async () => {
