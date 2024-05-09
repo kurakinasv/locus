@@ -1,19 +1,29 @@
-import { makeAutoObservable, observable } from 'mobx';
+import axios from 'axios';
+import { makeAutoObservable } from 'mobx';
 
-import { MOCK_USERS } from 'entities/mock/user';
+import { ENDPOINTS } from 'config/api';
+import { SnackbarType } from 'config/snackbar';
+import { User } from 'entities/user';
+import { UserServer } from 'entities/user/server';
 import { UserModel } from 'store/models/UserModel';
+import RootStore from 'store/RootStore';
+import { getErrorMsg } from 'utils/getErrorMsg';
+import { responseIsOk } from 'utils/responseIsOk';
 
 // todo: logic
 class UserStore {
-  isAuth = false;
-  inGroup = false;
+  private readonly _rootStore: RootStore;
 
   user: UserModel | null = null;
 
-  constructor() {
-    makeAutoObservable(this, {
-      user: observable.ref,
-    });
+  constructor(rootStore: RootStore) {
+    this._rootStore = rootStore;
+
+    makeAutoObservable(this);
+  }
+
+  setUser(user: User | null) {
+    this.user = user ? new UserModel(user) : null;
   }
 
   getUserDebt() {
@@ -21,35 +31,39 @@ class UserStore {
     return Math.floor(Math.random() * 10) > 4;
   }
 
-  login = () => {
-    this.isAuth = true;
-    this.user = new UserModel(MOCK_USERS[0]);
+  getUser = async () => {
+    try {
+      const response = await axios.get<UserServer>(ENDPOINTS.getUser.url, {
+        withCredentials: true,
+      });
+
+      if (responseIsOk(response)) {
+        this.setUser(response.data);
+        return;
+      }
+
+      this._rootStore.uiStore.snackbar.open(SnackbarType.error);
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
   };
 
-  logout = () => {
-    this.isAuth = false;
-    this.inGroup = false;
-  };
+  deleteAccount = async () => {
+    try {
+      const response = await axios.post(ENDPOINTS.deleteAccount.url, {}, { withCredentials: true });
 
-  deleteAccount = () => {
-    this.isAuth = false;
-    this.inGroup = false;
-  };
+      if (responseIsOk(response)) {
+        this._rootStore.authStore.setAuth(false);
+        this._rootStore.groupStore.setInGroup(false);
+        this.setUser(null);
 
-  enterGroup = () => {
-    this.inGroup = true;
-  };
+        return;
+      }
 
-  createGroup = () => {
-    this.inGroup = true;
-  };
-
-  exitGroup = () => {
-    this.inGroup = false;
-  };
-
-  deleteGroup = () => {
-    this.inGroup = false;
+      this._rootStore.uiStore.snackbar.open(SnackbarType.error);
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
   };
 }
 

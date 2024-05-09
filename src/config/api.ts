@@ -4,10 +4,15 @@ const getBaseUrl = () => `${BASE_URL}/api`;
 
 const getAuthApiUrl = () => `${getBaseUrl()}/auth`;
 
+const getUserApiUrl = () => `${getBaseUrl()}/user`;
+
 enum Endpoints {
   login = 'login',
   logout = 'logout',
   register = 'register',
+  getUser = 'getUser',
+  editProfile = 'editProfile',
+  deleteAccount = 'deleteAccount',
 }
 
 enum HTTTPMethods {
@@ -30,5 +35,19 @@ export const ENDPOINTS: Record<Endpoints, { url: string; method: HTTTPMethods }>
   [Endpoints.register]: {
     url: `${getAuthApiUrl()}/register`,
     method: HTTTPMethods.POST,
+  },
+
+  // user
+  [Endpoints.getUser]: {
+    url: `${getUserApiUrl()}/user`,
+    method: HTTTPMethods.GET,
+  },
+  [Endpoints.editProfile]: {
+    url: `${getUserApiUrl()}/user`,
+    method: HTTTPMethods.PUT,
+  },
+  [Endpoints.deleteAccount]: {
+    url: `${getAuthApiUrl()}/user`,
+    method: HTTTPMethods.DELETE,
   },
 };
