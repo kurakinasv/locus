@@ -37,7 +37,7 @@ const Input: FC<InputProps> = ({
     <div className={cn(s.wrapper, className)}>
       {Icon && <Icon className={s.icon} />}
       <input
-        className={cn(s.input, errorMessage && s.input_error)}
+        className={cn(s.input, errorMessage && touched && s.input_error)}
         value={value ?? undefined}
         name={name}
         placeholder={placeholder}

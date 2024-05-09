@@ -4,6 +4,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { Outlet } from 'react-router-dom';
 
 import { ModalRoot } from 'components/modals';
+import { Snackbar } from 'components/Snackbar';
 import { BREAKPOINTS } from 'config/app';
 import { ScreenTypeProvider, ScreenType } from 'store';
 
@@ -23,6 +24,7 @@ const Main: FC = () => {
         <Outlet />
         <ModalRoot />
       </Dialog.Root>
+      <Snackbar />
     </ScreenTypeProvider>
   );
 };

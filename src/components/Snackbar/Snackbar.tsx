@@ -1,9 +1,10 @@
-import React, { FC, PropsWithChildren, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 
 import { Portal } from '@radix-ui/react-portal';
 import { motion, AnimatePresence } from 'framer-motion';
+import { observer } from 'mobx-react-lite';
 
-import { SnackbarTheme } from 'config/snackbar';
+import { useUIStore } from 'store/RootStore/hooks';
 
 import CloseIcon from 'img/icons/close.svg?react';
 import ErrorIcon from 'img/icons/error.svg?react';
@@ -12,13 +13,10 @@ import SmileIcon from 'img/icons/smile.svg?react';
 
 import s from './Snackbar.module.scss';
 
-type Props = PropsWithChildren & {
-  isVisible: boolean;
-  theme?: SnackbarTheme;
-  onDismiss: VoidFunction;
-};
+const Snackbar: FC = () => {
+  const { snackbar } = useUIStore();
+  const { theme, message, close, isOpen } = snackbar;
 
-const Snackbar: FC<Props> = ({ children, isVisible, theme = SnackbarTheme.info, onDismiss }) => {
   const variants = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.2 } },
     hidden: { opacity: 0, y: 20, transition: { duration: 0.1 } },
@@ -28,7 +26,7 @@ const Snackbar: FC<Props> = ({ children, isVisible, theme = SnackbarTheme.info, 
 
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
-      onDismiss();
+      close();
     }, 3000);
 
     return () => {
@@ -36,20 +34,20 @@ const Snackbar: FC<Props> = ({ children, isVisible, theme = SnackbarTheme.info, 
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [isVisible]);
+  }, [isOpen]);
 
   return (
     <Portal id="snackbar-portal">
       <AnimatePresence>
-        {isVisible && (
+        {isOpen && (
           <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants}>
             <div className={`${s.snackbar} ${s[theme]}`}>
               <div className={s.snackbar__content}>
                 {theme === 'success' && <SmileIcon className={s.snackbar__icon} />}
                 {theme === 'info' && <InfoIcon className={s.snackbar__icon} />}
                 {theme === 'error' && <ErrorIcon className={s.snackbar__icon} />}
-                <p className={s.snackbar__text}>{children}</p>
-                <button className={s.snackbar__button} onClick={onDismiss}>
+                <p className={s.snackbar__text}>{message}</p>
+                <button className={s.snackbar__button} onClick={close}>
                   <CloseIcon />
                 </button>
               </div>
@@ -61,4 +59,4 @@ const Snackbar: FC<Props> = ({ children, isVisible, theme = SnackbarTheme.info, 
   );
 };
 
-export default Snackbar;
+export default observer(Snackbar);

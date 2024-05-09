@@ -5,10 +5,8 @@ import { observer } from 'mobx-react-lite';
 
 import { Button, Spacing, Tabs } from 'components';
 import { ModalEnum } from 'components/modals';
-import { Snackbar } from 'components/Snackbar';
 import { tabs } from 'config/chores';
-import { SnackbarTheme } from 'config/snackbar';
-import { useSnackbar } from 'hooks/useSnackbar';
+import { SnackbarType } from 'config/snackbar';
 import { useScreenType } from 'store';
 import { useUIStore } from 'store/RootStore/hooks';
 
@@ -24,7 +22,7 @@ const Chores: FC = () => {
   const screen = useScreenType();
   const isDesktop = screen === 'desktop';
 
-  const { isOpen, openSnackbar, closeSnackbar } = useSnackbar();
+  const { open: openSnackbar } = useUIStore().snackbar;
 
   const tabsContent: Array<{ value: string; content: ReactNode }> = useMemo(
     () => [
@@ -50,7 +48,11 @@ const Chores: FC = () => {
           <Button onClick={openModal(ModalEnum.addChore)}>schedule</Button>
         </Dialog.Trigger>
         <Spacing size={isDesktop ? 1.6 : 0.8} horizontal={isDesktop} stretched />
-        <Button icon={<PlusIcon />} stretched onClick={openSnackbar}>
+        <Button
+          icon={<PlusIcon />}
+          stretched
+          onClick={() => openSnackbar(SnackbarType.choreCreated)}
+        >
           Создать задачу
         </Button>
       </div>
@@ -58,9 +60,6 @@ const Chores: FC = () => {
       <div className={s.tabsWrapper}>
         <Tabs tabOptions={tabs} tabsContent={tabsContent} />
       </div>
-      <Snackbar isVisible={isOpen} onDismiss={closeSnackbar} theme={SnackbarTheme.info}>
-        Задача успешно создана
-      </Snackbar>
     </>
   );
 };
