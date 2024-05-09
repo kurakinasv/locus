@@ -6,6 +6,8 @@ const getAuthApiUrl = () => `${getBaseUrl()}/auth`;
 
 const getUserApiUrl = () => `${getBaseUrl()}/user`;
 
+const getChoreApiUrl = () => `${getBaseUrl()}/chore`;
+
 enum Endpoints {
   login = 'login',
   logout = 'logout',
@@ -13,6 +15,7 @@ enum Endpoints {
   getUser = 'getUser',
   editProfile = 'editProfile',
   deleteAccount = 'deleteAccount',
+  createChore = 'createChore',
 }
 
 enum HTTTPMethods {
@@ -49,5 +52,11 @@ export const ENDPOINTS: Record<Endpoints, { url: string; method: HTTTPMethods }>
   [Endpoints.deleteAccount]: {
     url: `${getAuthApiUrl()}/user`,
     method: HTTTPMethods.DELETE,
+  },
+
+  // chores
+  [Endpoints.createChore]: {
+    url: `${getChoreApiUrl()}/chore`,
+    method: HTTTPMethods.POST,
   },
 };

@@ -1,21 +1,20 @@
 import * as React from 'react';
 
-import * as Dialog from '@radix-ui/react-dialog';
-
 import { Button } from 'components/Button';
-import { useUIStore } from 'store/RootStore/hooks';
+import { useChoresStore } from 'store/RootStore/hooks';
 
 // import s from './AddChore.module.scss';
 
 const AddChore: React.FC = () => {
-  const { closeModal } = useUIStore();
+  const { createChore } = useChoresStore();
 
   return (
     <>
       <h1>Add Chore</h1>
-      <Dialog.Close asChild>
-        <Button onClick={closeModal}>Add Chore</Button>
-      </Dialog.Close>
+      <Button onClick={createChore} closesModal>
+        Add
+      </Button>
+      <Button closesModal>Add Chore</Button>
     </>
   );
 };
