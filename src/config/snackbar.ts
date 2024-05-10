@@ -7,7 +7,9 @@ export enum SnackbarTheme {
 export enum SnackbarType {
   error = 'error',
   passwordsDoNotMatch = 'passwordsDoNotMatch',
+  groupEdited = 'groupEdited',
   choreCreated = 'choreCreated',
+  copyInviteCode = 'copyInviteCode',
 }
 
 export const SNACKBAR_CONFIG: Record<SnackbarType, { message: string; theme: SnackbarTheme }> = {
@@ -19,8 +21,16 @@ export const SNACKBAR_CONFIG: Record<SnackbarType, { message: string; theme: Sna
     message: 'Пароли не совпадают',
     theme: SnackbarTheme.error,
   },
+  [SnackbarType.groupEdited]: {
+    message: 'Настройки группы успешно изменены',
+    theme: SnackbarTheme.success,
+  },
   [SnackbarType.choreCreated]: {
     message: 'Задача успешно создана',
     theme: SnackbarTheme.success,
+  },
+  [SnackbarType.copyInviteCode]: {
+    message: 'Код приглашения скопирован в буфер обмена',
+    theme: SnackbarTheme.info,
   },
 };

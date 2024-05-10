@@ -105,7 +105,7 @@ class AuthStore {
 
       if (responseIsOk(response)) {
         this.setAuth(false);
-        this._rootStore.groupStore.setInGroup(false);
+        this._rootStore.userStore.setInGroup(false);
         this._rootStore.userStore.setUser(null);
         localStorage.removeItem(userStorageName);
       }

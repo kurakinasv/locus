@@ -11,11 +11,11 @@ import 'swiper/css';
 import 'styles/global.scss';
 
 const App = () => {
-  const { checkAuth, isAuth } = useAuthStore();
+  const { init } = useAuthStore();
 
   useEffect(() => {
-    checkAuth();
-  }, [isAuth]);
+    init();
+  }, []);
 
   return (
     <RootStoreProvider>

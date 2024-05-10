@@ -18,12 +18,12 @@ import { Main } from 'pages/Main';
 import { ProfileSettings } from 'pages/ProfileSettings';
 import { ShoppingLists } from 'pages/ShoppingLists';
 import { UIKit } from 'pages/UIKit';
-import { useAuthStore, useGroupStore, useRootStore } from 'store/RootStore/hooks';
+import { useAuthStore, useRootStore, useUserStore } from 'store/RootStore/hooks';
 
 const Router: FC = () => {
   const { isDev } = useRootStore();
   const { isAuth } = useAuthStore();
-  const { inGroup } = useGroupStore();
+  const { inGroup } = useUserStore();
 
   const authNoGroupRoutes = (
     <>

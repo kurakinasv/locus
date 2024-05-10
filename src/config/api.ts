@@ -8,22 +8,39 @@ const getAuthApiUrl = () => `${getBaseUrl()}/auth`;
 
 const getUserApiUrl = () => `${getBaseUrl()}/user`;
 
+const getGroupApiUrl = () => `${getBaseUrl()}/group`;
+
 const getUserGroupApiUrl = () => `${getBaseUrl()}/user-group`;
+
+const getUserExpenseApiUrl = () => `${getBaseUrl()}/user-expense`;
 
 const getChoreApiUrl = () => `${getBaseUrl()}/chore`;
 
 enum Endpoints {
+  // auth
   login = 'login',
   logout = 'logout',
   register = 'register',
+
+  // user
   getUser = 'getUser',
+  getGroupUserExpenses = 'getGroupUserExpenses',
   editProfile = 'editProfile',
   deleteAccount = 'deleteAccount',
+
+  // group
+  getGroup = 'getGroup',
+  createGroup = 'createGroup',
+  editGroup = 'editGroup',
+  deleteGroup = 'deleteGroup',
+  generateInviteCode = 'generateInviteCode',
+
   getCurrentGroup = 'getCurrentGroup',
   getUserGroups = 'getUserGroups',
   joinGroup = 'joinGroup',
   exitGroup = 'exitGroup',
 
+  // chore
   createChore = 'createChore',
 }
 
@@ -61,6 +78,33 @@ export const ENDPOINTS: Record<Endpoints, { url: string; method: HTTTPMethods }>
   [Endpoints.deleteAccount]: {
     url: `${getAuthApiUrl()}/user`,
     method: HTTTPMethods.DELETE,
+  },
+
+  [Endpoints.getGroupUserExpenses]: {
+    url: `${getUserExpenseApiUrl()}/group`,
+    method: HTTTPMethods.GET,
+  },
+
+  // groups
+  [Endpoints.getGroup]: {
+    url: `${getGroupApiUrl()}/group`,
+    method: HTTTPMethods.GET,
+  },
+  [Endpoints.createGroup]: {
+    url: `${getGroupApiUrl()}/group`,
+    method: HTTTPMethods.POST,
+  },
+  [Endpoints.editGroup]: {
+    url: `${getGroupApiUrl()}/group`,
+    method: HTTTPMethods.PUT,
+  },
+  [Endpoints.deleteGroup]: {
+    url: `${getGroupApiUrl()}/group`,
+    method: HTTTPMethods.DELETE,
+  },
+  [Endpoints.generateInviteCode]: {
+    url: `${getGroupApiUrl()}/invite`,
+    method: HTTTPMethods.GET,
   },
 
   [Endpoints.getCurrentGroup]: {
