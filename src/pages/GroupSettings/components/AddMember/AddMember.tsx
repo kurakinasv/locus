@@ -23,7 +23,7 @@ const AddMember: React.FC = () => {
     }
   };
 
-  if (!group) {
+  if (!group || !group.users) {
     return null;
   }
 

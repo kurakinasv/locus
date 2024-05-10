@@ -10,7 +10,7 @@ import ArrowSVG from 'img/icons/arrow-left.svg?react';
 import s from './EnterGroup.module.scss';
 
 const EnterGroup: React.FC = () => {
-  const { joinGroup: enterGroup } = useUserStore();
+  const { joinGroup } = useUserStore();
 
   const nav = useNavigate();
 
@@ -22,6 +22,10 @@ const EnterGroup: React.FC = () => {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.currentTarget.value);
+  };
+
+  const onJoinGroup = () => {
+    joinGroup(value);
   };
 
   return (
@@ -40,7 +44,7 @@ const EnterGroup: React.FC = () => {
           Назад
         </Button>
         <Spacing size={1} horizontal />
-        <Button onClick={enterGroup} disabled={!value}>
+        <Button onClick={onJoinGroup} disabled={!value}>
           Войти
         </Button>
       </div>

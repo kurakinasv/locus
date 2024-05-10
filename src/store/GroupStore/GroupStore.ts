@@ -5,6 +5,7 @@ import { ENDPOINTS, STATIC_URL } from 'config/api';
 import { SnackbarType } from 'config/snackbar';
 import { GroupEditParams } from 'entities/group';
 import { GroupServer } from 'entities/group/server';
+import { GroupMemberServer } from 'entities/groupMember';
 import GroupModel from 'store/models/GroupModel';
 import RootStore from 'store/RootStore/RootStore';
 import { UUIDString } from 'typings/api';
@@ -38,8 +39,6 @@ class GroupStore {
         return;
       }
 
-      console.log(response.data.users);
-
       const image = response.data.image
         ? `${STATIC_URL}/${response.data.image}`
         : response.data.image;
@@ -53,17 +52,16 @@ class GroupStore {
 
   createGroup = async (name: string) => {
     try {
-      const response = await axios.post<GroupServer>(
+      const response = await axios.post<{ group: GroupServer; userInGroup: GroupMemberServer }>(
         ENDPOINTS.createGroup.url,
         { name },
         { withCredentials: true }
       );
-      console.log('createGroup', response.data);
 
       if (responseIsOk(response)) {
         this._rootStore.userStore.setInGroup(true);
-        this.setGroup(response.data);
-        // todo: set group member
+        this.setGroup(response.data.group);
+        this._rootStore.groupMemberStore.setGroupMember(response.data.userInGroup);
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));

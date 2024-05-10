@@ -30,7 +30,7 @@ const GroupSettings: FC = () => {
   return (
     <div className={s.wrapper}>
       <CommonSettings />
-      {groupMember?.isAdmin && (
+      {groupMember.isAdmin && (
         <>
           <Spacing size={3.5} />
           <AddMember />

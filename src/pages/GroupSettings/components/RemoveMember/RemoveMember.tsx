@@ -13,30 +13,31 @@ type Props = {
 };
 
 const RemoveMember: React.FC<Props> = ({ userId, users }) => {
-  const userOptions: OptionType<UUIDString>[] = users.reduce(
-    (options, { id, name, surname, username }) => {
-      if (userId === id) {
-        return options;
-      }
-
-      let fullName = username;
-
-      if (name || surname) {
-        fullName = `${name ?? ''} ${surname ?? ''}`;
-      }
-
-      return [
-        ...options,
-        {
-          label: `${fullName}`,
-          value: id,
-        },
-      ];
-    },
-    [] as OptionType<UUIDString>[]
-  );
-
   const [option, setOption] = React.useState('');
+
+  const userOptions: OptionType<UUIDString>[] = React.useMemo(
+    () =>
+      users.reduce((options, { id, name, surname, username }) => {
+        if (userId === id) {
+          return options;
+        }
+
+        let fullName = username;
+
+        if (name || surname) {
+          fullName = `${name ?? ''} ${surname ?? ''}`;
+        }
+
+        return [
+          ...options,
+          {
+            label: `${fullName}`,
+            value: id,
+          },
+        ];
+      }, [] as OptionType<UUIDString>[]),
+    [userId, users]
+  );
 
   return (
     <>

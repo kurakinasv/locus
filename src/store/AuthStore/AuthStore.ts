@@ -107,6 +107,7 @@ class AuthStore {
         this.setAuth(false);
         this._rootStore.userStore.setInGroup(false);
         this._rootStore.userStore.setUser(null);
+        this._rootStore.groupMemberStore.setGroupMember(null);
         localStorage.removeItem(userStorageName);
       }
     } catch (error) {

@@ -3,10 +3,13 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 import { ENDPOINTS } from 'config/api';
 import { SnackbarType } from 'config/snackbar';
+import { GroupServer } from 'entities/group';
+import { GroupMemberServer } from 'entities/groupMember';
 import { User } from 'entities/user';
 import { UserServer } from 'entities/user/server';
 import { UserModel } from 'store/models/UserModel';
 import RootStore from 'store/RootStore';
+import { UUIDString } from 'typings/api';
 import { getErrorMsg } from 'utils/getErrorMsg';
 import { responseIsOk } from 'utils/responseIsOk';
 
@@ -105,6 +108,26 @@ class UserStore {
       }
 
       this._rootStore.uiStore.snackbar.open(SnackbarType.error);
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
+
+  joinGroup = async (code: UUIDString) => {
+    try {
+      const response = await axios.post<{ group: GroupServer; userInGroup: GroupMemberServer }>(
+        ENDPOINTS.joinGroup.url,
+        { code },
+        { withCredentials: true }
+      );
+
+      if (responseIsOk(response)) {
+        this.setInGroup(true);
+        this._rootStore.groupStore.setGroup(response.data.group);
+        this._rootStore.groupMemberStore.setGroupMember(response.data.userInGroup);
+
+        return;
+      }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
