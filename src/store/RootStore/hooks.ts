@@ -28,6 +28,10 @@ export const useGroupStore = () => {
   return useRootStore().groupStore;
 };
 
+export const useGroupMemberStore = () => {
+  return useRootStore().groupMemberStore;
+};
+
 export const useChoresStore = () => {
   return useRootStore().choresStore;
 };

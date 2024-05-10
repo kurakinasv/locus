@@ -27,13 +27,16 @@ class AuthStore {
     this.isAuth = isAuth;
   };
 
-  initUser(user: User) {
+  initUser = async (user: User) => {
     localStorage.setItem(userStorageName, JSON.stringify(user.id));
     this._rootStore.userStore.setUser(user);
-    this.setAuth(true);
-  }
 
-  checkAuth = async () => {
+    await this._rootStore.groupMemberStore.getGroupMember();
+
+    this.setAuth(true);
+  };
+
+  init = async () => {
     try {
       const userId: string | null = JSON.parse(String(localStorage.getItem(userStorageName)));
 
@@ -42,7 +45,15 @@ class AuthStore {
         return;
       }
 
+      // todo: add loading state
       await this._rootStore.userStore.getUser();
+      await this._rootStore.groupMemberStore.init();
+
+      const currentMember = this._rootStore.groupMemberStore.groupMember;
+
+      if (currentMember) {
+        await this._rootStore.groupStore.getGroup(currentMember.groupId);
+      }
 
       this.setAuth(true);
     } catch (error) {

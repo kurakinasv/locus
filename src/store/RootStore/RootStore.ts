@@ -2,6 +2,7 @@ import { makeAutoObservable } from 'mobx';
 
 import AuthStore from 'store/AuthStore';
 import ChoresStore from 'store/ChoresStore';
+import GroupMemberStore from 'store/GroupMemberStore';
 import GroupStore from 'store/GroupStore';
 import UIStore from 'store/UIStore';
 import UserStore from 'store/UserStore';
@@ -12,6 +13,7 @@ class RootStore {
   readonly authStore: AuthStore;
   readonly userStore: UserStore;
   readonly groupStore: GroupStore;
+  readonly groupMemberStore: GroupMemberStore;
   readonly choresStore: ChoresStore;
 
   readonly isDev: boolean;
@@ -26,6 +28,7 @@ class RootStore {
     this.authStore = new AuthStore(this);
     this.userStore = new UserStore(this);
     this.groupStore = new GroupStore(this);
+    this.groupMemberStore = new GroupMemberStore(this);
     this.choresStore = new ChoresStore(this);
   }
 }

@@ -1,4 +1,4 @@
-import { DateString } from 'typings/api';
+import { AutomaticFields } from 'typings/api';
 
 export type UserServer = {
   id: string;
@@ -6,6 +6,4 @@ export type UserServer = {
   surname?: string;
   username: string;
   email: string;
-  createdAt: DateString;
-  updatedAt: DateString;
-};
+} & AutomaticFields;

@@ -9,3 +9,8 @@ export type NumberString = string;
 
 /** String that converts to a date */
 export type DateString = string;
+
+export type AutomaticFields = {
+  createdAt: DateString;
+  updatedAt: DateString;
+};
