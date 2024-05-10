@@ -3,14 +3,14 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Button, ButtonTheme, Input, Spacing, Text, Title } from 'components';
-import { useGroupStore } from 'store/RootStore/hooks';
+import { useUserStore } from 'store/RootStore/hooks';
 
 import ArrowSVG from 'img/icons/arrow-left.svg?react';
 
 import s from './EnterGroup.module.scss';
 
 const EnterGroup: React.FC = () => {
-  const { enterGroup } = useGroupStore();
+  const { joinGroup: enterGroup } = useUserStore();
 
   const nav = useNavigate();
 

@@ -14,26 +14,45 @@ import { UserCard } from './UserCard';
 
 import s from './RightsSettings.module.scss';
 
-const RightsSettings: React.FC = () => {
+type Props = {
+  userId: User['id'];
+  usersInGroup: User[];
+  editGroup: (userIds: Array<User['id']>) => void;
+};
+
+const RightsSettings: React.FC<Props> = ({ usersInGroup, userId, editGroup }) => {
   const screen = useScreenType();
   const isDesktop = screen === 'desktop';
 
+  const [touched, setTouched] = React.useState(false);
+
   const [users, setUsers] = React.useState<Array<User & { selected: boolean }>>(() =>
-    MOCK_USERS.reduce(
-      // todo: change to group id
-      (prev, user) => [...prev, { ...user, selected: user.adminInGroups?.includes(1) ?? false }],
+    usersInGroup.reduce(
+      // todo: set other admins
+      (prev, user) => [...prev, { ...user, selected: user.id === userId }],
       [] as Array<User & { selected: boolean }>
     )
   );
 
   const onUserClick = React.useCallback(
-    (id: number) => () => {
+    (id: User['id']) => () => {
+      if (userId === id) {
+        return;
+      }
+
       setUsers((prev) =>
         prev.map((user) => (id === user.id ? { ...user, selected: !user.selected } : user))
       );
+      setTouched(true);
     },
-    []
+    [userId]
   );
+
+  const onSaveClick = React.useCallback(() => {
+    const selectedUsers = users.filter((user) => user.selected);
+
+    editGroup(selectedUsers.map((user) => user.id));
+  }, [users, editGroup]);
 
   return (
     <>
@@ -61,7 +80,8 @@ const RightsSettings: React.FC = () => {
             <SwiperSlide key={user.id}>
               <UserCard
                 name={user.name || user.username}
-                image={user.image}
+                // todo: pass image
+                // image={user.image}
                 selected={user.selected}
                 onClick={onUserClick(user.id)}
               />
@@ -70,11 +90,11 @@ const RightsSettings: React.FC = () => {
         </Swiper>
       </div>
       <Spacing size={1.2} />
-      <Button size={SizeEnum.s} onClick={noop}>
+      <Button size={SizeEnum.s} onClick={onSaveClick} disabled={!touched}>
         Сохранить
       </Button>
     </>
   );
 };
 
-export default RightsSettings;
+export default React.memo(RightsSettings);

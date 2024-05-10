@@ -5,6 +5,7 @@ import { SNACKBAR_CONFIG } from 'config/snackbar';
 export const getErrorMsg = (err: unknown): string => {
   if (import.meta.env.DEV) {
     console.error(
+      'getErrorMsg',
       isAxiosError(err)
         ? err.response?.data.message
         : err instanceof Error

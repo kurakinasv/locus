@@ -11,6 +11,9 @@
     transform: translateY(-50%);
     right: 1.8rem;
 
+    max-width: 2rem;
+    max-height: 2rem;
+
     color: $turquoiseMain;
     @include animate(color);
 

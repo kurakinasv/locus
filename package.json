@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build --mode production",
     "build:dev": "tsc && vite build --mode development",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 20",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives",
     "lint:fix": "eslint src --ext ts,tsx --fix",
     "stylelint": "stylelint \"**/*.(s)css\"",
     "stylelint:fix": "stylelint \"**/*.(s)css\" --fix",

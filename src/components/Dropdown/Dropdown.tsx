@@ -17,20 +17,27 @@ type DropdownProps = {
   placeholder: string;
   options: Array<{ value: string; label: string }>;
   stretched?: boolean;
+  // todo: make required
+  selectedOption?: string;
+  onChange?: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const Dropdown: FC<DropdownProps> = ({ options, placeholder, stretched = false }) => {
+const Dropdown: FC<DropdownProps> = ({
+  options,
+  placeholder,
+  stretched = false,
+  selectedOption,
+  onChange,
+}) => {
   const triggerRef = useRef<HTMLButtonElement>(null);
 
-  const [option, setOption] = useState('');
-
   const toggleOption = (opt: string) => {
-    setOption((v) => (opt === v ? '' : opt));
+    onChange?.((v: string) => (opt === v ? '' : opt));
   };
 
   const clearOption = (e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation();
-    setOption('');
+    onChange?.('');
   };
 
   const [isOpen, setIsOpen] = useState(false);
@@ -55,22 +62,26 @@ const Dropdown: FC<DropdownProps> = ({ options, placeholder, stretched = false }
         onClick={() => onOpenChange(!isOpen)}
         ref={triggerRef}
       >
-        {!option && <div className={s.placeholder}>{placeholder}</div>}
-        {option && (
-          <div className={s.label}>{options.find((opt) => opt.value === option)?.label}</div>
+        {!selectedOption && <div className={s.placeholder}>{placeholder}</div>}
+        {selectedOption && (
+          <div className={s.label}>
+            {options.find((opt) => opt.value === selectedOption)?.label}
+          </div>
         )}
-        {!option && <ShevronIcon className={cn(s.icon, isOpen && s['icon_open'])} />}
-        {option && <Cross2Icon className={cn(s.icon, s.icon__close)} onClick={clearOption} />}
+        {!selectedOption && <ShevronIcon className={cn(s.icon, isOpen && s['icon_open'])} />}
+        {selectedOption && (
+          <Cross2Icon className={cn(s.icon, s.icon__close)} onClick={clearOption} />
+        )}
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content className={s.content} onInteractOutside={closeDropdown}>
-          <DropdownMenu.RadioGroup value={option} onValueChange={toggleOption}>
+          <DropdownMenu.RadioGroup value={selectedOption} onValueChange={toggleOption}>
             {options.map((opt) => (
               <DropdownMenu.RadioItem
                 key={opt.value}
                 value={opt.value}
-                className={cn(s.item, opt.value === option && s[`item_active`])}
+                className={cn(s.item, opt.value === selectedOption && s[`item_active`])}
                 onClick={() => onOpenChange(false)}
               >
                 {opt.label}
