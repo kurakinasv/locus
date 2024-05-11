@@ -5,4 +5,5 @@ export const VALIDATION_MESSAGES = {
   usernameMinLength: 'Минимальное число символов – 5',
   usernameMaxLength: 'Максимальное число символов – 20',
   integerValues: 'Введите целое число',
+  categoryNameMaxLength: 'Максимальное число символов – 30',
 };

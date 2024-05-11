@@ -16,6 +16,8 @@ const getUserExpenseApiUrl = () => `${getBaseUrl()}/user-expense`;
 
 const getChoreApiUrl = () => `${getBaseUrl()}/chore`;
 
+const getScheduleApiUrl = () => `${getBaseUrl()}/schedule`;
+
 enum Endpoints {
   // auth
   login = 'login',
@@ -42,6 +44,11 @@ enum Endpoints {
 
   // chore
   createChore = 'createChore',
+
+  // schedule
+  createSchedule = 'createSchedule',
+  // editSchedule = 'editSchedule',
+  // deleteSchedule = 'deleteSchedule',
 }
 
 enum HTTTPMethods {
@@ -129,4 +136,18 @@ export const ENDPOINTS: Record<Endpoints, { url: string; method: HTTTPMethods }>
     url: `${getChoreApiUrl()}/chore`,
     method: HTTTPMethods.POST,
   },
+
+  // schedule
+  [Endpoints.createSchedule]: {
+    url: `${getScheduleApiUrl()}/schedule`,
+    method: HTTTPMethods.POST,
+  },
+  // [Endpoints.editSchedule]: {
+  //   url: `${getScheduleApiUrl()}/schedule`,
+  //   method: HTTTPMethods.PUT,
+  // },
+  // [Endpoints.deleteSchedule]: {
+  //   url: `${getScheduleApiUrl()}/schedule`,
+  //   method: HTTTPMethods.DELETE,
+  // },
 };

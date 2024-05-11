@@ -7,11 +7,12 @@ import { Spacing } from 'components/Spacing';
 import { SizeEnum } from 'typings/ui';
 
 type Props = {
-  range: DateRange | undefined;
+  range?: DateRange | undefined;
+  selectedDate?: Date | undefined;
   onClick: VoidFunction;
 };
 
-const Footer: React.FC<Props> = ({ range, onClick }) => {
+const Footer: React.FC<Props> = ({ range, selectedDate, onClick }) => {
   return (
     <>
       <Spacing />
@@ -19,7 +20,7 @@ const Footer: React.FC<Props> = ({ range, onClick }) => {
         onClick={onClick}
         size={SizeEnum.s}
         theme={ButtonTheme.outlined}
-        disabled={!range?.from || !range?.to}
+        disabled={selectedDate ? !selectedDate : !range?.from || !range?.to}
       >
         Ок
       </Button>

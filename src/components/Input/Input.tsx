@@ -3,6 +3,7 @@ import { ChangeEvent, FC, InputHTMLAttributes, SVGProps, memo } from 'react';
 import cn from 'classnames';
 import { FieldInputProps } from 'formik';
 
+import { Spacing } from 'components/Spacing';
 import { PropsWithClassName } from 'typings/props';
 
 import s from './Input.module.scss';
@@ -16,6 +17,7 @@ type InputProps = PropsWithClassName & {
   stretched?: boolean;
   touched?: boolean;
   errorMessage?: string;
+  label?: React.ReactNode;
   field?: FieldInputProps<string>;
 } & InputHTMLAttributes<HTMLInputElement>;
 
@@ -27,6 +29,7 @@ const Input: FC<InputProps> = ({
   name = '',
   touched = false,
   errorMessage = '',
+  label,
   className,
   onChange,
   field: formikField,
@@ -35,18 +38,28 @@ const Input: FC<InputProps> = ({
 }) => {
   return (
     <div className={cn(s.wrapper, className)}>
-      {Icon && <Icon className={s.icon} />}
-      <input
-        className={cn(s.input, errorMessage && touched && s.input_error)}
-        value={value ?? undefined}
-        name={name}
-        placeholder={placeholder}
-        disabled={disabled}
-        onChange={onChange}
-        {...formikField}
-        {...props}
-      />
+      <div className={s['input-wrapper']}>
+        {Icon && <Icon className={s.icon} />}
+        <input
+          className={cn(s.input, errorMessage && touched && s.input_error)}
+          value={value ?? undefined}
+          name={name}
+          placeholder={placeholder}
+          disabled={disabled}
+          onChange={onChange}
+          {...formikField}
+          {...props}
+        />
+      </div>
       {errorMessage && touched && <div className={s.error}>{errorMessage}</div>}
+      {label && !(errorMessage && touched) && (
+        <>
+          <Spacing size={0.4} />
+          <label className={s.label} htmlFor={name}>
+            {label}
+          </label>
+        </>
+      )}
     </div>
   );
 };

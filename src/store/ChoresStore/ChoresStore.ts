@@ -81,6 +81,33 @@ class ChoresStore {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
   };
+
+  createSchedule = async (params: {
+    choreId: DefaultId;
+    frequency: ScheduleFrequency;
+    dateFrom: Date;
+    dateTo?: Date;
+    users?: UUIDString[];
+  }) => {
+    try {
+      console.log('createSchedule', params);
+
+      // const response = await axios.post(
+      //   ENDPOINTS.createSchedule.url,
+      //   {},
+      //   { withCredentials: true }
+      // );
+
+      await sleep(1000);
+      const response = { message: 'ok createSchedule' };
+
+      if (response) {
+        console.log('createSchedule', response);
+      }
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
 }
 
 export default ChoresStore;
