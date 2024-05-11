@@ -75,3 +75,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@mixin defaultFormWrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}

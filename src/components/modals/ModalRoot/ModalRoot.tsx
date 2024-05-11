@@ -4,6 +4,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import cn from 'classnames';
 import { observer } from 'mobx-react-lite';
 
+import { Spacing } from 'components/Spacing';
 import { Title } from 'components/Title';
 import { useUIStore } from 'store/RootStore/hooks';
 
@@ -28,9 +29,12 @@ const ModalRoot: React.FC = () => {
         {!!modal && (
           <>
             {ModalConfig[modal].title && (
-              <Dialog.Title className={s['dialog-content__title']}>
-                <Title>{ModalConfig[modal].title}</Title>
-              </Dialog.Title>
+              <>
+                <Dialog.Title className={s['dialog-content__title']}>
+                  <Title>{ModalConfig[modal].title}</Title>
+                </Dialog.Title>
+                <Spacing size={3} />
+              </>
             )}
             {!ModalConfig[modal].confirm && (
               <Dialog.Close className={s['dialog-modal__close']}>

@@ -31,6 +31,10 @@ class UIStore {
   closeModal = () => {
     this._modal = null;
   };
+
+  onOpenChange = (isOpen: boolean) => {
+    !isOpen && this.closeModal();
+  };
 }
 
 export default UIStore;

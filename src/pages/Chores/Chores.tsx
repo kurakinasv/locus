@@ -39,20 +39,16 @@ const Chores: FC = () => {
   return (
     <>
       <div className={s.buttons}>
-        <Dialog.Trigger asChild>
-          <Button icon={<CalendarIcon />} stretched onClick={openModal(ModalEnum.addSchedule)}>
-            Запланировать задачу
-          </Button>
-        </Dialog.Trigger>
-        <Dialog.Trigger asChild>
-          <Button onClick={openModal(ModalEnum.addChore)}>schedule</Button>
-        </Dialog.Trigger>
-        <Spacing size={isDesktop ? 1.6 : 0.8} horizontal={isDesktop} stretched />
         <Button
-          icon={<PlusIcon />}
+          icon={<CalendarIcon />}
           stretched
-          onClick={() => openSnackbar(SnackbarType.choreCreated)}
+          onClick={openModal(ModalEnum.addSchedule)}
+          opensModal
         >
+          Запланировать задачу
+        </Button>
+        <Spacing size={isDesktop ? 1.6 : 0.8} horizontal={isDesktop} stretched />
+        <Button icon={<PlusIcon />} stretched onClick={openModal(ModalEnum.addChore)} opensModal>
           Создать задачу
         </Button>
       </div>
