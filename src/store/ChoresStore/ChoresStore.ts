@@ -2,17 +2,18 @@ import axios from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import { ENDPOINTS } from 'config/api';
-import { CREATE_CATEGORY_OPTION, ScheduleFrequency } from 'config/chores';
+import { ScheduleFrequency } from 'config/chores';
 import { SnackbarType } from 'config/snackbar';
-import { Chore, ChoreCategory, ChoreCategoryIcon } from 'entities/chore';
-import { MOCK_CHORES_CATEGORIES, MOCK_CHORE_LIST } from 'entities/mock/chores';
+import { Chore } from 'entities/chore';
+import { ChoreCreateParams, ChoreEditParams } from 'entities/chore/params';
+import { ChoreServer } from 'entities/chore/server';
 import { MOCK_SCHEDULE_LIST } from 'entities/mock/schedule';
-import { MOCK_SCHEDULED_TASKS } from 'entities/mock/scheduledTasks';
 import { ScheduleItem } from 'entities/schedule';
 import { ScheduledTask } from 'entities/scheduledTask';
 import RootStore from 'store/RootStore';
 import { DefaultId, UUIDString } from 'typings/api';
 import { getErrorMsg } from 'utils/getErrorMsg';
+import { responseIsOk } from 'utils/responseIsOk';
 import { sleep } from 'utils/sleep';
 
 class ChoresStore {
@@ -44,17 +45,18 @@ class ChoresStore {
     this.activeSchedule = schedule;
   };
 
+  setChores = (chores: Chore[]) => {
+    this.chores = chores.filter((chore) => chore.isArchived === false);
+  };
+
   getChore = async (id: DefaultId) => {
     try {
-      // const response = await axios.get(ENDPOINTS.getChore.url(id), { withCredentials: true });
-      await sleep(1000);
-      const response = { data: MOCK_CHORE_LIST[id - 1] };
+      const response = await axios.get(ENDPOINTS.getChore.getUrl!(id), { withCredentials: true });
 
       if (response.data) {
         runInAction(() => {
           this.activeChore = response.data;
         });
-        console.log('getChore', response.data);
 
         return response.data;
       }
@@ -65,15 +67,10 @@ class ChoresStore {
 
   getChoresInGroup = async () => {
     try {
-      // const response = await axios.get(ENDPOINTS.getChoresInGroup.url(groupId), { withCredentials: true });
-      await sleep(1000);
-      const response = { data: MOCK_CHORE_LIST };
+      const response = await axios.get(ENDPOINTS.getChoresInGroup.url, { withCredentials: true });
 
       if (response.data) {
-        runInAction(() => {
-          this.chores = response.data;
-        });
-        console.log('getChoresInGroup', response.data);
+        this.setChores(response.data);
 
         return response.data;
       }
@@ -82,52 +79,44 @@ class ChoresStore {
     }
   };
 
-  createChore = async ({
-    name,
-    points,
-    categoryId,
-  }: {
-    name: string;
-    points: number;
-    categoryId: DefaultId | null;
-  }) => {
+  createChore = async ({ name, points, categoryId }: ChoreCreateParams) => {
     try {
-      console.log('createChore', name, points, categoryId);
+      const response = await axios.post(
+        ENDPOINTS.createChore.url,
+        {
+          name: name.trim(),
+          points,
+          categoryId,
+        },
+        { withCredentials: true }
+      );
 
-      const response = await axios.post(ENDPOINTS.createChore.url, {}, { withCredentials: true });
-      await sleep(1000);
+      if (responseIsOk(response)) {
+        this.setChores([...this.chores, response.data]);
 
-      if (response) {
-        console.log('createChore', response);
+        this._rootStore.uiStore.snackbar.open(SnackbarType.choreCreated);
+
+        return true;
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
   };
 
-  editChore = async ({
-    choreId,
-    name,
-    points,
-    categoryId,
-    isArchived,
-  }: {
-    choreId: DefaultId;
-    name?: string;
-    points?: number;
-    categoryId?: DefaultId;
-    isArchived?: boolean;
-  }) => {
+  editChore = async ({ choreId, name, points, categoryId, isArchived }: ChoreEditParams) => {
     try {
-      console.log('editChore', choreId, name, points, categoryId, isArchived);
+      const response = await axios.put<ChoreServer[]>(
+        ENDPOINTS.editChore.getUrl!(choreId),
+        { name: name?.trim(), points, categoryId, isArchived },
+        { withCredentials: true }
+      );
 
-      // const response = await axios.post(ENDPOINTS.editChore.url, {}, { withCredentials: true });
-      await sleep(1000);
-      const response = { message: 'ok editChore' };
+      if (responseIsOk(response)) {
+        this.setChores(response.data);
 
-      if (response) {
-        console.log('editChore', response);
         this._rootStore.uiStore.snackbar.open(SnackbarType.choreUpdated);
+
+        return true;
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));

@@ -1,3 +1,5 @@
+import { DefaultId } from 'typings/api';
+
 const BASE_URL = 'http://localhost:3000';
 
 export const STATIC_URL = BASE_URL + '/static';
@@ -43,7 +45,10 @@ enum Endpoints {
   exitGroup = 'exitGroup',
 
   // chore
+  getChore = 'getChore',
+  getChoresInGroup = 'getChoresInGroup',
   createChore = 'createChore',
+  editChore = 'editChore',
 
   // chore categories
   getChoreCategories = 'getChoreCategories',
@@ -62,7 +67,13 @@ enum HTTTPMethods {
   DELETE = 'DELETE',
 }
 
-export const ENDPOINTS: Record<Endpoints, { url: string; method: HTTTPMethods }> = {
+type EndpointConfig = {
+  url: string;
+  method: HTTTPMethods;
+  getUrl?: (id: number) => string;
+};
+
+export const ENDPOINTS: Record<Endpoints, EndpointConfig> = {
   // auth
   [Endpoints.login]: {
     url: `${getAuthApiUrl()}/login`,
@@ -136,9 +147,23 @@ export const ENDPOINTS: Record<Endpoints, { url: string; method: HTTTPMethods }>
   },
 
   // chores
+  [Endpoints.getChore]: {
+    url: `${getChoreApiUrl()}/chore`,
+    method: HTTTPMethods.GET,
+    getUrl: (choreId: DefaultId) => `${getChoreApiUrl()}/chore/${choreId}`,
+  },
+  [Endpoints.getChoresInGroup]: {
+    url: `${getChoreApiUrl()}/chores`,
+    method: HTTTPMethods.GET,
+  },
   [Endpoints.createChore]: {
     url: `${getChoreApiUrl()}/chore`,
     method: HTTTPMethods.POST,
+  },
+  [Endpoints.editChore]: {
+    url: `${getChoreApiUrl()}/chore`,
+    method: HTTTPMethods.PUT,
+    getUrl: (choreId: DefaultId) => `${getChoreApiUrl()}/chore/${choreId}`,
   },
 
   // chore categories

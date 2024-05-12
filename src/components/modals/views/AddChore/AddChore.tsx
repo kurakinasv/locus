@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import cn from 'classnames';
-import { Field, FieldProps, Form, Formik, FormikHelpers, FormikTouched, useFormik } from 'formik';
+import { Field, FieldProps, Form, Formik, FormikTouched, useFormik } from 'formik';
 
 import { Button, ButtonTheme } from 'components/Button';
 import { Dropdown } from 'components/Dropdown';
@@ -30,10 +30,7 @@ const AddChore: React.FC = () => {
 
   const createNewCategory = option === CREATE_CATEGORY_ID;
 
-  const submitHandler = async (
-    values: FormValues,
-    { setSubmitting }: FormikHelpers<FormValues>
-  ) => {
+  const submitHandler = async () => {
     setSubmitting(true);
 
     let categoryId;
@@ -44,13 +41,19 @@ const AddChore: React.FC = () => {
       categoryId = category?.id;
     }
 
-    await createChore({
+    const created = await createChore({
       name: values.name,
       points: Number(values.points),
       categoryId: categoryId ? Number(categoryId) : option ? Number(option) : null,
     });
 
+    if (!created) {
+      setSubmitting(false);
+      return false;
+    }
+
     setSubmitting(false);
+    return true;
   };
 
   const {
@@ -103,7 +106,12 @@ const AddChore: React.FC = () => {
       return;
     }
 
-    await submitHandler(values, { setSubmitting } as FormikHelpers<FormValues>);
+    const submitted = await submitHandler();
+
+    if (!submitted) {
+      return;
+    }
+
     closeModal();
   };
 

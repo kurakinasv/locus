@@ -16,7 +16,12 @@ const ChoreArchive: React.FC = () => {
       return;
     }
 
-    await editChore({ choreId: modalState?.choreId, isArchived: true });
+    const archived = await editChore({ choreId: modalState.choreId, isArchived: true });
+
+    if (!archived) {
+      return;
+    }
+
     closeModal();
   };
 

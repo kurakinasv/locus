@@ -77,20 +77,30 @@ const ChoreEdit: React.FC = () => {
   }, []);
 
   const submitHandler = async () => {
+    if (!modalState?.choreId) {
+      return;
+    }
+
     let categoryId;
 
     if (createNewCategory && values.category) {
-      categoryId = await createCategory({ name: values.category, icon: selectedIcon });
+      const category = await createCategory({ name: values.category, icon: selectedIcon });
+
+      categoryId = category?.id;
     }
 
-    if (modalState?.choreId) {
-      await editChore({
-        name: values.name,
-        points: Number(values.points),
-        categoryId: categoryId ? Number(categoryId) : Number(option),
-        choreId: modalState?.choreId,
-      });
+    const edited = await editChore({
+      name: values.name,
+      points: Number(values.points),
+      categoryId: categoryId ? Number(categoryId) : Number(option),
+      choreId: modalState?.choreId,
+    });
+
+    if (!edited) {
+      return false;
     }
+
+    return true;
   };
 
   const {
@@ -154,9 +164,14 @@ const ChoreEdit: React.FC = () => {
       return;
     }
 
-    await submitHandler();
+    const submitted = await submitHandler();
 
     setSubmitting(false);
+
+    if (!submitted) {
+      return;
+    }
+
     closeModal();
   };
 

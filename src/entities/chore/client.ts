@@ -1,3 +1,6 @@
+import { Group } from 'entities/group';
+import { DefaultId } from 'typings/api';
+
 import BathIcon from 'img/choreCategories/bath.svg?react';
 import BroomIcon from 'img/choreCategories/broom.svg?react';
 import CartIcon from 'img/choreCategories/cart.svg?react';
@@ -17,12 +20,12 @@ import TshirtIcon from 'img/choreCategories/tshirt.svg?react';
 import WashingMachineIcon from 'img/choreCategories/washing-machine.svg?react';
 
 export type Chore = {
-  id: number;
+  id: DefaultId;
   name: string;
   points: number;
   isArchived: boolean;
-  category: ChoreCategory;
-  groupId: number;
+  categoryId: ChoreCategory['id'];
+  groupId: Group['id'];
 };
 
 export type ChoreCategory = {

@@ -18,7 +18,7 @@ import s from './ScheduleItem.module.scss';
 type ScheduleItemProps = {
   id: DefaultId;
   name: Chore['name'];
-  icon: ChoreCategory['icon'];
+  icon?: ChoreCategory['icon'];
   points?: number;
   category?: string;
   completed?: boolean;
@@ -65,7 +65,7 @@ const ScheduleItem: FC<ScheduleItemProps> = ({
     openModal(ModalEnum.editSchedule, { scheduleId: id });
   };
 
-  const ChoreCategoryIcon = choreCategoryIconsMap[icon];
+  const ChoreCategoryIcon = icon ? choreCategoryIconsMap[icon] : null;
 
   return (
     <div className={cn(s.wrapper, checked && s.wrapper_completed)} onClick={onItemClick}>
@@ -83,7 +83,7 @@ const ScheduleItem: FC<ScheduleItemProps> = ({
       </div>
       <div className={s.right}>
         <div className={s['additional-info']}>
-          {choreItem && points && (
+          {choreItem && !!points && (
             <>
               <div className={s.badge}>
                 {points}
@@ -92,9 +92,11 @@ const ScheduleItem: FC<ScheduleItemProps> = ({
               <Spacing size={isMobile ? 0.6 : 1.6} horizontal />
             </>
           )}
-          <div className={s['additional-info__icon']}>
-            <ChoreCategoryIcon />
-          </div>
+          {ChoreCategoryIcon && (
+            <div className={s['additional-info__icon']}>
+              <ChoreCategoryIcon />
+            </div>
+          )}
         </div>
         <Spacing size={isMobile ? 1 : 3} horizontal />
         <div className={s['common-icons']}>
