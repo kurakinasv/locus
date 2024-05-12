@@ -95,3 +95,21 @@
     }
   }
 }
+
+@mixin defaultInputIconStyles {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1.8rem;
+
+  max-width: 2rem;
+  max-height: 2rem;
+
+  color: $turquoiseMain;
+  @include animate(color);
+
+  &:hover {
+    color: rgba($turquoiseMain, 0.8);
+    cursor: pointer;
+  }
+}

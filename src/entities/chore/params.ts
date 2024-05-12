@@ -1,4 +1,11 @@
+import { NumberString } from 'typings/api';
+
 import { Chore, ChoreCategory } from './client';
+
+export type ChoresGetParams = {
+  name?: string;
+  categoryId?: NumberString;
+};
 
 export type ChoreCreateParams = {
   name: Chore['name'];

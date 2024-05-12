@@ -1,4 +1,4 @@
-import { DefaultId } from 'typings/api';
+import { NumberString } from 'typings/api';
 
 const BASE_URL = 'http://localhost:3000';
 
@@ -70,7 +70,7 @@ enum HTTTPMethods {
 type EndpointConfig = {
   url: string;
   method: HTTTPMethods;
-  getUrl?: (id: number) => string;
+  getUrl?: (id: string) => string;
 };
 
 export const ENDPOINTS: Record<Endpoints, EndpointConfig> = {
@@ -150,11 +150,12 @@ export const ENDPOINTS: Record<Endpoints, EndpointConfig> = {
   [Endpoints.getChore]: {
     url: `${getChoreApiUrl()}/chore`,
     method: HTTTPMethods.GET,
-    getUrl: (choreId: DefaultId) => `${getChoreApiUrl()}/chore/${choreId}`,
+    getUrl: (choreId: NumberString) => `${getChoreApiUrl()}/chore/${choreId}`,
   },
   [Endpoints.getChoresInGroup]: {
     url: `${getChoreApiUrl()}/chores`,
     method: HTTTPMethods.GET,
+    getUrl: (query: string) => `${getChoreApiUrl()}/chores${query}`,
   },
   [Endpoints.createChore]: {
     url: `${getChoreApiUrl()}/chore`,
@@ -163,7 +164,7 @@ export const ENDPOINTS: Record<Endpoints, EndpointConfig> = {
   [Endpoints.editChore]: {
     url: `${getChoreApiUrl()}/chore`,
     method: HTTTPMethods.PUT,
-    getUrl: (choreId: DefaultId) => `${getChoreApiUrl()}/chore/${choreId}`,
+    getUrl: (choreId: NumberString) => `${getChoreApiUrl()}/chore/${choreId}`,
   },
 
   // chore categories

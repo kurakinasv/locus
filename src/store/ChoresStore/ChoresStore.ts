@@ -5,7 +5,7 @@ import { ENDPOINTS } from 'config/api';
 import { ScheduleFrequency } from 'config/chores';
 import { SnackbarType } from 'config/snackbar';
 import { Chore } from 'entities/chore';
-import { ChoreCreateParams, ChoreEditParams } from 'entities/chore/params';
+import { ChoreCreateParams, ChoreEditParams, ChoresGetParams } from 'entities/chore/params';
 import { ChoreServer } from 'entities/chore/server';
 import { MOCK_SCHEDULE_LIST } from 'entities/mock/schedule';
 import { ScheduleItem } from 'entities/schedule';
@@ -51,7 +51,9 @@ class ChoresStore {
 
   getChore = async (id: DefaultId) => {
     try {
-      const response = await axios.get(ENDPOINTS.getChore.getUrl!(id), { withCredentials: true });
+      const response = await axios.get(ENDPOINTS.getChore.getUrl!(String(id)), {
+        withCredentials: true,
+      });
 
       if (response.data) {
         runInAction(() => {
@@ -65,9 +67,21 @@ class ChoresStore {
     }
   };
 
-  getChoresInGroup = async () => {
+  getChoresInGroup = async (params: ChoresGetParams) => {
     try {
-      const response = await axios.get(ENDPOINTS.getChoresInGroup.url, { withCredentials: true });
+      let query = '';
+
+      if (params?.name) {
+        query = `${query}?name=${params.name.trim().toLowerCase()}`;
+      }
+      if (params?.categoryId) {
+        const sym = query ? '&' : '?';
+        query = `${query}${sym}categoryId=${params.categoryId}`;
+      }
+
+      const response = await axios.get(ENDPOINTS.getChoresInGroup.getUrl!(encodeURI(query)), {
+        withCredentials: true,
+      });
 
       if (response.data) {
         this.setChores(response.data);
@@ -106,7 +120,7 @@ class ChoresStore {
   editChore = async ({ choreId, name, points, categoryId, isArchived }: ChoreEditParams) => {
     try {
       const response = await axios.put<ChoreServer[]>(
-        ENDPOINTS.editChore.getUrl!(choreId),
+        ENDPOINTS.editChore.getUrl!(String(choreId)),
         { name: name?.trim(), points, categoryId, isArchived },
         { withCredentials: true }
       );
@@ -165,7 +179,7 @@ class ChoresStore {
     try {
       // const response = await axios.get(ENDPOINTS.getScheduledTasks.url(), { withCredentials: true });
       await sleep(1000);
-      const response = { data: MOCK_SCHEDULED_TASKS };
+      const response = { data: [] };
 
       if (response.data) {
         runInAction(() => {

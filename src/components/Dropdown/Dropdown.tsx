@@ -23,7 +23,7 @@ type DropdownProps = {
   onBlur?: () => void;
   // todo: make required
   selectedOption?: string;
-  onChange?: React.Dispatch<React.SetStateAction<string>>;
+  onChange?: React.Dispatch<React.SetStateAction<string>> | ((value: string) => void);
 };
 
 const Dropdown: FC<DropdownProps> = forwardRef<HTMLDivElement, DropdownProps>(
