@@ -5,6 +5,7 @@ import ChoreCategoriesStore from 'store/ChoreCategoriesStore';
 import ChoresStore from 'store/ChoresStore';
 import GroupMemberStore from 'store/GroupMemberStore';
 import GroupStore from 'store/GroupStore';
+import SchedulesStore from 'store/SchedulesStore/SchedulesStore';
 import UIStore from 'store/UIStore';
 import UserStore from 'store/UserStore';
 
@@ -17,6 +18,7 @@ class RootStore {
   readonly groupMemberStore: GroupMemberStore;
   readonly choresStore: ChoresStore;
   readonly choreCategoriesStore: ChoreCategoriesStore;
+  readonly schedulesStore: SchedulesStore;
 
   readonly isDev: boolean;
 
@@ -33,6 +35,7 @@ class RootStore {
     this.groupMemberStore = new GroupMemberStore(this);
     this.choresStore = new ChoresStore(this);
     this.choreCategoriesStore = new ChoreCategoriesStore(this);
+    this.schedulesStore = new SchedulesStore(this);
   }
 }
 

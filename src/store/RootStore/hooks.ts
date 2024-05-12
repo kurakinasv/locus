@@ -41,3 +41,7 @@ export const useChoresStore = () => {
 export const useChoreCategoriesStore = () => {
   return useRootStore().choreCategoriesStore;
 };
+
+export const useSchedulesStore = () => {
+  return useRootStore().schedulesStore;
+};

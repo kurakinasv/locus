@@ -3,13 +3,14 @@ import React, { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Spacing, Stub, Title } from 'components';
-import { useChoreCategoriesStore, useChoresStore } from 'store/RootStore/hooks';
+import { useChoreCategoriesStore, useChoresStore, useSchedulesStore } from 'store/RootStore/hooks';
 
 import { Controls, ScheduleItem } from '..';
 
 const ScheduleTab: FC = () => {
-  const { chores, schedules, scheduledTasks } = useChoresStore();
+  const { chores } = useChoresStore();
   const { categories } = useChoreCategoriesStore();
+  const { schedules, scheduledTasks } = useSchedulesStore();
 
   if (!chores.length || !schedules.length || !scheduledTasks.length || !categories.length) {
     return <Stub />;
