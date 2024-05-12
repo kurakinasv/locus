@@ -13,6 +13,8 @@ export const tabs: OptionType<string>[] = [
 
 export type ScheduleFrequency = 'daily' | 'weekly' | 'monthly' | 'never';
 
+export type AlternatingMethod = 'one-by-one' | 'single' | 'anyone';
+
 export const scheduleFrequencyOptions: OptionType<ScheduleFrequency>[] = [
   {
     label: 'Ежедневно',
