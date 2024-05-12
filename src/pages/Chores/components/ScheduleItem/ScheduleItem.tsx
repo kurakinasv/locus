@@ -48,6 +48,7 @@ const ScheduleItem: FC<ScheduleItemProps> = ({
 
   const onScheduleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
+    openModal(ModalEnum.deleteSchedule, { scheduleId: id });
   };
 
   return (

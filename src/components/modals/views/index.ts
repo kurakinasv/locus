@@ -8,6 +8,8 @@ export * from './ChoreArchive';
 
 export * from './ProfileExit';
 
+export * from './ScheduleDelete';
+
 export * from './ScheduleEdit';
 
 export * from './ProfileDelete';

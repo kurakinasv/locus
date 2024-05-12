@@ -162,6 +162,23 @@ class ChoresStore {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
   };
+
+  deleteSchedule = async (scheduleId: DefaultId) => {
+    try {
+      console.log('deleteSchedule', scheduleId);
+
+      await sleep(1000);
+
+      const response = { message: 'ok deleteSchedule' };
+
+      if (response) {
+        console.log('deleteSchedule', response);
+        this._rootStore.uiStore.snackbar.open(SnackbarType.scheduleDeleted);
+      }
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
 }
 
 export default ChoresStore;

@@ -9,6 +9,7 @@ import { GroupDelete } from './views/GroupDelete';
 import { GroupExit } from './views/GroupExit';
 import { ProfileDelete } from './views/ProfileDelete';
 import { ProfileExit } from './views/ProfileExit';
+import { ScheduleDelete } from './views/ScheduleDelete';
 import { ScheduleEdit } from './views/ScheduleEdit';
 
 type ModalConfigType = {
@@ -29,6 +30,7 @@ export enum ModalEnum {
   groupDelete = 'group-delete',
   groupDebtsAlert = 'group-debts-alert',
   archiveChore = 'archive-chore',
+  deleteSchedule = 'delete-schedule',
 }
 
 export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
@@ -78,6 +80,11 @@ export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
   [ModalEnum.archiveChore]: {
     title: 'Архивировать задачу',
     component: <ChoreArchive />,
+    confirm: true,
+  },
+  [ModalEnum.deleteSchedule]: {
+    title: 'Удалить расписание',
+    component: <ScheduleDelete />,
     confirm: true,
   },
 };

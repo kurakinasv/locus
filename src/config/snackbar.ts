@@ -9,9 +9,10 @@ export enum SnackbarType {
   passwordsDoNotMatch = 'passwordsDoNotMatch',
   chooseOneUser = 'chooseOneUser',
   groupEdited = 'groupEdited',
+  copyInviteCode = 'copyInviteCode',
   choreCreated = 'choreCreated',
   choreUpdated = 'choreUpdated',
-  copyInviteCode = 'copyInviteCode',
+  scheduleDeleted = 'scheduleDeleted',
 }
 
 export const SNACKBAR_CONFIG: Record<SnackbarType, { message: string; theme: SnackbarTheme }> = {
@@ -42,5 +43,9 @@ export const SNACKBAR_CONFIG: Record<SnackbarType, { message: string; theme: Sna
   [SnackbarType.copyInviteCode]: {
     message: 'Код приглашения скопирован в буфер обмена',
     theme: SnackbarTheme.info,
+  },
+  [SnackbarType.scheduleDeleted]: {
+    message: 'Расписание успешно удалено',
+    theme: SnackbarTheme.success,
   },
 };
