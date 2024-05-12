@@ -42,6 +42,7 @@ const Controls: React.FC<Props> = ({ dropdownPlaceholder, dropdownOptions }) => 
           setRange={setRange}
           placeholder="Выберите даты"
           stretched={isMobile}
+          max={31}
         />
       )}
       {dropdownPlaceholder && dropdownOptions && (

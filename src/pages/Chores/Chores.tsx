@@ -1,14 +1,12 @@
-import { FC, ReactNode, useMemo } from 'react';
+import { FC, ReactNode, useEffect, useMemo } from 'react';
 
-import * as Dialog from '@radix-ui/react-dialog';
 import { observer } from 'mobx-react-lite';
 
 import { Button, Spacing, Tabs } from 'components';
 import { ModalEnum } from 'components/modals';
 import { tabs } from 'config/chores';
-import { SnackbarType } from 'config/snackbar';
 import { useScreenType } from 'store';
-import { useUIStore } from 'store/RootStore/hooks';
+import { useChoresStore, useUIStore } from 'store/RootStore/hooks';
 
 import CalendarIcon from 'img/icons/calendar.svg?react';
 import PlusIcon from 'img/icons/plus.svg?react';
@@ -19,10 +17,21 @@ import s from './Chores.module.scss';
 
 const Chores: FC = () => {
   const { openModal: open } = useUIStore();
+
   const screen = useScreenType();
   const isDesktop = screen === 'desktop';
 
-  const { open: openSnackbar } = useUIStore().snackbar;
+  const { getChoresInGroup, getScheduledTasks, getGroupSchedules } = useChoresStore();
+
+  useEffect(() => {
+    const init = async () => {
+      await getChoresInGroup();
+      await getGroupSchedules();
+      await getScheduledTasks();
+    };
+
+    init();
+  }, []);
 
   const tabsContent: Array<{ value: string; content: ReactNode }> = useMemo(
     () => [

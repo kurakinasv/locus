@@ -1,7 +1,7 @@
 import { ScheduleFrequency } from 'config/chores';
 import { UUIDString } from 'typings/api';
 
-type FormFields = {
+export type FormFields = {
   choreId: UUIDString;
   frequency: ScheduleFrequency;
   range: {
@@ -11,12 +11,12 @@ type FormFields = {
   date: Date;
 };
 
-type FieldConfigs = {
+type FieldConfig = {
   name: string;
   placeholder: string;
 };
 
-export const createScheduleMap: Record<keyof FormFields, FieldConfigs> = {
+export const createScheduleMap = {
   choreId: {
     name: 'choreId',
     placeholder: 'Выбрать задачу',
@@ -33,13 +33,20 @@ export const createScheduleMap: Record<keyof FormFields, FieldConfigs> = {
     name: 'date',
     placeholder: 'Дата выполнения задачи',
   },
-};
+} as const satisfies Record<keyof FormFields, FieldConfig>;
 
 export const rangeDateLabel = (
   <>
     Дата начала&nbsp;&mdash; дата первого выполнения задачи одним из&nbsp;участников группы. Дата
     окончания&nbsp;&mdash; дата последнего выполнения задачи. Она может не&nbsp;совпадать
     с&nbsp;фактическим последним днем в&nbsp;зависимости от&nbsp;выбранной периодичности
+  </>
+);
+
+export const rangeDateEditLabel = (
+  <>
+    Выберите новую дату окончания повторения задач для этого расписания. Дата начала повторений
+    не&nbsp;изменится
   </>
 );
 

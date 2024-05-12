@@ -75,13 +75,24 @@ $shallowScreen: 360px;
     display: flex;
     align-items: center;
 
-    .icon {
+    &__icon {
       max-width: 3.2rem;
       max-height: 3.2rem;
+      padding: 0.6rem;
+
+      background-color: $turquoiseMain;
+      border-radius: 50%;
+      color: $white;
 
       @media (max-width: $shallowScreen) {
         max-width: 2.8rem;
         max-height: 2.8rem;
+      }
+
+      & > svg {
+        @include square(2rem);
+        max-width: 2rem;
+        max-height: 2rem;
       }
     }
 

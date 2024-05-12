@@ -10,10 +10,17 @@ import { ErrorMessageLabel } from 'components/ErrorMessageLabel';
 import { Spacing } from 'components/Spacing';
 import { Title } from 'components/Title';
 import { UsersSlider } from 'components/UsersSlider';
+import { WarningBlock } from 'components/WarningBlock';
 import { ScheduleFrequency, scheduleFrequencyOptions } from 'config/chores';
 import { VALIDATION_MESSAGES } from 'config/form';
 import { SnackbarType } from 'config/snackbar';
-import { createScheduleMap, dateLabel, rangeDateLabel } from 'entities/schedule/form';
+import { MOCK_GROUP_MEMBERS } from 'entities/mock/groupMembers';
+import {
+  FormFields,
+  createScheduleMap,
+  dateLabel,
+  rangeDateEditLabel,
+} from 'entities/schedule/form';
 import { User } from 'entities/user';
 import {
   UsersSelectListType,
@@ -22,22 +29,83 @@ import {
   initializeUsers,
 } from 'entities/user/service';
 import { useChoresStore, useGroupStore, useUIStore } from 'store/RootStore/hooks';
+import { DefaultId } from 'typings/api';
 
 import s from './ScheduleEdit.module.scss';
 
 const ScheduleEdit: React.FC = () => {
   const { group } = useGroupStore();
-  const { choresOptions, createSchedule } = useChoresStore();
-  const { closeModal, snackbar } = useUIStore();
+  const { choresOptions, activeSchedule, setActiveSchedule, editSchedule, getSchedule } =
+    useChoresStore();
+  const { closeModal, snackbar, modalState } = useUIStore<{ scheduleId: DefaultId }>();
 
-  const { handleSubmit, control, formState, watch } = useForm();
+  const { handleSubmit, control, formState, watch, setValue } = useForm();
+
+  const [initial, setInitial] = React.useState<FormFields>();
 
   const frequency: ScheduleFrequency | undefined = watch('frequency');
   const noRepeat = frequency === 'never';
 
+  React.useEffect(() => {
+    return () => {
+      setActiveSchedule(null);
+    };
+  }, []);
+
   const [users, setUsers] = React.useState<UsersSelectListType>(() =>
     group?.users ? initializeUsers(group.users) : []
   );
+
+  const init = React.useCallback(async () => {
+    if (!modalState?.scheduleId) {
+      return;
+    }
+
+    const schedule = await getSchedule(modalState.scheduleId);
+
+    if (!schedule || !group?.users) {
+      return;
+    }
+
+    setInitial({
+      choreId: String(schedule.choreId),
+      frequency: schedule.frequency as ScheduleFrequency,
+      range: {
+        from: new Date(schedule.dateStart),
+        to: new Date(schedule.dateEnd),
+      },
+      date: new Date(schedule.dateStart),
+    });
+
+    const choreOption = choresOptions.find((option) => option.value === String(schedule.choreId));
+
+    setValue(createScheduleMap.choreId.name, choreOption?.value);
+    setValue(createScheduleMap.frequency.name, schedule.frequency);
+
+    if (schedule.frequency === 'never') {
+      setValue(createScheduleMap.date.name, new Date(schedule.dateStart));
+    } else {
+      setValue(createScheduleMap.range.name, {
+        from: new Date(schedule.dateStart),
+        to: new Date(schedule.dateEnd),
+      });
+    }
+
+    // todo: fix users selection
+    const usersIdsByGroupIds = MOCK_GROUP_MEMBERS.filter((member) =>
+      schedule.userGroupIds.includes(member.id)
+    ).map((member) => member.userId);
+
+    const usersList = group.users.reduce((acc, user) => {
+      return [...acc, { ...user, selected: usersIdsByGroupIds.includes(user.id) }];
+    }, [] as UsersSelectListType);
+
+    setUsers(usersList);
+  }, [choresOptions, group?.users, modalState?.scheduleId]);
+
+  React.useEffect(() => {
+    init();
+  }, []);
 
   const onUserClick = React.useCallback(
     (id: User['id']) => () => {
@@ -53,148 +121,166 @@ const ScheduleEdit: React.FC = () => {
         return;
       }
 
-      await createSchedule({
-        choreId: data.choreId,
-        frequency: data.frequency,
-        dateFrom: data.frequency === 'never' ? data.date : data.from,
-        dateTo: data.frequency === 'never' ? data.date : data.to,
+      if (!modalState?.scheduleId) {
+        return;
+      }
+
+      await editSchedule({
+        scheduleId: modalState?.scheduleId,
+        dateEnd: data.frequency === 'never' ? data.date : data.from,
         users: users.filter((user) => user.selected).map((user) => user.id),
       });
 
       closeModal();
     },
-    [users]
+    [users, modalState?.scheduleId]
   );
 
+  if (!activeSchedule) {
+    return null;
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
-      <div className={s.flex}>
-        <Controller
-          control={control}
-          name={createScheduleMap.choreId.name}
-          rules={{ required: true }}
-          render={({ field }) => {
-            return (
+    <>
+      <WarningBlock>
+        Изменение расписания изменит все незавершенные запланированные задачи, созданные
+        по&nbsp;этому расписанию, начиная с&nbsp;сегодняшнего дня
+      </WarningBlock>
+      <Spacing size={1.4} />
+
+      <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
+        <div className={s.flex}>
+          <Controller
+            control={control}
+            name={createScheduleMap.choreId.name}
+            defaultValue={initial?.[createScheduleMap.choreId.name]}
+            rules={{ required: true }}
+            render={({ field }) => {
+              return (
+                <>
+                  <Dropdown
+                    {...field}
+                    options={choresOptions}
+                    selectedOption={field.value}
+                    onChange={field.onChange}
+                    placeholder={createScheduleMap.choreId.placeholder}
+                    stretched
+                    disabled
+                  />
+                  <ErrorMessageLabel
+                    errors={formState.errors}
+                    name={createScheduleMap.choreId.name}
+                    message={VALIDATION_MESSAGES.required}
+                  />
+                </>
+              );
+            }}
+          />
+          <Spacing size={1.4} />
+          <Controller
+            control={control}
+            name={createScheduleMap.frequency.name}
+            defaultValue={initial?.[createScheduleMap.frequency.name]}
+            rules={{ required: true }}
+            render={({ field }) => (
               <>
                 <Dropdown
                   {...field}
-                  options={choresOptions}
+                  options={scheduleFrequencyOptions}
                   selectedOption={field.value}
                   onChange={field.onChange}
-                  placeholder={
-                    choresOptions.length
-                      ? createScheduleMap.choreId.placeholder
-                      : 'Доступных для выбора задач нет'
-                  }
+                  placeholder={createScheduleMap.frequency.placeholder}
                   stretched
-                  disabled={!choresOptions.length}
+                  disabled
                 />
                 <ErrorMessageLabel
                   errors={formState.errors}
-                  name={createScheduleMap.choreId.name}
+                  name={createScheduleMap.frequency.name}
                   message={VALIDATION_MESSAGES.required}
                 />
               </>
-            );
-          }}
-        />
-        <Spacing size={1.4} />
-        <Controller
-          control={control}
-          name={createScheduleMap.frequency.name}
-          rules={{ required: true }}
-          render={({ field }) => (
+            )}
+          />
+          {frequency && !noRepeat && (
             <>
-              <Dropdown
-                {...field}
-                options={scheduleFrequencyOptions}
-                selectedOption={field.value}
-                onChange={field.onChange}
-                placeholder={createScheduleMap.frequency.placeholder}
-                stretched
-              />
-              <ErrorMessageLabel
-                errors={formState.errors}
-                name={createScheduleMap.frequency.name}
-                message={VALIDATION_MESSAGES.required}
+              <Spacing size={1.4} />
+              <Controller
+                control={control}
+                name={createScheduleMap.range.name}
+                defaultValue={initial?.[createScheduleMap.range.name]}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <DatePickerInput
+                    {...field}
+                    {...createScheduleMap.range}
+                    defaultRange={initial?.[createScheduleMap.range.name]}
+                    mode="range"
+                    range={field.value}
+                    setRange={field.onChange}
+                    stretched
+                    label={rangeDateEditLabel}
+                    touched
+                    errorMessage={
+                      formState.errors[createScheduleMap.range.name]?.type === 'required'
+                        ? VALIDATION_MESSAGES.required
+                        : undefined
+                    }
+                  />
+                )}
               />
             </>
           )}
-        />
-        {frequency && !noRepeat && (
-          <>
-            <Spacing size={1.4} />
-            <Controller
-              control={control}
-              name={createScheduleMap.range.name}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <DatePickerInput
-                  {...field}
-                  {...createScheduleMap.range}
-                  mode="range"
-                  range={field.value}
-                  setRange={field.onChange}
-                  stretched
-                  label={rangeDateLabel}
-                  touched
-                  errorMessage={
-                    formState.errors[createScheduleMap.range.name]?.type === 'required'
-                      ? VALIDATION_MESSAGES.required
-                      : undefined
-                  }
-                />
-              )}
-            />
-          </>
-        )}
-        {frequency && noRepeat && (
-          <>
-            <Spacing size={1.4} />
-            <Controller
-              control={control}
-              name={createScheduleMap.date.name}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <DatePickerInput
-                  {...field}
-                  {...createScheduleMap.date}
-                  mode="single"
-                  selectedDate={field.value}
-                  setSelectedDate={field.onChange}
-                  stretched
-                  label={dateLabel}
-                  touched
-                  errorMessage={
-                    formState.errors[createScheduleMap.date.name]?.type === 'required'
-                      ? VALIDATION_MESSAGES.required
-                      : undefined
-                  }
-                />
-              )}
-            />
-          </>
-        )}
-        <Spacing size={1.4} />
-        <div>
-          <Title size="h2">Исполнители</Title>
+          {frequency && noRepeat && (
+            <>
+              <Spacing size={1.4} />
+              <Controller
+                control={control}
+                name={createScheduleMap.date.name}
+                defaultValue={initial?.[createScheduleMap.date.name]}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <DatePickerInput
+                    {...field}
+                    {...createScheduleMap.date}
+                    mode="single"
+                    selectedDate={field.value}
+                    setSelectedDate={field.onChange}
+                    stretched
+                    label={dateLabel}
+                    touched
+                    errorMessage={
+                      formState.errors[createScheduleMap.date.name]?.type === 'required'
+                        ? VALIDATION_MESSAGES.required
+                        : undefined
+                    }
+                  />
+                )}
+              />
+            </>
+          )}
           <Spacing size={1.4} />
-          <UsersSlider users={users} onUserClick={onUserClick} />
+          <div>
+            <Title size="h2">Исполнители</Title>
+            <Spacing size={1.4} />
+            <UsersSlider users={users} onUserClick={onUserClick} />
+          </div>
+          <Spacing size={3} />
         </div>
-        <Spacing size={3} />
-      </div>
 
-      <Button
-        type="submit"
-        stretched
-        disabled={
-          !formState.isDirty || !Object.keys(formState.dirtyFields).length || formState.isSubmitting
-        }
-        loading={formState.isSubmitting}
-      >
-        Создать
-      </Button>
-    </form>
+        <Button
+          type="submit"
+          stretched
+          disabled={
+            !formState.isDirty ||
+            !Object.keys(formState.dirtyFields).length ||
+            formState.isSubmitting
+          }
+          loading={formState.isSubmitting}
+        >
+          Создать
+        </Button>
+      </form>
+    </>
   );
 };
 
