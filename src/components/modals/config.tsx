@@ -2,6 +2,7 @@ import React from 'react';
 
 import { AddChore } from './views/AddChore';
 import { AddSchedule } from './views/AddSchedule';
+import { ChoreArchive } from './views/ChoreArchive';
 import { ChoreEdit } from './views/ChoreEdit';
 import { GroupDebtsAlert } from './views/GroupDebtsAlert';
 import { GroupDelete } from './views/GroupDelete';
@@ -27,6 +28,7 @@ export enum ModalEnum {
   groupExit = 'group-exit',
   groupDelete = 'group-delete',
   groupDebtsAlert = 'group-debts-alert',
+  archiveChore = 'archive-chore',
 }
 
 export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
@@ -71,6 +73,11 @@ export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
   },
   [ModalEnum.groupDebtsAlert]: {
     component: <GroupDebtsAlert />,
+    confirm: true,
+  },
+  [ModalEnum.archiveChore]: {
+    title: 'Архивировать задачу',
+    component: <ChoreArchive />,
     confirm: true,
   },
 };

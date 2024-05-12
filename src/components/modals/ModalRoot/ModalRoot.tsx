@@ -33,7 +33,7 @@ const ModalRoot: React.FC = () => {
                 <Dialog.Title className={s['dialog-content__title']}>
                   <Title>{ModalConfig[modal].title}</Title>
                 </Dialog.Title>
-                <Spacing size={3} />
+                {!ModalConfig[modal].confirm && <Spacing size={3} />}
               </>
             )}
             {!ModalConfig[modal].confirm && (

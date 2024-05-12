@@ -42,6 +42,7 @@
   .name {
     font-family: 'Source Sans 3', sans-serif;
     font-size: 1.6rem;
+    line-height: 1.8rem;
     font-weight: 400;
   }
 
@@ -52,8 +53,41 @@
     color: $turquoiseMain;
   }
 
-  .icon {
-    max-width: 3.2rem;
-    max-height: 3.2rem;
+  .right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .additional-info {
+    display: flex;
+    align-items: center;
+
+    .icon {
+      max-width: 3.2rem;
+      max-height: 3.2rem;
+    }
+
+    .badge {
+      padding: 0.2rem 0.8rem;
+      background-color: $purple100;
+      border: 1px solid $purpleMain;
+      border-radius: 3rem;
+      color: $purpleMain;
+
+      font-family: $avenirNext;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+  }
+
+  .delete {
+    color: $turquoiseMain;
+    opacity: 0.6;
+    @include animate(opacity);
+
+    @include hover {
+      opacity: 0.8;
+    }
   }
 }

@@ -4,6 +4,8 @@ export * from './AddSchedule';
 
 export * from './ChoreEdit';
 
+export * from './ChoreArchive';
+
 export * from './ProfileExit';
 
 export * from './ScheduleEdit';

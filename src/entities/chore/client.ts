@@ -12,6 +12,7 @@ import PotIcon from 'img/choreCategories/pot.svg?react';
 import SoapIcon from 'img/choreCategories/soap.svg?react';
 import SprayBottleIcon from 'img/choreCategories/spray-bottle.svg?react';
 import ToiletIcon from 'img/choreCategories/toilet.svg?react';
+import TrashIcon from 'img/choreCategories/trash.svg?react';
 import TshirtIcon from 'img/choreCategories/tshirt.svg?react';
 import WashingMachineIcon from 'img/choreCategories/washing-machine.svg?react';
 
@@ -19,7 +20,7 @@ export type Chore = {
   id: number;
   name: string;
   points: number;
-  createdAt: string;
+  isArchived: boolean;
   category: ChoreCategory;
   groupId: number;
 };
@@ -28,7 +29,7 @@ export type ChoreCategory = {
   id: number;
   name: string;
   icon: ChoreCategoryIcon;
-  createdAt: string;
+  isArchived: boolean;
 };
 
 export const choreCategoryIconsNames = [
@@ -46,6 +47,7 @@ export const choreCategoryIconsNames = [
   'soap',
   'sprayBottle',
   'toilet',
+  'trash',
   'tshirt',
   'washingMachine',
 ] as const;
@@ -70,6 +72,7 @@ export const choreCategoryIconsMap: Record<
   soap: SoapIcon,
   sprayBottle: SprayBottleIcon,
   toilet: ToiletIcon,
+  trash: TrashIcon,
   tshirt: TshirtIcon,
   washingMachine: WashingMachineIcon,
 };
