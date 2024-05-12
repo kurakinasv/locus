@@ -6,7 +6,7 @@ import { Button, Spacing, Tabs } from 'components';
 import { ModalEnum } from 'components/modals';
 import { tabs } from 'config/chores';
 import { useScreenType } from 'store';
-import { useChoresStore, useUIStore } from 'store/RootStore/hooks';
+import { useChoreCategoriesStore, useChoresStore, useUIStore } from 'store/RootStore/hooks';
 
 import CalendarIcon from 'img/icons/calendar.svg?react';
 import PlusIcon from 'img/icons/plus.svg?react';
@@ -22,12 +22,14 @@ const Chores: FC = () => {
   const isDesktop = screen === 'desktop';
 
   const { getChoresInGroup, getScheduledTasks, getGroupSchedules } = useChoresStore();
+  const { getCategories } = useChoreCategoriesStore();
 
   useEffect(() => {
     const init = async () => {
       await getChoresInGroup();
       await getGroupSchedules();
       await getScheduledTasks();
+      await getCategories();
     };
 
     init();

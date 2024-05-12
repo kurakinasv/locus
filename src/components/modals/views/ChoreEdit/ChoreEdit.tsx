@@ -16,9 +16,8 @@ import { VALIDATION_MESSAGES } from 'config/form';
 import { ChoreCategoryIcon, choreCategoryIconsMap, choreCategoryIconsNames } from 'entities/chore';
 import { FormValues, fieldsConfigMap, initialValues } from 'entities/chore/form';
 import { addChoreValidationSchema } from 'entities/chore/validation';
-import { MOCK_CHORES_CATEGORIES } from 'entities/mock/chores';
 import { useScreenType } from 'store';
-import { useChoresStore, useUIStore } from 'store/RootStore/hooks';
+import { useChoreCategoriesStore, useChoresStore, useUIStore } from 'store/RootStore/hooks';
 import { DefaultId } from 'typings/api';
 import { SizeEnum } from 'typings/ui';
 import { noop } from 'utils/noop';
@@ -26,11 +25,13 @@ import { noop } from 'utils/noop';
 import s from './ChoreEdit.module.scss';
 
 const ChoreEdit: React.FC = () => {
-  const { getChore, editChore, createCategory, categoriesOptions, activeChore } = useChoresStore();
   const { closeModal, modalState } = useUIStore<{ choreId: DefaultId }>();
 
   const screen = useScreenType();
   const isMobile = screen === 'mobile';
+
+  const { getChore, editChore, activeChore } = useChoresStore();
+  const { createCategory, categoriesOptionsWithCreate } = useChoreCategoriesStore();
 
   const [option, setOption] = React.useState<string>('');
   const [selectedIcon, setIcon] = React.useState<ChoreCategoryIcon>('other');
@@ -50,16 +51,18 @@ const ChoreEdit: React.FC = () => {
       return;
     }
 
-    const categoryOption = String(MOCK_CHORES_CATEGORIES[chore.category.id - 1].id);
+    const categoryOption = categoriesOptionsWithCreate.find(
+      (c) => c.value === String(chore.categoryId)
+    );
 
     setInitial({
       name: chore.name,
       points: chore.points,
       category: '',
-      categoryOption,
+      categoryOption: categoryOption ? categoryOption.value : '',
     });
 
-    setOption(categoryOption);
+    setOption(categoryOption?.value ?? '');
 
     await setTouched(
       Object.keys(initialValues).reduce(
@@ -228,7 +231,7 @@ const ChoreEdit: React.FC = () => {
                 name={fieldsConfigMap.categoryOption.name}
                 selectedOption={option}
                 onChange={setOption}
-                options={categoriesOptions}
+                options={categoriesOptionsWithCreate}
                 placeholder="Категория"
                 stretched
               />

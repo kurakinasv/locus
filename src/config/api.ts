@@ -45,6 +45,10 @@ enum Endpoints {
   // chore
   createChore = 'createChore',
 
+  // chore categories
+  getChoreCategories = 'getChoreCategories',
+  createChoreCategory = 'createChoreCategory',
+
   // schedule
   createSchedule = 'createSchedule',
   // editSchedule = 'editSchedule',
@@ -134,6 +138,16 @@ export const ENDPOINTS: Record<Endpoints, { url: string; method: HTTTPMethods }>
   // chores
   [Endpoints.createChore]: {
     url: `${getChoreApiUrl()}/chore`,
+    method: HTTTPMethods.POST,
+  },
+
+  // chore categories
+  [Endpoints.getChoreCategories]: {
+    url: `${getChoreApiUrl()}/category`,
+    method: HTTTPMethods.GET,
+  },
+  [Endpoints.createChoreCategory]: {
+    url: `${getChoreApiUrl()}/category`,
     method: HTTTPMethods.POST,
   },
 

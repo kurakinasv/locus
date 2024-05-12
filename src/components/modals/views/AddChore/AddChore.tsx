@@ -14,14 +14,15 @@ import { VALIDATION_MESSAGES } from 'config/form';
 import { ChoreCategoryIcon, choreCategoryIconsMap, choreCategoryIconsNames } from 'entities/chore';
 import { FormValues, fieldsConfigMap, initialValues } from 'entities/chore/form';
 import { addChoreValidationSchema } from 'entities/chore/validation';
-import { useChoresStore, useUIStore } from 'store/RootStore/hooks';
+import { useChoreCategoriesStore, useChoresStore, useUIStore } from 'store/RootStore/hooks';
 import { SizeEnum } from 'typings/ui';
 import { noop } from 'utils/noop';
 
 import s from './AddChore.module.scss';
 
 const AddChore: React.FC = () => {
-  const { createChore, createCategory, categoriesOptions } = useChoresStore();
+  const { createChore } = useChoresStore();
+  const { categoriesOptionsWithCreate, createCategory } = useChoreCategoriesStore();
   const { closeModal } = useUIStore();
 
   const [option, setOption] = React.useState<string>('');
@@ -38,7 +39,9 @@ const AddChore: React.FC = () => {
     let categoryId;
 
     if (createNewCategory && values.category) {
-      categoryId = await createCategory({ name: values.category, icon: selectedIcon });
+      const category = await createCategory({ name: values.category, icon: selectedIcon });
+
+      categoryId = category?.id;
     }
 
     await createChore({
@@ -165,7 +168,7 @@ const AddChore: React.FC = () => {
               name={fieldsConfigMap.categoryOption.name}
               selectedOption={option}
               onChange={setOption}
-              options={categoriesOptions}
+              options={categoriesOptionsWithCreate}
               placeholder="Категория"
               stretched
             />

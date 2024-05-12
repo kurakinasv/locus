@@ -37,3 +37,7 @@ export const useGroupMemberStore = () => {
 export const useChoresStore = () => {
   return useRootStore().choresStore;
 };
+
+export const useChoreCategoriesStore = () => {
+  return useRootStore().choreCategoriesStore;
+};

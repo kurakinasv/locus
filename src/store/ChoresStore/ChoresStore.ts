@@ -25,8 +25,6 @@ class ChoresStore {
   activeChore: Chore | null = null;
   activeSchedule: ScheduleItem | null = null;
 
-  categories: ChoreCategory[] = MOCK_CHORES_CATEGORIES;
-
   constructor(rootStore: RootStore) {
     this._rootStore = rootStore;
 
@@ -39,17 +37,7 @@ class ChoresStore {
       value: String(chore.id),
     }));
 
-    // todo: remove
-    return [...opts, { label: 'Create new chore', value: 'new' }];
-  }
-
-  get categoriesOptions() {
-    const opts = this.categories.map((cat) => ({
-      label: cat.name,
-      value: String(cat.id),
-    }));
-
-    return [CREATE_CATEGORY_OPTION, ...opts];
+    return opts;
   }
 
   setActiveSchedule = (schedule: ScheduleItem | null) => {
@@ -140,24 +128,6 @@ class ChoresStore {
       if (response) {
         console.log('editChore', response);
         this._rootStore.uiStore.snackbar.open(SnackbarType.choreUpdated);
-      }
-    } catch (error) {
-      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
-    }
-  };
-
-  createCategory = async ({ name, icon }: { name: string; icon: ChoreCategoryIcon }) => {
-    try {
-      console.log('createCategory', name, icon);
-
-      // const response = await axios.post(ENDPOINTS.createCategory.url, {}, { withCredentials: true });
-      await sleep(1000);
-      const response = { data: { id: 1 } };
-
-      if (response) {
-        console.log('createCategory', response);
-
-        return response.data.id;
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));

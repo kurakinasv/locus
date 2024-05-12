@@ -2,16 +2,17 @@ import React, { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Spacing, Title } from 'components';
-import { useChoresStore } from 'store/RootStore/hooks';
+import { Spacing, Stub, Title } from 'components';
+import { useChoreCategoriesStore, useChoresStore } from 'store/RootStore/hooks';
 
 import { Controls, ScheduleItem } from '..';
 
 const ScheduleTab: FC = () => {
   const { chores, schedules, scheduledTasks } = useChoresStore();
+  const { categories } = useChoreCategoriesStore();
 
-  if (!chores.length || !schedules.length || !scheduledTasks.length) {
-    return null;
+  if (!chores.length || !schedules.length || !scheduledTasks.length || !categories.length) {
+    return <Stub />;
   }
 
   return (
@@ -23,6 +24,7 @@ const ScheduleTab: FC = () => {
       {scheduledTasks.map((task) => {
         const schedule = schedules.find((schedule) => schedule.id === task.scheduleId);
         const chore = chores.find((chore) => chore.id === schedule?.choreId);
+        const icon = categories.find((c) => c.id === chore?.categoryId)?.icon;
 
         if (!chore) {
           return;
@@ -35,7 +37,7 @@ const ScheduleTab: FC = () => {
               key={task.id}
               id={task.id}
               name={chore.name}
-              icon={chore.category.icon}
+              icon={icon}
               points={chore.points}
             />
           </React.Fragment>
