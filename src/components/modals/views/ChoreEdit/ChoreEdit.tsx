@@ -10,6 +10,7 @@ import { ErrorMessageLabel } from 'components/ErrorMessageLabel';
 import { Input } from 'components/Input';
 import { Spacing } from 'components/Spacing';
 import { Text } from 'components/Text';
+import { WarningBlock } from 'components/WarningBlock';
 import { CREATE_CATEGORY_ID } from 'config/chores';
 import { VALIDATION_MESSAGES } from 'config/form';
 import { ChoreCategoryIcon, choreCategoryIconsMap, choreCategoryIconsNames } from 'entities/chore';
@@ -21,8 +22,6 @@ import { useChoresStore, useUIStore } from 'store/RootStore/hooks';
 import { DefaultId } from 'typings/api';
 import { SizeEnum } from 'typings/ui';
 import { noop } from 'utils/noop';
-
-import WarningIcon from 'img/icons/error.svg?react';
 
 import s from './ChoreEdit.module.scss';
 
@@ -190,13 +189,9 @@ const ChoreEdit: React.FC = () => {
 
   return (
     <>
-      <div className={s['warning']}>
-        <WarningIcon className={s['warning__icon']} />
-        <Spacing horizontal />
-        <Text className={s['warning__text']}>
-          Изменение задачи изменит все незавершенные запланированные задачи, связанные с&nbsp;ней
-        </Text>
-      </div>
+      <WarningBlock>
+        Изменение задачи изменит все незавершенные запланированные задачи, связанные с&nbsp;ней
+      </WarningBlock>
       <Spacing size={1.4} />
 
       <Formik<FormValues> initialValues={initial} onSubmit={noop}>

@@ -5,10 +5,12 @@ import cn from 'classnames';
 import { Checkbox } from 'components/Checkbox';
 import { ModalEnum } from 'components/modals';
 import { Spacing } from 'components/Spacing';
+import { useScreenType } from 'store';
 import { useUIStore } from 'store/RootStore/hooks';
 import { DefaultId } from 'typings/api';
 
 import ChoresIcon from 'img/chores/chores-item.svg?react';
+import PencilIcon from 'img/icons/pencil.svg?react';
 import TrashIcon from 'img/icons/trash.svg?react';
 
 import s from './ScheduleItem.module.scss';
@@ -29,6 +31,9 @@ const ScheduleItem: FC<ScheduleItemProps> = ({
   choreItem = false,
 }) => {
   const { openModal } = useUIStore();
+
+  const screen = useScreenType();
+  const isMobile = screen === 'mobile';
 
   const [checked, setChecked] = useState(completed);
 
@@ -51,6 +56,11 @@ const ScheduleItem: FC<ScheduleItemProps> = ({
     openModal(ModalEnum.deleteSchedule, { scheduleId: id });
   };
 
+  const onScheduleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    openModal(ModalEnum.editSchedule, { scheduleId: id });
+  };
+
   return (
     <div className={cn(s.wrapper, checked && s.wrapper_completed)} onClick={onItemClick}>
       <div className={s.left}>
@@ -70,15 +80,31 @@ const ScheduleItem: FC<ScheduleItemProps> = ({
           <ChoresIcon className={s.icon} />
           {choreItem && (
             <>
-              <Spacing size={1.6} horizontal />
-              <div className={s.badge}>15 баллов</div>
+              <Spacing size={isMobile ? 0.6 : 1.6} horizontal />
+              <div className={s.badge}>15{isMobile ? '' : ' баллов'}</div>
             </>
           )}
         </div>
-        <Spacing size={3} horizontal />
-        <button type="button" onClick={choreItem ? onChoreArchive : onScheduleDelete}>
-          <TrashIcon className={s.delete} />
-        </button>
+        <Spacing size={isMobile ? 1 : 3} horizontal />
+        <div className={s['common-icons']}>
+          <button
+            className={s['common-icons__icon']}
+            type="button"
+            title="Редактировать"
+            onClick={!choreItem ? onScheduleEdit : undefined}
+          >
+            <PencilIcon />
+          </button>
+          <Spacing size={isMobile ? 0.6 : 2} horizontal />
+          <button
+            className={s['common-icons__icon']}
+            type="button"
+            title="Удалить"
+            onClick={choreItem ? onChoreArchive : onScheduleDelete}
+          >
+            <TrashIcon />
+          </button>
+        </div>
       </div>
     </div>
   );

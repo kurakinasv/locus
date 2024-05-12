@@ -1,0 +1,9 @@
+@import 'styles/mixins';
+
+.form {
+  @include defaultFormWrapper;
+
+  .flex {
+    flex: 1;
+  }
+}

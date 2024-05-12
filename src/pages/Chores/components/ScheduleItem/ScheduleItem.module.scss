@@ -1,8 +1,14 @@
 @import 'styles/mixins';
 
+$shallowScreen: 360px;
+
 .wrapper {
   position: relative;
-  padding: 0.6rem 2rem;
+  padding: 0.6rem 1rem;
+
+  @include mediaScreen($tablet) {
+    padding: 0.6rem 2rem;
+  }
 
   display: flex;
   justify-content: space-between;
@@ -44,6 +50,12 @@
     font-size: 1.6rem;
     line-height: 1.8rem;
     font-weight: 400;
+
+    @media (max-width: $shallowScreen) {
+      font-size: 1.4rem;
+      line-height: 1.6rem;
+      hyphens: auto;
+    }
   }
 
   .category {
@@ -66,10 +78,16 @@
     .icon {
       max-width: 3.2rem;
       max-height: 3.2rem;
+
+      @media (max-width: $shallowScreen) {
+        max-width: 2.8rem;
+        max-height: 2.8rem;
+      }
     }
 
     .badge {
       padding: 0.2rem 0.8rem;
+
       background-color: $purple100;
       border: 1px solid $purpleMain;
       border-radius: 3rem;
@@ -78,16 +96,28 @@
       font-family: $avenirNext;
       font-weight: 600;
       font-size: 1.2rem;
+
+      text-wrap: nowrap;
     }
   }
 
-  .delete {
-    color: $turquoiseMain;
-    opacity: 0.6;
-    @include animate(opacity);
+  .common-icons {
+    display: flex;
+    align-items: center;
 
-    @include hover {
-      opacity: 0.8;
+    &__icon {
+      @include square(2.4rem);
+
+      display: flex;
+      align-items: center;
+
+      color: $turquoiseMain;
+      opacity: 0.6;
+      @include animate(opacity);
+
+      @include hover {
+        opacity: 0.8;
+      }
     }
   }
 }

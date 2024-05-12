@@ -1,15 +1,19 @@
 import React, { FC } from 'react';
 
+import { observer } from 'mobx-react-lite';
+
 import { Spacing } from 'components';
-import { mockOptions } from 'config/mock/options';
 import { MOCK_SCHEDULE_LIST } from 'entities/mock/schedule';
+import { useChoresStore } from 'store/RootStore/hooks';
 
 import { Controls, ScheduleItem } from '..';
 
 const ChoresTab: FC = () => {
+  const { categoriesOptions } = useChoresStore();
+
   return (
     <div>
-      <Controls dropdownOptions={mockOptions} dropdownPlaceholder="Категория" />
+      <Controls dropdownOptions={categoriesOptions} dropdownPlaceholder="Категория" />
 
       <Spacing size={2.6} />
       {MOCK_SCHEDULE_LIST.map((schedule) => (
@@ -28,4 +32,4 @@ const ChoresTab: FC = () => {
   );
 };
 
-export default ChoresTab;
+export default observer(ChoresTab);

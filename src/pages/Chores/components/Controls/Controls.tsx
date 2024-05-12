@@ -19,6 +19,7 @@ const Controls: React.FC<Props> = ({ dropdownPlaceholder, dropdownOptions }) => 
   const isMobile = screen === 'mobile';
 
   const [search, setSearch] = React.useState('');
+  const [option, setOption] = React.useState('');
 
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.currentTarget.value);
@@ -45,6 +46,8 @@ const Controls: React.FC<Props> = ({ dropdownPlaceholder, dropdownOptions }) => 
       )}
       {dropdownPlaceholder && dropdownOptions && (
         <Dropdown
+          selectedOption={option}
+          onChange={setOption}
           options={dropdownOptions}
           placeholder={dropdownPlaceholder}
           stretched={isMobile}

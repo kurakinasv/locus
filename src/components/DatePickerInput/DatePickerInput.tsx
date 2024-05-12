@@ -1,4 +1,11 @@
-import React, { InputHTMLAttributes, forwardRef, memo, useCallback, useState } from 'react';
+import React, {
+  InputHTMLAttributes,
+  forwardRef,
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
 import cn from 'classnames';
 import {
@@ -22,6 +29,7 @@ import s from './DatePickerInput.module.scss';
 import 'react-day-picker/dist/style.css';
 
 type InputProps = PropsWithClassName & {
+  defaultRange?: DateRange;
   range?: DateRange | undefined;
   setRange?: SelectRangeEventHandler;
   selectedDate?: Date | undefined;
@@ -34,12 +42,14 @@ type InputProps = PropsWithClassName & {
   label?: React.ReactNode;
   errorMessage?: string;
   mode?: DaySelectionMode;
+  max?: number;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 // todo: divide on two components
 const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputProps>(
   (
     {
+      defaultRange,
       range,
       setRange,
       selectedDate,
@@ -51,6 +61,7 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
       label,
       errorMessage,
       mode = 'range',
+      max,
       className,
     },
     forwardedRef
@@ -61,6 +72,13 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
     const currentMonth = new Date();
 
     const { ref } = useClickOutside(() => setDatePickerOpen(false));
+
+    useEffect(() => {
+      if (defaultRange) {
+        const formated = `${defaultRange.from?.toLocaleDateString()} - ${defaultRange.to?.toLocaleDateString()}`;
+        setFormatedDate(formated ?? '');
+      }
+    }, [defaultRange]);
 
     const onRangeChange = useCallback(() => {
       const formated = `${range?.from?.toLocaleDateString()} - ${range?.to?.toLocaleDateString()}`;
@@ -99,7 +117,7 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
           {datePickerOpen && mode === 'range' && (
             <DayPicker
               mode="range"
-              max={31}
+              max={max}
               selected={range}
               defaultMonth={currentMonth}
               onSelect={setRange}
@@ -107,6 +125,7 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
               className={s.datePicker}
               weekStartsOn={1}
               showOutsideDays
+              initialFocus
             />
           )}
           {datePickerOpen && mode === 'single' && (

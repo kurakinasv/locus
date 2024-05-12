@@ -31,3 +31,5 @@ export * from './UserCard';
 export * from './UsersSlider';
 
 export * from './ErrorMessageLabel';
+
+export * from './WarningBlock';
