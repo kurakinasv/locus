@@ -1,0 +1,67 @@
+@import 'styles/mixins';
+
+.warning {
+  display: flex;
+  align-items: center;
+
+  &__icon {
+    flex-shrink: 0;
+    color: $red300;
+  }
+
+  &__text {
+    font-family: $sourceSans3;
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 1.7rem;
+    color: $black;
+  }
+}
+
+.form {
+  @include defaultFormWrapper;
+  flex: 1;
+}
+
+.content {
+  width: 100%;
+  flex: 1;
+}
+
+.category-icons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.category-button {
+  min-width: 0;
+  @include square(5rem);
+  padding: 0.6rem;
+  border-radius: 50%;
+
+  @include animate(opacity);
+
+  &_selected {
+    border: 2px solid $turquoiseMain;
+  }
+
+  & > span {
+    display: flex;
+    align-items: center;
+  }
+
+  & .icon {
+    @include square(100%);
+    color: $turquoiseMain;
+  }
+}
+
+.footer-buttons {
+  width: 100%;
+  display: flex;
+
+  @include mobile {
+    flex-wrap: wrap;
+  }
+}

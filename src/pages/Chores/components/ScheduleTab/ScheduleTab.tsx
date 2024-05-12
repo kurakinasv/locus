@@ -15,7 +15,7 @@ const ScheduleTab: FC = () => {
       {MOCK_SCHEDULE_LIST.map((schedule) => (
         <React.Fragment key={schedule.id}>
           <Spacing size={1} />
-          <ScheduleItem key={schedule.id} name={schedule.chore.name} />
+          <ScheduleItem key={schedule.id} id={schedule.id} name={schedule.chore.name} />
         </React.Fragment>
       ))}
 
@@ -25,7 +25,7 @@ const ScheduleTab: FC = () => {
         // todo: remove id + i
         <React.Fragment key={schedule.id + i}>
           <Spacing size={1} />
-          <ScheduleItem key={schedule.id} name={schedule.chore.name} />
+          <ScheduleItem key={schedule.id} id={schedule.id} name={schedule.chore.name} />
         </React.Fragment>
       ))}
     </div>

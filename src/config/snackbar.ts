@@ -10,6 +10,7 @@ export enum SnackbarType {
   chooseOneUser = 'chooseOneUser',
   groupEdited = 'groupEdited',
   choreCreated = 'choreCreated',
+  choreUpdated = 'choreUpdated',
   copyInviteCode = 'copyInviteCode',
 }
 
@@ -32,6 +33,10 @@ export const SNACKBAR_CONFIG: Record<SnackbarType, { message: string; theme: Sna
   },
   [SnackbarType.choreCreated]: {
     message: 'Задача успешно создана',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.choreUpdated]: {
+    message: 'Задача успешно изменена',
     theme: SnackbarTheme.success,
   },
   [SnackbarType.copyInviteCode]: {

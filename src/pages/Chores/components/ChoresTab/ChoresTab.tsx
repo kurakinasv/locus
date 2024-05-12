@@ -16,7 +16,8 @@ const ChoresTab: FC = () => {
         <React.Fragment key={schedule.id}>
           <ScheduleItem
             key={schedule.id}
-            hideCheckbox
+            id={schedule.id}
+            choreItem
             name={schedule.chore.name}
             category={schedule.chore.category.name}
           />

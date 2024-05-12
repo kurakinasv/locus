@@ -1,9 +1,11 @@
 import axios from 'axios';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 import { ENDPOINTS } from 'config/api';
 import { CREATE_CATEGORY_OPTION, ScheduleFrequency } from 'config/chores';
+import { SnackbarType } from 'config/snackbar';
 import { Chore, ChoreCategory, ChoreCategoryIcon } from 'entities/chore';
+import { MOCK_CHORES_CATEGORIES, MOCK_CHORE_LIST } from 'entities/mock/chores';
 import RootStore from 'store/RootStore';
 import { DefaultId, UUIDString } from 'typings/api';
 import { getErrorMsg } from 'utils/getErrorMsg';
@@ -12,9 +14,11 @@ import { sleep } from 'utils/sleep';
 class ChoresStore {
   private readonly _rootStore: RootStore;
 
-  chores: Chore[] = [];
+  chores: Chore[] = MOCK_CHORE_LIST;
 
-  categories: ChoreCategory[] = [];
+  activeChore: Chore | null = null;
+
+  categories: ChoreCategory[] = MOCK_CHORES_CATEGORIES;
 
   constructor(rootStore: RootStore) {
     this._rootStore = rootStore;
@@ -41,6 +45,27 @@ class ChoresStore {
     return [CREATE_CATEGORY_OPTION, ...opts];
   }
 
+  getChore = async (id: DefaultId) => {
+    try {
+      console.log('getChore', id);
+
+      // const response = await axios.get(ENDPOINTS.getChore.url(id), { withCredentials: true });
+      await sleep(1000);
+      const response = { data: MOCK_CHORE_LIST[id - 1] };
+
+      if (response.data) {
+        runInAction(() => {
+          this.activeChore = response.data;
+        });
+        console.log('getChore', response.data);
+
+        return response.data;
+      }
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
+
   createChore = async ({
     name,
     points,
@@ -58,6 +83,35 @@ class ChoresStore {
 
       if (response) {
         console.log('createChore', response);
+      }
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
+
+  editChore = async ({
+    choreId,
+    name,
+    points,
+    categoryId,
+    isArchived,
+  }: {
+    choreId: DefaultId;
+    name?: string;
+    points?: number;
+    categoryId?: DefaultId;
+    isArchived?: boolean;
+  }) => {
+    try {
+      console.log('editChore', choreId, name, points, categoryId, isArchived);
+
+      // const response = await axios.post(ENDPOINTS.editChore.url, {}, { withCredentials: true });
+      await sleep(1000);
+      const response = { message: 'ok editChore' };
+
+      if (response) {
+        console.log('editChore', response);
+        this._rootStore.uiStore.snackbar.open(SnackbarType.choreUpdated);
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));

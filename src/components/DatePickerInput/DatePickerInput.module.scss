@@ -1,7 +1,11 @@
 @import 'styles/mixins';
 
+.ref-wrapper {
+  width: 100%;
+}
+
 .wrapper {
-  min-width: 30rem;
+  min-width: 25rem;
   position: relative;
 
   .stretched {

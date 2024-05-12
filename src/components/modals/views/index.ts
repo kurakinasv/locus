@@ -2,7 +2,11 @@ export * from './AddChore';
 
 export * from './AddSchedule';
 
+export * from './ChoreEdit';
+
 export * from './ProfileExit';
+
+export * from './ScheduleEdit';
 
 export * from './ProfileDelete';
 

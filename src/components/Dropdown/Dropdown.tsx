@@ -59,7 +59,7 @@ const Dropdown: FC<DropdownProps> = forwardRef<HTMLDivElement, DropdownProps>(
 
     return (
       <DropdownMenu.Root modal={false} open={isOpen}>
-        <div ref={forwardedRef}>
+        <div ref={forwardedRef} className={stretched ? s['ref-wrapper'] : undefined}>
           <DropdownMenu.Trigger
             className={cn(
               s.wrapper,

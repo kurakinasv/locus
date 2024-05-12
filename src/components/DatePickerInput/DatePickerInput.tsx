@@ -83,7 +83,7 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
     };
 
     return (
-      <div ref={forwardedRef}>
+      <div ref={forwardedRef} className={stretched ? s['ref-wrapper'] : undefined}>
         <div className={cn(s.wrapper, stretched && s.stretched, className)} ref={ref}>
           <Input
             value={formatedDate}

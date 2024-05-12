@@ -1,5 +1,7 @@
 import { useContext } from 'react';
 
+import UIStore from 'store/UIStore';
+
 import { rootStoreContext } from './context';
 
 export const useRootStore = () => {
@@ -12,8 +14,8 @@ export const useRootStore = () => {
   return store;
 };
 
-export const useUIStore = () => {
-  return useRootStore().uiStore;
+export const useUIStore = <ModalStateT>() => {
+  return useRootStore().uiStore as UIStore<ModalStateT>;
 };
 
 export const useUserStore = () => {

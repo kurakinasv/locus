@@ -36,6 +36,7 @@
   border-radius: 24px;
 
   @include mobile {
+    height: 100%;
     padding: 2rem 1.2rem calc(#{$maxMobileHeaderHeight} + 4rem);
     top: calc(50% + #{$maxMobileHeaderHeight});
     animation: contentShowMobile 0.2s cubic-bezier(0.16, 1, 0.3, 1);

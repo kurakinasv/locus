@@ -82,3 +82,16 @@
   flex-direction: column;
   width: 100%;
 }
+
+@mixin hover {
+  @include mediaScreen($tablet) {
+    &:hover {
+      @content;
+    }
+  }
+  @include mobile {
+    &:active {
+      @content;
+    }
+  }
+}
