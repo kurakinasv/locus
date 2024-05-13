@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Spacing, Stub } from 'components';
+import { Spacing, Spinner, Stub } from 'components';
 import { useChoreCategoriesStore, useChoresStore } from 'store/RootStore/hooks';
 
 import { Controls, ScheduleItem } from '..';
 
 const ChoresTab: FC = () => {
-  const { chores } = useChoresStore();
+  const { chores, meta } = useChoresStore();
   const { categoriesOptions, categories } = useChoreCategoriesStore();
 
   const empty = !chores.length || !categories.length;
@@ -19,9 +19,12 @@ const ChoresTab: FC = () => {
 
       <Spacing size={2.6} />
 
-      {empty && <Stub />}
+      {meta.loading && <Spinner />}
 
-      {!empty &&
+      {!meta.loading && empty && <Stub />}
+
+      {!meta.loading &&
+        !empty &&
         chores.map((chore) => {
           const category = categories.find((c) => c.id === chore?.categoryId);
 

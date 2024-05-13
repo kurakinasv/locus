@@ -7,12 +7,15 @@ import { SnackbarType } from 'config/snackbar';
 import { User } from 'entities/user';
 import { LoginParams, RegisterParams } from 'entities/user/params';
 import { UserServer } from 'entities/user/server';
+import MetaModel from 'store/models/MetaModel';
 import RootStore from 'store/RootStore/RootStore';
 import { getErrorMsg } from 'utils/getErrorMsg';
 import { responseIsOk } from 'utils/responseIsOk';
 
 class AuthStore {
   private readonly _rootStore: RootStore;
+
+  readonly meta = new MetaModel();
 
   isAuth = false;
 
@@ -37,6 +40,8 @@ class AuthStore {
 
   init = async () => {
     try {
+      this.meta.startLoading();
+
       const userId: string | null = JSON.parse(String(localStorage.getItem(USER_STORAGE)));
 
       if (!userId) {
@@ -55,6 +60,8 @@ class AuthStore {
       }
 
       this.setAuth(true);
+
+      this.meta.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
@@ -62,6 +69,8 @@ class AuthStore {
 
   login = async ({ email, password }: LoginParams) => {
     try {
+      this.meta.startLoading();
+
       const response = await axios.post<UserServer>(
         ENDPOINTS.login.url,
         { password, email },
@@ -71,6 +80,8 @@ class AuthStore {
       if (responseIsOk(response)) {
         this.initUser(response.data);
       }
+
+      this.meta.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
@@ -84,6 +95,8 @@ class AuthStore {
     }
 
     try {
+      this.meta.startLoading();
+
       const response = await axios.post<UserServer>(
         ENDPOINTS.register.url,
         { username, password, email },
@@ -93,6 +106,8 @@ class AuthStore {
       if (responseIsOk(response)) {
         this.initUser(response.data);
       }
+
+      this.meta.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
@@ -100,6 +115,8 @@ class AuthStore {
 
   logout = async () => {
     try {
+      this.meta.startLoading();
+
       const response = await axios.post(ENDPOINTS.logout.url, {}, { withCredentials: true });
 
       if (responseIsOk(response)) {
@@ -107,8 +124,10 @@ class AuthStore {
         this._rootStore.userStore.setInGroup(false);
         this._rootStore.userStore.setUser(null);
         this._rootStore.groupMemberStore.setGroupMember(null);
-        localStorage.removeItem(userStorageName);
+        localStorage.removeItem(USER_STORAGE);
       }
+
+      this.meta.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }

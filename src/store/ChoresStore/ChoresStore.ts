@@ -6,13 +6,17 @@ import { SnackbarType } from 'config/snackbar';
 import { Chore } from 'entities/chore';
 import { ChoreCreateParams, ChoreEditParams, ChoresGetParams } from 'entities/chore/params';
 import { ChoreServer } from 'entities/chore/server';
+import MetaModel from 'store/models/MetaModel';
 import RootStore from 'store/RootStore';
 import { DefaultId } from 'typings/api';
 import { getErrorMsg } from 'utils/getErrorMsg';
 import { responseIsOk } from 'utils/responseIsOk';
+import { sleep } from 'utils/sleep';
 
 class ChoresStore {
   private readonly _rootStore: RootStore;
+
+  readonly meta = new MetaModel();
 
   chores: Chore[] = [];
 
@@ -39,6 +43,8 @@ class ChoresStore {
 
   getChore = async (id: DefaultId) => {
     try {
+      this.meta.startLoading();
+
       const response = await axios.get(ENDPOINTS.getChore.getUrl!(String(id)), {
         withCredentials: true,
       });
@@ -50,6 +56,8 @@ class ChoresStore {
 
         return response.data;
       }
+
+      this.meta.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
@@ -67,15 +75,20 @@ class ChoresStore {
         query = `${query}${sym}categoryId=${params.categoryId}`;
       }
 
+      this.meta.startLoading();
+
       const response = await axios.get(ENDPOINTS.getChoresInGroup.getUrl!(encodeURI(query)), {
         withCredentials: true,
       });
 
       if (response.data) {
         this.setChores(response.data);
+        this.meta.stopLoading();
 
         return response.data;
       }
+
+      this.meta.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
@@ -83,6 +96,8 @@ class ChoresStore {
 
   createChore = async ({ name, points, categoryId }: ChoreCreateParams) => {
     try {
+      this.meta.startLoading();
+
       const response = await axios.post(
         ENDPOINTS.createChore.url,
         {
@@ -96,10 +111,13 @@ class ChoresStore {
       if (responseIsOk(response)) {
         this.setChores([...this.chores, response.data]);
 
+        this.meta.stopLoading();
         this._rootStore.uiStore.snackbar.open(SnackbarType.choreCreated);
 
         return true;
       }
+
+      this.meta.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
@@ -116,10 +134,13 @@ class ChoresStore {
       if (responseIsOk(response)) {
         this.setChores(response.data);
 
+        this.meta.stopLoading();
         this._rootStore.uiStore.snackbar.open(SnackbarType.choreUpdated);
 
         return true;
       }
+
+      this.meta.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }

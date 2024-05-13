@@ -1,10 +1,11 @@
 import React, { FC, useCallback, useState } from 'react';
 
+import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, ButtonTheme, Spacing, Title } from 'components';
+import { Button, ButtonTheme, Spacing, Spinner, Title } from 'components';
 import { routes } from 'config/routes';
-import { useRootStore } from 'store/RootStore/hooks';
+import { useAuthStore, useRootStore } from 'store/RootStore/hooks';
 
 import { RegisterForm, LoginForm } from './components';
 
@@ -12,6 +13,8 @@ import s from './Auth.module.scss';
 
 const Auth: FC = () => {
   const { isDev } = useRootStore();
+  const { meta } = useAuthStore();
+
   const nav = useNavigate();
 
   const [hasAccount, setHasAccount] = useState(false);
@@ -19,6 +22,10 @@ const Auth: FC = () => {
   const onClick = useCallback(() => {
     nav(routes.faq.full);
   }, []);
+
+  if (meta.loading) {
+    return <Spinner />;
+  }
 
   return (
     <>
@@ -47,4 +54,4 @@ const Auth: FC = () => {
   );
 };
 
-export default Auth;
+export default observer(Auth);
