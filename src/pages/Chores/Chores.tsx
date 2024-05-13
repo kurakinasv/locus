@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useMemo } from 'react';
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
@@ -30,12 +30,19 @@ const Chores: FC = () => {
   const { getCategories } = useChoreCategoriesStore();
   const { getGroupSchedules, getScheduledTasks } = useSchedulesStore();
 
+  const [tabsLoading, setTabsLoading] = useState(false);
+
   useEffect(() => {
     const init = async () => {
-      await getChoresInGroup();
+      setTabsLoading(true);
+
+      await getCategories();
       await getGroupSchedules();
       await getScheduledTasks();
-      await getCategories();
+
+      setTabsLoading(false);
+
+      await getChoresInGroup();
     };
 
     init();
@@ -71,7 +78,7 @@ const Chores: FC = () => {
       </div>
       <Spacing size={2.4} />
       <div className={s.tabsWrapper}>
-        <Tabs tabOptions={tabs} tabsContent={tabsContent} />
+        <Tabs tabOptions={tabs} tabsContent={tabsContent} loading={tabsLoading} />
       </div>
     </>
   );

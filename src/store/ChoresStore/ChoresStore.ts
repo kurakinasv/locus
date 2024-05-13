@@ -16,6 +16,8 @@ import { sleep } from 'utils/sleep';
 class ChoresStore {
   private readonly _rootStore: RootStore;
 
+  readonly getChoresMeta = new MetaModel();
+  readonly getSingleChoreMeta = new MetaModel();
   readonly meta = new MetaModel();
 
   chores: Chore[] = [];
@@ -43,7 +45,7 @@ class ChoresStore {
 
   getChore = async (id: DefaultId) => {
     try {
-      this.meta.startLoading();
+      this.getSingleChoreMeta.startLoading();
 
       const response = await axios.get(ENDPOINTS.getChore.getUrl!(String(id)), {
         withCredentials: true,
@@ -53,11 +55,12 @@ class ChoresStore {
         runInAction(() => {
           this.activeChore = response.data;
         });
+        this.getSingleChoreMeta.stopLoading();
 
         return response.data;
       }
 
-      this.meta.stopLoading();
+      this.getChoresMeta.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
@@ -75,7 +78,7 @@ class ChoresStore {
         query = `${query}${sym}categoryId=${params.categoryId}`;
       }
 
-      this.meta.startLoading();
+      this.getChoresMeta.startLoading();
 
       const response = await axios.get(ENDPOINTS.getChoresInGroup.getUrl!(encodeURI(query)), {
         withCredentials: true,
@@ -83,12 +86,12 @@ class ChoresStore {
 
       if (response.data) {
         this.setChores(response.data);
-        this.meta.stopLoading();
+        this.getChoresMeta.stopLoading();
 
         return response.data;
       }
 
-      this.meta.stopLoading();
+      this.getChoresMeta.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
@@ -125,6 +128,8 @@ class ChoresStore {
 
   editChore = async ({ choreId, name, points, categoryId, isArchived }: ChoreEditParams) => {
     try {
+      this.meta.startLoading();
+
       const response = await axios.put<ChoreServer[]>(
         ENDPOINTS.editChore.getUrl!(String(choreId)),
         { name: name?.trim(), points, categoryId, isArchived },

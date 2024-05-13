@@ -5,12 +5,16 @@ import { ENDPOINTS } from 'config/api';
 import { CREATE_CATEGORY_OPTION } from 'config/chores';
 import { ChoreCategory, choreCategoryIconsNames } from 'entities/chore';
 import { CreateChoreCategory } from 'entities/choreCategory/params';
+import MetaModel from 'store/models/MetaModel';
 import RootStore from 'store/RootStore';
 import { getErrorMsg } from 'utils/getErrorMsg';
 import { responseIsOk } from 'utils/responseIsOk';
 
 class ChoreCategoriesStore {
   private readonly _rootStore: RootStore;
+
+  readonly getCategoriesMeta = new MetaModel();
+  readonly createCategoryMeta = new MetaModel();
 
   categories: ChoreCategory[] = [];
 
@@ -33,6 +37,8 @@ class ChoreCategoriesStore {
 
   getCategories = async () => {
     try {
+      this.getCategoriesMeta.startLoading();
+
       const response = await axios.get(ENDPOINTS.getChoreCategories.url, { withCredentials: true });
 
       if (response.data) {
@@ -40,6 +46,8 @@ class ChoreCategoriesStore {
           this.categories = response.data;
         });
       }
+
+      this.getCategoriesMeta.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
@@ -47,6 +55,8 @@ class ChoreCategoriesStore {
 
   createCategory = async (params: CreateChoreCategory): Promise<ChoreCategory | void> => {
     try {
+      this.createCategoryMeta.startLoading();
+
       let icon = params.icon;
 
       if (icon && !choreCategoryIconsNames.includes(icon)) {
@@ -64,8 +74,12 @@ class ChoreCategoriesStore {
           this.categories = [...this.categories, response.data];
         });
 
+        this.createCategoryMeta.stopLoading();
+
         return response.data;
       }
+
+      this.createCategoryMeta.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }

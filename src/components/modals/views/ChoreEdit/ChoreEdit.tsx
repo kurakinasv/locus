@@ -9,6 +9,7 @@ import { Dropdown } from 'components/Dropdown';
 import { ErrorMessageLabel } from 'components/ErrorMessageLabel';
 import { Input } from 'components/Input';
 import { Spacing } from 'components/Spacing';
+import { Spinner } from 'components/Spinner';
 import { Text } from 'components/Text';
 import { WarningBlock } from 'components/WarningBlock';
 import { CREATE_CATEGORY_ID } from 'config/chores';
@@ -37,6 +38,7 @@ const ChoreEdit: React.FC = () => {
   const [selectedIcon, setIcon] = React.useState<ChoreCategoryIcon>('other');
 
   const [initial, setInitial] = React.useState(initialValues);
+  const [initiallyLoading, setInitiallyLoading] = React.useState(false);
 
   const createNewCategory = option === CREATE_CATEGORY_ID;
 
@@ -44,6 +46,8 @@ const ChoreEdit: React.FC = () => {
     if (!modalState?.choreId) {
       return;
     }
+
+    setInitiallyLoading(true);
 
     const chore = await getChore(modalState.choreId);
 
@@ -70,10 +74,12 @@ const ChoreEdit: React.FC = () => {
         {} as FormikTouched<FormValues>
       )
     );
+
+    setInitiallyLoading(false);
   };
 
   React.useEffect(() => {
-    init();
+    init().then(() => setInitiallyLoading(false));
   }, []);
 
   const submitHandler = async () => {
@@ -200,6 +206,10 @@ const ChoreEdit: React.FC = () => {
       );
     });
   }, [selectedIcon]);
+
+  if (initiallyLoading) {
+    return <Spinner />;
+  }
 
   if (!activeChore) {
     return null;

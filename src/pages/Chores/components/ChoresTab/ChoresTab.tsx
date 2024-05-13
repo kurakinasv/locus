@@ -8,9 +8,10 @@ import { useChoreCategoriesStore, useChoresStore } from 'store/RootStore/hooks';
 import { Controls, ScheduleItem } from '..';
 
 const ChoresTab: FC = () => {
-  const { chores, meta } = useChoresStore();
+  const { chores, getChoresMeta, meta } = useChoresStore();
   const { categoriesOptions, categories } = useChoreCategoriesStore();
 
+  const loading = getChoresMeta.loading || meta.loading;
   const empty = !chores.length || !categories.length;
 
   return (
@@ -19,11 +20,11 @@ const ChoresTab: FC = () => {
 
       <Spacing size={2.6} />
 
-      {meta.loading && <Spinner />}
+      {loading && <Spinner />}
 
-      {!meta.loading && empty && <Stub />}
+      {!loading && empty && <Stub />}
 
-      {!meta.loading &&
+      {!loading &&
         !empty &&
         chores.map((chore) => {
           const category = categories.find((c) => c.id === chore?.categoryId);
