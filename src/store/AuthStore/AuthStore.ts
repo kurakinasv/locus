@@ -2,6 +2,7 @@ import axios from 'axios';
 import { makeAutoObservable } from 'mobx';
 
 import { ENDPOINTS } from 'config/api';
+import { USER_STORAGE } from 'config/localStorage';
 import { SnackbarType } from 'config/snackbar';
 import { User } from 'entities/user';
 import { LoginParams, RegisterParams } from 'entities/user/params';
@@ -9,8 +10,6 @@ import { UserServer } from 'entities/user/server';
 import RootStore from 'store/RootStore/RootStore';
 import { getErrorMsg } from 'utils/getErrorMsg';
 import { responseIsOk } from 'utils/responseIsOk';
-
-const userStorageName = 'user';
 
 class AuthStore {
   private readonly _rootStore: RootStore;
@@ -28,7 +27,7 @@ class AuthStore {
   };
 
   initUser = async (user: User) => {
-    localStorage.setItem(userStorageName, JSON.stringify(user.id));
+    localStorage.setItem(USER_STORAGE, JSON.stringify(user.id));
     this._rootStore.userStore.setUser(user);
 
     await this._rootStore.groupMemberStore.getGroupMember();
@@ -38,7 +37,7 @@ class AuthStore {
 
   init = async () => {
     try {
-      const userId: string | null = JSON.parse(String(localStorage.getItem(userStorageName)));
+      const userId: string | null = JSON.parse(String(localStorage.getItem(USER_STORAGE)));
 
       if (!userId) {
         this.setAuth(false);

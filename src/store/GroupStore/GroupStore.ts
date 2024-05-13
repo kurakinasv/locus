@@ -31,7 +31,7 @@ class GroupStore {
 
   getGroup = async (groupId: UUIDString) => {
     try {
-      const response = await axios.get<GroupServer>(`${ENDPOINTS.getGroup.url}?id=${groupId}`, {
+      const response = await axios.get<GroupServer>(ENDPOINTS.getGroup.getUrl!(groupId), {
         withCredentials: true,
       });
 

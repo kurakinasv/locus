@@ -1,6 +1,6 @@
 import { NumberString } from 'typings/api';
 
-const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'http://localhost:3000';
 
 export const STATIC_URL = BASE_URL + '/static';
 
@@ -111,6 +111,7 @@ export const ENDPOINTS: Record<Endpoints, EndpointConfig> = {
   [Endpoints.getGroup]: {
     url: `${getGroupApiUrl()}/group`,
     method: HTTTPMethods.GET,
+    getUrl: (id: string) => `${getGroupApiUrl()}/group/${id}`,
   },
   [Endpoints.createGroup]: {
     url: `${getGroupApiUrl()}/group`,

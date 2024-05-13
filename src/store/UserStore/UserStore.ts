@@ -2,6 +2,7 @@ import axios from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import { ENDPOINTS } from 'config/api';
+import { axiosInstance } from 'config/api/requests';
 import { SnackbarType } from 'config/snackbar';
 import { GroupServer } from 'entities/group';
 import { GroupMemberServer } from 'entities/groupMember';
@@ -41,7 +42,7 @@ class UserStore {
 
   getUser = async () => {
     try {
-      const response = await axios.get<UserServer>(ENDPOINTS.getUser.url, {
+      const response = await axiosInstance.get<UserServer>(ENDPOINTS.getUser.url, {
         withCredentials: true,
       });
 
