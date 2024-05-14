@@ -21,11 +21,12 @@
   .date {
     font-family: $avenirNext;
     font-size: 2.2rem;
+    line-height: 2.6rem;
     font-weight: 700;
     color: $grey300;
     letter-spacing: -0.2rem;
 
-    @include mediaScreen($desktop) {
+    @include mediaScreen($tablet) {
       font-size: 3.2rem;
     }
   }
@@ -34,15 +35,19 @@
     .category {
       font-family: $avenirNext;
       font-size: 1.6rem;
+      line-height: 1.8rem;
       font-weight: 600;
       color: $black;
 
       @include mediaScreen($desktop) {
         font-size: 2rem;
+        line-height: 2.2rem;
       }
     }
 
     .description {
+      max-width: 40rem;
+
       font-family: $sourceSans3;
       font-size: 1.2rem;
       line-height: 1.4rem;

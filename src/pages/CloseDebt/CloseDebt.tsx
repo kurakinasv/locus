@@ -39,7 +39,7 @@ const CloseDebt: React.FC = () => {
   };
 
   return (
-    <div className={s.wrapper}>
+    <div>
       <Button icon={<ArrowIcon />} onClick={onGoBack} stretched={!isDesktop}>
         На страницу расходов
       </Button>

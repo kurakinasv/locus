@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 
 import cn from 'classnames';
+import { format } from 'date-fns';
+import { enUS, ru } from 'date-fns/locale';
 import { DateRange } from 'react-day-picker';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,6 +29,7 @@ const Expenses: FC = () => {
   const isDesktop = screen === 'desktop';
 
   const [range, setRange] = React.useState<DateRange | undefined>();
+  const [option, setOption] = React.useState('');
 
   const onOpenModal = (modal: ModalEnum) => () => {
     openModal(modal);
@@ -78,7 +81,13 @@ const Expenses: FC = () => {
 
       <Spacing size={isDesktop ? 3.2 : 2} />
       <div className={cn(s.controls, !isDesktop && s.controls_mobile)}>
-        <Dropdown options={mockOptions} placeholder="Категория" stretched={!isDesktop} />
+        <Dropdown
+          options={mockOptions}
+          placeholder="Категория"
+          stretched={!isDesktop}
+          selectedOption={option}
+          onChange={setOption}
+        />
         <Spacing size={1.6} horizontal={isDesktop} className={s.spacing} />
         <DatePickerInput
           mode="range"
@@ -94,7 +103,11 @@ const Expenses: FC = () => {
       </div>
 
       <Spacing size={2.4} />
-      <Title size="h2">Декабрь 2023</Title>
+      <Title size="h2">
+        {format(new Date(), 'LLLL y', {
+          locale: navigator.language === 'ru-RU' ? ru : enUS,
+        })}
+      </Title>
       <Spacing size={isDesktop ? 2 : 1} />
 
       <div>

@@ -31,10 +31,22 @@ const ExpenseItem: React.FC<Props> = ({
 
   const mockIcon = <CalendarIcon />;
 
+  const dayMonthArray = formatLocaleDateToDDMM(date).split('.');
+
   return (
     <div className={s.expense} onClick={onClick}>
       <div className={s.right}>
-        <div className={s.date}>{formatLocaleDateToDDMM(date)}</div>
+        <div className={s.date}>
+          {!isMobile ? (
+            formatLocaleDateToDDMM(date)
+          ) : (
+            <>
+              {dayMonthArray[0]}
+              <br />
+              {dayMonthArray[1]}
+            </>
+          )}
+        </div>
         <Spacing size={1.2} horizontal />
         <div className={s.text}>
           <div className={s.category}>{category}</div>

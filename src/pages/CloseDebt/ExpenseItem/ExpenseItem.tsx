@@ -24,6 +24,7 @@ const ExpenseItem: React.FC<Props> = ({ date, category, description, price }) =>
   const mockIcon = <CalendarIcon />;
 
   const dayMonthArray = formatLocaleDateToDDMM(date).split('.');
+
   return (
     <div className={s.expense}>
       <div className={s.right}>
