@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { useForm, Controller, FieldValues } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 
 import { Button } from 'components/Button';
 import { DatePickerInput } from 'components/DatePickerInput';
@@ -13,7 +13,8 @@ import { UsersSlider } from 'components/UsersSlider';
 import { ScheduleFrequency, scheduleFrequencyOptions } from 'config/chores';
 import { VALIDATION_MESSAGES } from 'config/form';
 import { SnackbarType } from 'config/snackbar';
-import { createScheduleMap, dateLabel, rangeDateLabel } from 'entities/schedule/form';
+import { FormFields, createScheduleMap, dateLabel, rangeDateLabel } from 'entities/schedule/form';
+import { ScheduleCreateParams } from 'entities/schedule/params';
 import { User } from 'entities/user';
 import {
   UsersSelectListType,
@@ -21,16 +22,23 @@ import {
   chooseSingleUser,
   initializeUsers,
 } from 'entities/user/service';
-import { useChoresStore, useGroupStore, useUIStore } from 'store/RootStore/hooks';
+import {
+  useChoresStore,
+  useGroupStore,
+  useSchedulesStore,
+  useUIStore,
+} from 'store/RootStore/hooks';
 
 import s from './AddSchedule.module.scss';
 
 const AddSchedule: React.FC = () => {
-  const { group } = useGroupStore();
-  const { choresOptions, createSchedule } = useChoresStore();
   const { closeModal, snackbar } = useUIStore();
 
-  const { handleSubmit, control, formState, watch } = useForm();
+  const { group } = useGroupStore();
+  const { choresOptions } = useChoresStore();
+  const { createSchedule } = useSchedulesStore();
+
+  const { handleSubmit, control, formState, watch } = useForm<FormFields>();
 
   const frequency: ScheduleFrequency | undefined = watch('frequency');
   const noRepeat = frequency === 'never';
@@ -47,19 +55,25 @@ const AddSchedule: React.FC = () => {
   );
 
   const onSubmit = React.useCallback(
-    async (data: FieldValues) => {
+    async (data: FormFields) => {
       if (!users.some((user) => user.selected)) {
         snackbar.open(SnackbarType.chooseOneUser);
         return;
       }
 
-      await createSchedule({
-        choreId: data.choreId,
+      const createParams: ScheduleCreateParams = {
+        choreId: Number(data.choreId),
         frequency: data.frequency,
-        dateFrom: data.frequency === 'never' ? data.date : data.from,
-        dateTo: data.frequency === 'never' ? data.date : data.to,
+        dateFrom: data.frequency === 'never' ? data.date : data.range.from,
+        dateTo: data.frequency === 'never' ? data.date : data.range.to,
         users: users.filter((user) => user.selected).map((user) => user.id),
-      });
+      };
+
+      const created = await createSchedule(createParams);
+
+      if (!created) {
+        return;
+      }
 
       closeModal();
     },
@@ -124,7 +138,7 @@ const AddSchedule: React.FC = () => {
         {frequency && !noRepeat && (
           <>
             <Spacing size={1.4} />
-            <Controller
+            <Controller<FormFields>
               control={control}
               name={createScheduleMap.range.name}
               rules={{ required: true }}
@@ -151,7 +165,7 @@ const AddSchedule: React.FC = () => {
         {frequency && noRepeat && (
           <>
             <Spacing size={1.4} />
-            <Controller
+            <Controller<FormFields>
               control={control}
               name={createScheduleMap.date.name}
               rules={{ required: true }}

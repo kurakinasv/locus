@@ -3,7 +3,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 
-import { Button } from 'components/Button';
+import { Button, ButtonTheme } from 'components/Button';
 import { DatePickerInput } from 'components/DatePickerInput';
 import { Dropdown } from 'components/Dropdown';
 import { ErrorMessageLabel } from 'components/ErrorMessageLabel';
@@ -14,7 +14,6 @@ import { WarningBlock } from 'components/WarningBlock';
 import { ScheduleFrequency, scheduleFrequencyOptions } from 'config/chores';
 import { VALIDATION_MESSAGES } from 'config/form';
 import { SnackbarType } from 'config/snackbar';
-import { MOCK_GROUP_MEMBERS } from 'entities/mock/groupMembers';
 import {
   FormFields,
   createScheduleMap,
@@ -28,18 +27,31 @@ import {
   chooseSingleUser,
   initializeUsers,
 } from 'entities/user/service';
-import { useChoresStore, useGroupStore, useUIStore } from 'store/RootStore/hooks';
+import { useScreenType } from 'store';
+import {
+  useChoresStore,
+  useGroupMemberStore,
+  useGroupStore,
+  useSchedulesStore,
+  useUIStore,
+} from 'store/RootStore/hooks';
 import { DefaultId } from 'typings/api';
+import { toUTC } from 'utils/formatDate';
 
 import s from './ScheduleEdit.module.scss';
 
 const ScheduleEdit: React.FC = () => {
-  const { group } = useGroupStore();
-  const { choresOptions, activeSchedule, setActiveSchedule, editSchedule, getSchedule } =
-    useChoresStore();
   const { closeModal, snackbar, modalState } = useUIStore<{ scheduleId: DefaultId }>();
 
-  const { handleSubmit, control, formState, watch, setValue } = useForm();
+  const screen = useScreenType();
+  const isMobile = screen === 'mobile';
+
+  const { group } = useGroupStore();
+  const { choresOptions } = useChoresStore();
+  const { activeSchedule, setActiveSchedule, editSchedule, getSchedule } = useSchedulesStore();
+  const { userGroupIdByUserId } = useGroupMemberStore();
+
+  const { handleSubmit, control, formState, watch, setValue } = useForm<FormFields>();
 
   const [initial, setInitial] = React.useState<FormFields>();
 
@@ -79,7 +91,7 @@ const ScheduleEdit: React.FC = () => {
 
     const choreOption = choresOptions.find((option) => option.value === String(schedule.choreId));
 
-    setValue(createScheduleMap.choreId.name, choreOption?.value);
+    setValue(createScheduleMap.choreId.name, choreOption?.value ?? '');
     setValue(createScheduleMap.frequency.name, schedule.frequency);
 
     if (schedule.frequency === 'never') {
@@ -91,17 +103,16 @@ const ScheduleEdit: React.FC = () => {
       });
     }
 
-    // todo: fix users selection
-    const usersIdsByGroupIds = MOCK_GROUP_MEMBERS.filter((member) =>
-      schedule.userGroupIds.includes(member.id)
-    ).map((member) => member.userId);
-
-    const usersList = group.users.reduce((acc, user) => {
-      return [...acc, { ...user, selected: usersIdsByGroupIds.includes(user.id) }];
-    }, [] as UsersSelectListType);
+    const usersList = group.users.reduce(
+      (prev, user) => [
+        ...prev,
+        { ...user, selected: schedule.userGroupIds.includes(userGroupIdByUserId[user.id]) },
+      ],
+      [] as UsersSelectListType
+    );
 
     setUsers(usersList);
-  }, [choresOptions, group?.users, modalState?.scheduleId]);
+  }, [choresOptions, group?.users, modalState?.scheduleId, userGroupIdByUserId]);
 
   React.useEffect(() => {
     init();
@@ -127,8 +138,8 @@ const ScheduleEdit: React.FC = () => {
 
       await editSchedule({
         scheduleId: modalState?.scheduleId,
-        dateEnd: data.frequency === 'never' ? data.date : data.from,
-        users: users.filter((user) => user.selected).map((user) => user.id),
+        dateEnd: data.frequency === 'never' ? data.date : data.range.to,
+        // users: users.filter((user) => user.selected).map((user) => user.id),
       });
 
       closeModal();
@@ -139,6 +150,15 @@ const ScheduleEdit: React.FC = () => {
   if (!activeSchedule) {
     return null;
   }
+
+  const initialDate = initial ? toUTC(initial[createScheduleMap.date.name]) : undefined;
+
+  const initialRange = initial
+    ? {
+        from: toUTC(initial[createScheduleMap.range.name].from),
+        to: toUTC(initial[createScheduleMap.range.name].to),
+      }
+    : undefined;
 
   return (
     <>
@@ -204,16 +224,16 @@ const ScheduleEdit: React.FC = () => {
           {frequency && !noRepeat && (
             <>
               <Spacing size={1.4} />
-              <Controller
+              <Controller<FormFields>
                 control={control}
                 name={createScheduleMap.range.name}
-                defaultValue={initial?.[createScheduleMap.range.name]}
+                defaultValue={initialRange}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <DatePickerInput
                     {...field}
                     {...createScheduleMap.range}
-                    defaultRange={initial?.[createScheduleMap.range.name]}
+                    defaultRange={initialRange}
                     mode="range"
                     range={field.value}
                     setRange={field.onChange}
@@ -233,16 +253,17 @@ const ScheduleEdit: React.FC = () => {
           {frequency && noRepeat && (
             <>
               <Spacing size={1.4} />
-              <Controller
+              <Controller<FormFields>
                 control={control}
                 name={createScheduleMap.date.name}
-                defaultValue={initial?.[createScheduleMap.date.name]}
+                defaultValue={initialDate}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <DatePickerInput
                     {...field}
                     {...createScheduleMap.date}
                     mode="single"
+                    defaultDate={initialDate}
                     selectedDate={field.value}
                     setSelectedDate={field.onChange}
                     stretched
@@ -262,23 +283,35 @@ const ScheduleEdit: React.FC = () => {
           <div>
             <Title size="h2">Исполнители</Title>
             <Spacing size={1.4} />
-            <UsersSlider users={users} onUserClick={onUserClick} />
+            <UsersSlider users={users} onUserClick={onUserClick} disabled />
           </div>
           <Spacing size={3} />
         </div>
 
-        <Button
-          type="submit"
-          stretched
-          disabled={
-            !formState.isDirty ||
-            !Object.keys(formState.dirtyFields).length ||
-            formState.isSubmitting
-          }
-          loading={formState.isSubmitting}
-        >
-          Создать
-        </Button>
+        <div className={s['footer-buttons']}>
+          <Button
+            theme={ButtonTheme.outlined}
+            stretched
+            disabled={formState.isSubmitting}
+            loading={formState.isSubmitting}
+            closesModal
+          >
+            Отменить
+          </Button>
+          <Spacing size={1} horizontal={!isMobile} stretched />
+          <Button
+            stretched
+            type="submit"
+            disabled={
+              !formState.isDirty ||
+              !Object.keys(formState.dirtyFields).length ||
+              formState.isSubmitting
+            }
+            loading={formState.isSubmitting}
+          >
+            Сохранить
+          </Button>
+        </div>
       </form>
     </>
   );

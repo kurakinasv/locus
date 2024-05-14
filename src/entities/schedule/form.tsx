@@ -1,7 +1,9 @@
+import { FieldValues } from 'react-hook-form';
+
 import { ScheduleFrequency } from 'config/chores';
 import { UUIDString } from 'typings/api';
 
-export type FormFields = {
+export type FormFields = FieldValues & {
   choreId: UUIDString;
   frequency: ScheduleFrequency;
   range: {

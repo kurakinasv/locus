@@ -9,7 +9,7 @@ import { Chore, ChoreCategory, choreCategoryIconsMap } from 'entities/chore';
 import { ScheduleItem as ScheduleItemClient } from 'entities/schedule';
 import { ScheduledTask } from 'entities/scheduledTask';
 import { useScreenType } from 'store';
-import { useUIStore } from 'store/RootStore/hooks';
+import { useSchedulesStore, useUIStore } from 'store/RootStore/hooks';
 import { DefaultId } from 'typings/api';
 
 import PencilIcon from 'img/icons/pencil.svg?react';
@@ -40,18 +40,21 @@ const ScheduleItem: FC<ScheduleItemProps> = ({
 }) => {
   const { openModal } = useUIStore();
 
+  const { editScheduledTask } = useSchedulesStore();
+
   const screen = useScreenType();
   const isMobile = screen === 'mobile';
 
   const [checked, setChecked] = useState(completed);
 
-  const onItemClick = () => {
+  const onItemClick = async () => {
     if (choreItem) {
       openModal<{ choreId: DefaultId }>(ModalEnum.editChore, { choreId: id });
       return;
     }
 
     setChecked((prev) => !prev);
+    await editScheduledTask({ taskId: id, completed: !checked });
   };
 
   const onChoreArchive = (e: React.MouseEvent) => {

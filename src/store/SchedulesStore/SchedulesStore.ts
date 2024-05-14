@@ -155,45 +155,58 @@ class SchedulesStore {
     }
   };
 
-  editSchedule = async (params: {
-    scheduleId: ScheduleItem['id'];
-    dateEnd?: Date;
-    users?: UUIDString[];
-  }) => {
+  editSchedule = async (params: ScheduleEditParams) => {
     try {
-      // const response = await axios.post(
-      //   ENDPOINTS.createSchedule.url,
-      //   {},
-      //   { withCredentials: true }
-      // );
-
-      const foundSchedule = MOCK_SCHEDULE_LIST.find(
-        (schedule) => schedule.id === params.scheduleId
+      const response = await axios.put<ScheduleItemServer>(
+        ENDPOINTS.editSchedule.getUrl(String(params.scheduleId)),
+        {
+          dateEnd: params.dateEnd,
+          userGroupIds: params.users?.map(
+            (m) => this._rootStore.groupMemberStore.userGroupIdByUserId[m]
+          ),
+        },
+        { withCredentials: true }
       );
 
-      if (!foundSchedule) {
-        return;
-      }
-
-      await sleep(1000);
-      const response: { data: ScheduleItem } = {
-        data: {
-          ...foundSchedule,
-          dateStart:
-            foundSchedule.frequency === 'never' && params.dateEnd
-              ? params.dateEnd.toISOString()
-              : foundSchedule.dateStart,
-          dateEnd: params.dateEnd ? params.dateEnd.toISOString() : foundSchedule.dateEnd,
-        },
-      };
-
       if (response.data) {
+        await this.getGroupSchedules();
+
         runInAction(() => {
           this.activeSchedule = response.data;
         });
-        console.log('editSchedule', response.data);
 
         this._rootStore.uiStore.snackbar.open(SnackbarType.scheduleEdited);
+      }
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
+
+  editScheduledTask = async (params: ScheduleTaskEditParams) => {
+    try {
+      const response = await axios.put<ScheduledTaskServer>(
+        ENDPOINTS.editScheduledTask.getUrl(String(params.taskId)),
+        {
+          completed: params.completed,
+          completedAt: cutTimezone(new Date()).toISOString(),
+        } as ScheduleTaskEditBody,
+        { withCredentials: true }
+      );
+
+      if (responseIsOk(response)) {
+        runInAction(() => {
+          this.scheduledTasks.forEach((t) => {
+            if (t.id === params.taskId && params.completed !== undefined) {
+              t.completed = params.completed;
+            }
+          });
+        });
+
+        if (params.completed !== undefined) {
+          return;
+        }
+
+        this._rootStore.uiStore.snackbar.open(SnackbarType.taskEdited);
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));

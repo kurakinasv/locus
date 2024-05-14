@@ -7,3 +7,12 @@
     flex: 1;
   }
 }
+
+.footer-buttons {
+  width: 100%;
+  display: flex;
+
+  @include mobile {
+    flex-wrap: wrap;
+  }
+}

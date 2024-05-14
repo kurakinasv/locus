@@ -59,8 +59,8 @@ enum Endpoints {
   getSchedules = 'getSchedules',
   getScheduledTasks = 'getScheduledTasks',
   createSchedule = 'createSchedule',
-  // editSchedule = 'editSchedule',
-  // deleteSchedule = 'deleteSchedule',
+  editSchedule = 'editSchedule',
+  editScheduledTask = 'editScheduledTask',
 }
 
 enum HTTTPMethods {
@@ -199,5 +199,15 @@ export const ENDPOINTS = {
   [Endpoints.createSchedule]: {
     url: `${getScheduleApiUrl()}/schedule`,
     method: HTTTPMethods.POST,
+  },
+  [Endpoints.editSchedule]: {
+    url: `${getScheduleApiUrl()}/schedule`,
+    method: HTTTPMethods.PUT,
+    getUrl: (scheduleId: NumberString) => `${getScheduleApiUrl()}/schedule/${scheduleId}`,
+  },
+  [Endpoints.editScheduledTask]: {
+    url: `${getScheduleApiUrl()}/task`,
+    method: HTTTPMethods.PUT,
+    getUrl: (scheduleId: NumberString) => `${getScheduleApiUrl()}/task/${scheduleId}`,
   },
 } satisfies Record<Endpoints, EndpointConfig>;
