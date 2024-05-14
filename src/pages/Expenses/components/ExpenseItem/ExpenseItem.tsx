@@ -15,14 +15,24 @@ type Props = {
   category: string;
   description: string;
   price: number;
-  onDelete?: VoidFunction;
+  onDelete?: ((e: React.MouseEvent) => void) | VoidFunction;
+  onClick?: VoidFunction;
 };
 
-const ExpenseItem: React.FC<Props> = ({ date, category, description, price, onDelete }) => {
+const ExpenseItem: React.FC<Props> = ({
+  date,
+  category,
+  description,
+  price,
+  onDelete,
+  onClick,
+}) => {
   const isMobile = useScreenType() === 'mobile';
+
   const mockIcon = <CalendarIcon />;
+
   return (
-    <div className={s.expense}>
+    <div className={s.expense} onClick={onClick}>
       <div className={s.right}>
         <div className={s.date}>{formatLocaleDateToDDMM(date)}</div>
         <Spacing size={1.2} horizontal />

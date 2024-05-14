@@ -23,5 +23,5 @@ export const useUsersSelect = (single = false) => {
     [single]
   );
 
-  return { users, onUserClick };
+  return { users, setUsers, onUserClick };
 };

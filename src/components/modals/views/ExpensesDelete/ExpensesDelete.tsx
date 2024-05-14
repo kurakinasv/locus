@@ -9,7 +9,11 @@ const ExpensesDelete: React.FC = () => {
       cancelButton="Отмена"
       confirmAction={noop}
       confirmButton="Удалить"
-    ></DefaultConfirm>
+      cancelAction={noop}
+    >
+      Удаление записи о&nbsp;расходах не&nbsp;повлияет на&nbsp;другие записи, но&nbsp;изменит общую
+      статистику по&nbsp;расходам
+    </DefaultConfirm>
   );
 };
 

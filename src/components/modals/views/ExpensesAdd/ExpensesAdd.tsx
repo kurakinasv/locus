@@ -13,20 +13,19 @@ import { UsersSlider } from 'components/UsersSlider';
 import { VALIDATION_MESSAGES } from 'config/form';
 import { mockOptions } from 'config/mock/options';
 import { SnackbarType } from 'config/snackbar';
-import { addExpenseMap } from 'entities/expense/form';
-import { FormFields } from 'entities/schedule/form';
+import { addExpenseMap, CreateFormValues } from 'entities/expense/form';
 import { useUsersSelect } from 'hooks/useUsersSelect';
 import { useUIStore } from 'store/RootStore/hooks';
 
 const ExpensesAdd: React.FC = () => {
   const { closeModal, snackbar } = useUIStore();
 
-  const { register, handleSubmit, control, formState } = useForm<FormFields>();
+  const { register, handleSubmit, control, formState } = useForm<CreateFormValues>();
 
   const { onUserClick, users } = useUsersSelect();
 
   const onSubmit = React.useCallback(
-    async (data: FormFields) => {
+    async (data: CreateFormValues) => {
       if (!users.some((user) => user.selected)) {
         snackbar.open(SnackbarType.chooseOneUser);
         return;
@@ -50,12 +49,12 @@ const ExpensesAdd: React.FC = () => {
   );
 
   return (
-    <FormWrapper<FormFields>
+    <FormWrapper<CreateFormValues>
       handleSubmit={handleSubmit(onSubmit)}
       formState={formState}
       actionButtonLabel="Создать"
     >
-      <Controller<FormFields>
+      <Controller<CreateFormValues>
         control={control}
         name={addExpenseMap.name.name}
         rules={{ required: true }}
@@ -76,7 +75,7 @@ const ExpensesAdd: React.FC = () => {
         )}
       />
       <Spacing size={1.4} />
-      <Controller<FormFields>
+      <Controller<CreateFormValues>
         control={control}
         name={addExpenseMap.category.name}
         rules={{ required: true }}
@@ -99,7 +98,7 @@ const ExpensesAdd: React.FC = () => {
         )}
       />
       <Spacing size={1.4} />
-      <Controller<FormFields>
+      <Controller<CreateFormValues>
         control={control}
         name={addExpenseMap.description.name}
         render={({ field }) => (
@@ -112,7 +111,7 @@ const ExpensesAdd: React.FC = () => {
         )}
       />
       <Spacing size={1.4} />
-      <Controller<FormFields>
+      <Controller<CreateFormValues>
         control={control}
         name={addExpenseMap.amount.name}
         rules={{ required: true }}
@@ -133,7 +132,7 @@ const ExpensesAdd: React.FC = () => {
         )}
       />
       <Spacing size={1.4} />
-      <Controller<FormFields>
+      <Controller<CreateFormValues>
         control={control}
         name={addExpenseMap.purchaseDate.name}
         rules={{ required: true }}

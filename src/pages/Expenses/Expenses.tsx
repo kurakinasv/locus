@@ -1,18 +1,17 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 
 import cn from 'classnames';
+import { DateRange } from 'react-day-picker';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Dropdown, Input, Spacing, Title } from 'components';
+import { Button, DatePickerInput, Dropdown, Spacing, Title } from 'components';
 import { ModalEnum } from 'components/modals';
 import { mockOptions } from 'config/mock/options';
 import { routes } from 'config/routes';
 import { MOCK_EXPENSES } from 'entities/mock/expenses';
 import { useScreenType } from 'store';
 import { useUIStore } from 'store/RootStore/hooks';
-import { noop } from 'utils/noop';
 
-import CalendarIcon from 'img/icons/calendar.svg?react';
 import ExpenseIcon from 'img/icons/expense.svg?react';
 import PlusIcon from 'img/icons/plus.svg?react';
 
@@ -27,14 +26,27 @@ const Expenses: FC = () => {
   const screen = useScreenType();
   const isDesktop = screen === 'desktop';
 
-  const [date, setDate] = useState<string>('');
+  const [range, setRange] = React.useState<DateRange | undefined>();
 
   const onOpenModal = (modal: ModalEnum) => () => {
     openModal(modal);
   };
 
+  const onOpenEditModal = (expenseId: number) => () => {
+    openModal(ModalEnum.expensesEdit, { expenseId });
+  };
+
   const onGoToDebtsPage = () => {
     nav(routes.debts.full);
+  };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onOpenModal(ModalEnum.expensesDelete)();
+  };
+
+  const clearDateRange = () => {
+    setRange(undefined);
   };
 
   return (
@@ -68,12 +80,16 @@ const Expenses: FC = () => {
       <div className={cn(s.controls, !isDesktop && s.controls_mobile)}>
         <Dropdown options={mockOptions} placeholder="Категория" stretched={!isDesktop} />
         <Spacing size={1.6} horizontal={isDesktop} className={s.spacing} />
-        <Input
-          placeholder="Дата"
-          icon={CalendarIcon}
+        <DatePickerInput
+          mode="range"
+          placeholder="Выберите даты"
           className={s.input}
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+          range={range}
+          setRange={setRange}
+          stretched={!isDesktop}
+          max={31}
+          fromToday={false}
+          onClearDate={clearDateRange}
         />
       </div>
 
@@ -84,7 +100,11 @@ const Expenses: FC = () => {
       <div>
         {MOCK_EXPENSES.map((expense) => (
           <React.Fragment key={expense.id}>
-            <ExpenseItem {...expense} onDelete={onOpenModal(ModalEnum.expensesDelete)} />
+            <ExpenseItem
+              {...expense}
+              onDelete={handleDelete}
+              onClick={onOpenEditModal(expense.id)}
+            />
             <Spacing size={1} />
           </React.Fragment>
         ))}
