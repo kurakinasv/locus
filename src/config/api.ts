@@ -41,6 +41,7 @@ enum Endpoints {
 
   getCurrentGroup = 'getCurrentGroup',
   getUserGroups = 'getUserGroups',
+  getGroupMembers = 'getGroupMembers',
   joinGroup = 'joinGroup',
   exitGroup = 'exitGroup',
 
@@ -111,6 +112,10 @@ export const ENDPOINTS = {
     url: `${getUserExpenseApiUrl()}/group`,
     method: HTTTPMethods.GET,
   },
+  [Endpoints.getUserGroups]: {
+    url: `${getUserGroupApiUrl()}/user-groups`,
+    method: HTTTPMethods.GET,
+  },
 
   // groups
   [Endpoints.getGroup]: {
@@ -139,8 +144,8 @@ export const ENDPOINTS = {
     url: `${getUserGroupApiUrl()}/current`,
     method: HTTTPMethods.GET,
   },
-  [Endpoints.getUserGroups]: {
-    url: `${getUserGroupApiUrl()}/user-groups`,
+  [Endpoints.getGroupMembers]: {
+    url: `${getUserGroupApiUrl()}/group-members`,
     method: HTTTPMethods.GET,
   },
   [Endpoints.joinGroup]: {

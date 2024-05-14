@@ -4,7 +4,7 @@ import { User } from 'entities/user';
 import { UUIDString } from 'typings/api';
 
 // todo: add more fields
-class UserModel {
+class UserModel implements User {
   id: UUIDString;
   name?: string;
   surname?: string;

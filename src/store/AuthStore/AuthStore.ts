@@ -34,6 +34,7 @@ class AuthStore {
     this._rootStore.userStore.setUser(user);
 
     await this._rootStore.groupMemberStore.getGroupMember();
+    await this._rootStore.groupMemberStore.getAllGroupMembers();
 
     this.setAuth(true);
   };
@@ -53,7 +54,7 @@ class AuthStore {
       await this._rootStore.userStore.getUser();
       await this._rootStore.groupMemberStore.init();
 
-      const currentMember = this._rootStore.groupMemberStore.groupMember;
+      const currentMember = this._rootStore.groupMemberStore.currentGroupMember;
 
       if (currentMember) {
         await this._rootStore.groupStore.getGroup(currentMember.groupId);
@@ -123,7 +124,7 @@ class AuthStore {
         this.setAuth(false);
         this._rootStore.userStore.setInGroup(false);
         this._rootStore.userStore.setUser(null);
-        this._rootStore.groupMemberStore.setGroupMember(null);
+        this._rootStore.groupMemberStore.setGroupMembers([]);
         localStorage.removeItem(USER_STORAGE);
       }
 

@@ -13,9 +13,10 @@ import { responseIsOk } from 'utils/responseIsOk';
 class GroupMemberStore {
   private readonly _rootStore: RootStore;
 
-  groupMember: GroupMemberModel | null = null;
+  groupMembersIds: UUIDString[] = [];
+  groupMembers: GroupMemberModel[] = [];
 
-  userGroupIds: UUIDString[] = [];
+  currentMember: GroupMemberModel | null = null;
 
   constructor(rootStore: RootStore) {
     this._rootStore = rootStore;
@@ -23,15 +24,34 @@ class GroupMemberStore {
     makeAutoObservable(this);
   }
 
-  setGroupMember(groupMember: GroupMemberClient | null) {
-    this.groupMember = groupMember ? new GroupMemberModel(groupMember) : null;
+  get currentGroupMember() {
+    const foundUser = this.groupMembers.find(
+      (groupMember) => groupMember.userId === this._rootStore.userStore.user?.id
+    );
+
+    return foundUser ? new GroupMemberModel(foundUser) : null;
   }
 
+  get userGroupIdByUserId() {
+    return this.groupMembers.reduce(
+      (acc, groupMember) => ({
+        ...acc,
+        [groupMember.userId]: groupMember.id,
+      }),
+      {} as Record<UUIDString, UUIDString>
+    );
+  }
+
+  setGroupMembers = (groupMembers: GroupMemberClient[]) => {
+    this.groupMembers = groupMembers;
+  };
+
   init = async () => {
-    const groupsIds = await this._rootStore.groupMemberStore.getUserGroups();
+    const groupsIds = await this._rootStore.userStore.getUserGroups();
 
     if (groupsIds?.length) {
       await this._rootStore.groupMemberStore.getGroupMember();
+      await this._rootStore.groupMemberStore.getAllGroupMembers();
     }
   };
 
@@ -42,24 +62,31 @@ class GroupMemberStore {
         withCredentials: true,
       });
 
-      if (responseIsOk(response) && response.data !== null) {
+      const data = response.data;
+
+      if (responseIsOk(response) && data !== null) {
         this._rootStore.userStore.setInGroup(true);
-        this.setGroupMember(response.data);
+        runInAction(() => {
+          this.currentMember = new GroupMemberModel(data);
+        });
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
   };
 
-  getUserGroups = async () => {
+  /** Get members of the group user is currently logged in */
+  getAllGroupMembers = async () => {
     try {
-      const response = await axios.get<UUIDString[]>(ENDPOINTS.getUserGroups.url, {
+      const response = await axios.get<GroupMemberServer[]>(ENDPOINTS.getGroupMembers.url, {
         withCredentials: true,
       });
 
-      if (responseIsOk(response)) {
+      if (responseIsOk(response) && response.data !== null) {
+        this._rootStore.userStore.setInGroup(true);
         runInAction(() => {
-          this.userGroupIds = response.data;
+          this.groupMembers = response.data;
+          this.groupMembersIds = response.data.map((userInGroup) => userInGroup.id);
         });
 
         return response.data;
@@ -70,7 +97,7 @@ class GroupMemberStore {
   };
 
   getGroupUserExpenses = async () => {
-    if (!this.userGroupIds.length) {
+    if (!this.groupMembersIds.length) {
       return;
     }
 

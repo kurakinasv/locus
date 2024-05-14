@@ -10,11 +10,11 @@ import { AddMember, CommonSettings } from './components';
 import s from './GroupSettings.module.scss';
 
 const GroupSettings: FC = () => {
-  const { groupMember } = useGroupMemberStore();
+  const { currentGroupMember } = useGroupMemberStore();
   const { group } = useGroupStore();
   const { user } = useUserStore();
 
-  if (!group || !groupMember || !user) {
+  if (!group || !currentGroupMember || !user) {
     return null;
   }
 
@@ -30,7 +30,7 @@ const GroupSettings: FC = () => {
   return (
     <div className={s.wrapper}>
       <CommonSettings />
-      {groupMember.isAdmin && (
+      {currentGroupMember.isAdmin && (
         <>
           <Spacing size={3.5} />
           <AddMember />

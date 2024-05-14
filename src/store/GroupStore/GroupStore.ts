@@ -61,7 +61,7 @@ class GroupStore {
       if (responseIsOk(response)) {
         this._rootStore.userStore.setInGroup(true);
         this.setGroup(response.data.group);
-        this._rootStore.groupMemberStore.setGroupMember(response.data.userInGroup);
+        this._rootStore.groupMemberStore.setGroupMembers([response.data.userInGroup]);
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));

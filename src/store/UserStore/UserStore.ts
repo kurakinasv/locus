@@ -8,6 +8,7 @@ import { GroupServer } from 'entities/group';
 import { GroupMemberServer } from 'entities/groupMember';
 import { User } from 'entities/user';
 import { UserServer } from 'entities/user/server';
+import GroupMemberModel from 'store/models/GroupMemberModel';
 import { UserModel } from 'store/models/UserModel';
 import RootStore from 'store/RootStore';
 import { UUIDString } from 'typings/api';
@@ -20,6 +21,7 @@ class UserStore {
   user: UserModel | null = null;
   inGroup = false;
   userDebtInGroup: number | null = null;
+  userGroups: GroupMemberModel[] = [];
 
   constructor(rootStore: RootStore) {
     this._rootStore = rootStore;
@@ -125,9 +127,31 @@ class UserStore {
       if (responseIsOk(response)) {
         this.setInGroup(true);
         this._rootStore.groupStore.setGroup(response.data.group);
-        this._rootStore.groupMemberStore.setGroupMember(response.data.userInGroup);
+        this._rootStore.groupMemberStore.setGroupMembers([
+          ...this._rootStore.groupMemberStore.groupMembers,
+          response.data.userInGroup,
+        ]);
 
         return;
+      }
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
+
+  /** Get current user's user group instances */
+  getUserGroups = async () => {
+    try {
+      const response = await axios.get<GroupMemberServer[]>(ENDPOINTS.getUserGroups.url, {
+        withCredentials: true,
+      });
+
+      if (responseIsOk(response)) {
+        runInAction(() => {
+          this.userGroups = response.data;
+        });
+
+        return response.data;
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
