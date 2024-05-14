@@ -11,7 +11,7 @@ import s from './Price.module.scss';
 
 type Props = CommonProps & {
   color?: 'black' | 'red' | 'green';
-  size?: SizeEnum.s | SizeEnum.m | SizeEnum.l;
+  size?: SizeEnum.s | SizeEnum.m | SizeEnum.xl;
 };
 
 const Price: React.FC<Props> = ({ children, color = 'black', size = 'm', className }) => {

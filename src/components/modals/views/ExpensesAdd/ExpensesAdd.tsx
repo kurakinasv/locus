@@ -33,7 +33,7 @@ const ExpensesAdd: React.FC = () => {
 
       const selectedUsers = users.filter((user) => user.selected).map((user) => user.id);
 
-      const createParams = {};
+      // const createParams = {};
 
       console.log('onSubmit', data, selectedUsers);
 

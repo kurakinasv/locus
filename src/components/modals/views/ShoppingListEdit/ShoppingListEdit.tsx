@@ -58,7 +58,7 @@ const ShoppingListEdit: React.FC = () => {
     <FormWrapper
       handleSubmit={handleSubmit(onSubmit)}
       formState={formState}
-      actionButtonLabel="Создать"
+      actionButtonLabel="Сохранить"
     >
       <Controller<EditFormValues>
         control={control}

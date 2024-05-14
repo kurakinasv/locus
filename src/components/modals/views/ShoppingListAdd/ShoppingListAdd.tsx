@@ -19,7 +19,7 @@ const ShoppingListAdd: React.FC = () => {
   const { register, handleSubmit, control, formState } = useForm<CreateFormValues>();
 
   const onSubmit = React.useCallback(async (data: CreateFormValues) => {
-    const createParams = {};
+    // const createParams = {};
 
     console.log('onSubmit', data);
 

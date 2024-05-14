@@ -48,7 +48,7 @@ const CloseDebt: React.FC = () => {
       <Spacing size={1.4} />
       <UsersSlider
         users={users}
-        getCardFooter={(user) => (
+        getCardFooter={(_user) => (
           <>
             <Spacing size={1} />
             <Price color="red" size={SizeEnum.s} className={s.price}>

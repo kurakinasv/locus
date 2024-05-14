@@ -22,7 +22,7 @@ import { DefaultId } from 'typings/api';
 // import s from './ExpensesEdit.module.scss';
 
 const ExpensesEdit: React.FC = () => {
-  const { modalState } = useUIStore<{ expenseId: DefaultId }>();
+  const { closeModal, modalState } = useUIStore<{ expenseId: DefaultId }>();
 
   const { group } = useGroupStore();
   const { userGroupIdByUserId } = useGroupMemberStore();
@@ -64,14 +64,18 @@ const ExpensesEdit: React.FC = () => {
   }, []);
 
   const onSubmit = React.useCallback(async (data: EditFormValues) => {
+    console.log('onSubmit', data);
+
     // await editExpense({})
+
+    closeModal();
   }, []);
 
   return (
     <FormWrapper<EditFormValues>
       handleSubmit={handleSubmit(onSubmit)}
       formState={formState}
-      actionButtonLabel="Создать"
+      actionButtonLabel="Сохранить"
       hasCancelButton
     >
       <Controller<EditFormValues>
