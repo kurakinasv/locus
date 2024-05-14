@@ -22,24 +22,50 @@ class SchedulesStore {
   constructor(rootStore: RootStore) {
     this._rootStore = rootStore;
 
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      scheduledTasks: observable.ref,
+    });
+  }
+
+  /** Map like { ['2024-01-01']: [ ScheduledTask1, ScheduledTask2... ], ['2024-02-01']: [...] } */
+  get scheduleTasksDayMap(): Record<DateString, ScheduledTask[]> {
+    return this.scheduledTasks.reduce(
+      (acc, task) => {
+        const taskDate = new Date(task.date);
+        const dateKey = format(new Date(taskDate), 'yyyy-MM-dd');
+
+        let restAcc = [] as ScheduledTask[];
+
+        if (Object.keys(acc).length) {
+          restAcc = acc[dateKey] ?? [];
+        }
+
+        return {
+          ...acc,
+          [dateKey]: [...restAcc, task],
+        };
+      },
+      {} as Record<DateString, ScheduledTask[]>
+    );
   }
 
   setActiveSchedule = (schedule: ScheduleItem | null) => {
     this.activeSchedule = schedule;
   };
 
+  setScheduledTasks = (tasks: ScheduledTask[]) => {
+    this.scheduledTasks = tasks;
+  };
+
   getSchedule = async (scheduleId: ScheduleItem['id']) => {
     try {
-      // const response = await axios.get(ENDPOINTS.getSchedule.url(scheduleId), { withCredentials: true });
-      await sleep(1000);
-      const response = {
-        data: MOCK_SCHEDULE_LIST.find((schedule) => schedule.id === scheduleId),
-      };
+      const response = await axios.get(ENDPOINTS.getSchedule.getUrl(String(scheduleId)), {
+        withCredentials: true,
+      });
 
       if (response.data) {
         runInAction(() => {
-          this.activeSchedule = response.data ?? null;
+          this.setActiveSchedule(response.data);
         });
 
         return response.data;
@@ -49,16 +75,34 @@ class SchedulesStore {
     }
   };
 
-  getGroupSchedules = async () => {
+  getGroupSchedules = async (params?: ScheduleTasksGetParams) => {
     try {
-      // const response = await axios.get(ENDPOINTS.getGroupSchedules.url(), { withCredentials: true });
-      await sleep(1000);
-      const response = { data: MOCK_SCHEDULE_LIST };
+      let query = '';
+
+      if (params?.name) {
+        query = `${query}?name=${params.name.trim().toLowerCase()}`;
+      }
+
+      if (params?.range) {
+        const { from, to } = params.range;
+
+        const sym = query ? '&' : '?';
+
+        const dateFrom = from ? cutTimezone(from).toISOString() : '';
+        const dateTo = to ? cutTimezone(to).toISOString() : '';
+
+        query = `${query}${sym}from=${dateFrom}&to=${dateTo}`;
+      }
+
+      const response = await axios.get<ScheduledTaskServer[]>(
+        ENDPOINTS.getSchedules.getUrl(encodeURI(query)),
+        {
+          withCredentials: true,
+        }
+      );
 
       if (response.data) {
-        runInAction(() => {
-          this.schedules = response.data;
-        });
+        this.setScheduledTasks(response.data.map(normalizeScheduledTask));
 
         return response.data;
       }
@@ -69,15 +113,12 @@ class SchedulesStore {
 
   getScheduledTasks = async () => {
     try {
-      // const response = await axios.get(ENDPOINTS.getScheduledTasks.url(), { withCredentials: true });
-      await sleep(1000);
-      const response = { data: [] };
+      const response = await axios.get<ScheduledTaskServer[]>(ENDPOINTS.getScheduledTasks.url, {
+        withCredentials: true,
+      });
 
       if (response.data) {
-        runInAction(() => {
-          this.scheduledTasks = response.data;
-        });
-        console.log('getScheduledTasks', response.data);
+        this.setScheduledTasks(response.data.map(normalizeScheduledTask));
 
         return response.data;
       }

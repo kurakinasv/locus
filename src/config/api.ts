@@ -55,6 +55,9 @@ enum Endpoints {
   createChoreCategory = 'createChoreCategory',
 
   // schedule
+  getSchedule = 'getSchedule',
+  getSchedules = 'getSchedules',
+  getScheduledTasks = 'getScheduledTasks',
   createSchedule = 'createSchedule',
   // editSchedule = 'editSchedule',
   // deleteSchedule = 'deleteSchedule',
@@ -73,7 +76,7 @@ type EndpointConfig = {
   getUrl?: (id: string) => string;
 };
 
-export const ENDPOINTS: Record<Endpoints, EndpointConfig> = {
+export const ENDPOINTS = {
   // auth
   [Endpoints.login]: {
     url: `${getAuthApiUrl()}/login`,
@@ -179,16 +182,22 @@ export const ENDPOINTS: Record<Endpoints, EndpointConfig> = {
   },
 
   // schedule
+  [Endpoints.getSchedule]: {
+    url: `${getScheduleApiUrl()}/schedule`,
+    method: HTTTPMethods.GET,
+    getUrl: (scheduleId: NumberString) => `${getScheduleApiUrl()}/schedule/${scheduleId}`,
+  },
+  [Endpoints.getSchedules]: {
+    url: `${getScheduleApiUrl()}/schedules`,
+    method: HTTTPMethods.GET,
+    getUrl: (query: string) => `${getScheduleApiUrl()}/schedules${query}`,
+  },
+  [Endpoints.getScheduledTasks]: {
+    url: `${getScheduleApiUrl()}/schedules`,
+    method: HTTTPMethods.GET,
+  },
   [Endpoints.createSchedule]: {
     url: `${getScheduleApiUrl()}/schedule`,
     method: HTTTPMethods.POST,
   },
-  // [Endpoints.editSchedule]: {
-  //   url: `${getScheduleApiUrl()}/schedule`,
-  //   method: HTTTPMethods.PUT,
-  // },
-  // [Endpoints.deleteSchedule]: {
-  //   url: `${getScheduleApiUrl()}/schedule`,
-  //   method: HTTTPMethods.DELETE,
-  // },
-};
+} satisfies Record<Endpoints, EndpointConfig>;

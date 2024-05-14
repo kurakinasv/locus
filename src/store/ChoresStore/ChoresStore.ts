@@ -47,7 +47,7 @@ class ChoresStore {
     try {
       this.getSingleChoreMeta.startLoading();
 
-      const response = await axios.get(ENDPOINTS.getChore.getUrl!(String(id)), {
+      const response = await axios.get(ENDPOINTS.getChore.getUrl(String(id)), {
         withCredentials: true,
       });
 
@@ -80,7 +80,7 @@ class ChoresStore {
 
       this.getChoresMeta.startLoading();
 
-      const response = await axios.get(ENDPOINTS.getChoresInGroup.getUrl!(encodeURI(query)), {
+      const response = await axios.get(ENDPOINTS.getChoresInGroup.getUrl(encodeURI(query)), {
         withCredentials: true,
       });
 

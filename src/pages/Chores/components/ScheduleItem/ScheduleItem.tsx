@@ -6,6 +6,8 @@ import { Checkbox } from 'components/Checkbox';
 import { ModalEnum } from 'components/modals';
 import { Spacing } from 'components/Spacing';
 import { Chore, ChoreCategory, choreCategoryIconsMap } from 'entities/chore';
+import { ScheduleItem as ScheduleItemClient } from 'entities/schedule';
+import { ScheduledTask } from 'entities/scheduledTask';
 import { useScreenType } from 'store';
 import { useUIStore } from 'store/RootStore/hooks';
 import { DefaultId } from 'typings/api';
@@ -16,7 +18,8 @@ import TrashIcon from 'img/icons/trash.svg?react';
 import s from './ScheduleItem.module.scss';
 
 type ScheduleItemProps = {
-  id: DefaultId;
+  id: Chore['id'] | ScheduledTask['id'];
+  scheduleId?: ScheduleItemClient['id'];
   name: Chore['name'];
   icon?: ChoreCategory['icon'];
   points?: number;
@@ -27,6 +30,7 @@ type ScheduleItemProps = {
 
 const ScheduleItem: FC<ScheduleItemProps> = ({
   id,
+  scheduleId,
   name,
   icon,
   points,
@@ -57,12 +61,12 @@ const ScheduleItem: FC<ScheduleItemProps> = ({
 
   const onScheduleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    openModal(ModalEnum.deleteSchedule, { scheduleId: id });
+    openModal(ModalEnum.deleteSchedule, { scheduleId });
   };
 
   const onScheduleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
-    openModal(ModalEnum.editSchedule, { scheduleId: id });
+    openModal(ModalEnum.editSchedule, { scheduleId });
   };
 
   const ChoreCategoryIcon = icon ? choreCategoryIconsMap[icon] : null;

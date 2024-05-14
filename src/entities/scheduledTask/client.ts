@@ -9,5 +9,6 @@ export type ScheduledTask = {
   isAssigned: boolean;
   completedAt: DateString | null;
   scheduleId: ScheduleItem['id'];
+  choreId: ScheduleItem['choreId'];
   userGroupId: GroupMemberClient['id'] | null;
 };

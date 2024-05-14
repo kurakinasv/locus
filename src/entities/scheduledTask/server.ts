@@ -10,4 +10,5 @@ export type ScheduledTaskServer = {
   completedAt: DateString | null;
   scheduleId: ScheduleItemServer['id'];
   userGroupId: GroupMemberServer['id'] | null;
+  schedule: { choreId: ScheduleItemServer['choreId'] };
 } & AutomaticFields;
