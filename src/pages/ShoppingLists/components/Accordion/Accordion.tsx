@@ -3,9 +3,12 @@ import * as React from 'react';
 import cn from 'classnames';
 
 import { Button, ButtonTheme, Input, Spacing } from 'components';
+import { ModalEnum } from 'components/modals';
 import { Title } from 'components/Title';
 import { ProductType } from 'entities/product';
+import { ShoppingList } from 'entities/shoppingList';
 import { useScreenType } from 'store';
+import { useUIStore } from 'store/RootStore/hooks';
 import { SizeEnum } from 'typings/ui';
 import { formatLocaleToLongDate } from 'utils/formatDate';
 import { noop } from 'utils/noop';
@@ -18,13 +21,22 @@ import { ListItem } from '../ListItem';
 import s from './Accordion.module.scss';
 
 type Props = {
+  id: ShoppingList['id'];
   isOpenDefault?: boolean;
   name: string;
   products: ProductType[];
   purchaseDate: string;
 };
 
-const Accordion: React.FC<Props> = ({ isOpenDefault = false, name, products, purchaseDate }) => {
+const Accordion: React.FC<Props> = ({
+  id,
+  isOpenDefault = false,
+  name,
+  products,
+  purchaseDate,
+}) => {
+  const { openModal } = useUIStore();
+
   const [isOpen, setIsOpen] = React.useState(isOpenDefault);
   const [newProduct, setNewProduct] = React.useState('');
   const [price, setPrice] = React.useState<number | ''>('');
@@ -53,12 +65,8 @@ const Accordion: React.FC<Props> = ({ isOpenDefault = false, name, products, pur
     setPrice(Number(e.target.value));
   };
 
-  const editList = () => {
-    console.log('editList');
-  };
-
-  const deleteList = () => {
-    console.log('deleteList');
+  const onOpenModal = (modal: ModalEnum) => () => {
+    openModal(modal, { listId: id });
   };
 
   return (
@@ -118,11 +126,11 @@ const Accordion: React.FC<Props> = ({ isOpenDefault = false, name, products, pur
           </ul>
           <Spacing size={isDesktop ? 2 : 1.4} />
           <div className={s.buttons}>
-            <Button size={SizeEnum.s} onClick={editList}>
+            <Button size={SizeEnum.s} onClick={onOpenModal(ModalEnum.shoppingListEdit)}>
               Редактировать
             </Button>
             <Spacing size={1.4} horizontal />
-            <Button size={SizeEnum.s} onClick={deleteList}>
+            <Button size={SizeEnum.s} onClick={onOpenModal(ModalEnum.shoppingListDelete)}>
               Удалить
             </Button>
           </div>

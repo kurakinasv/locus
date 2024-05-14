@@ -43,9 +43,9 @@ const Sidebar: FunctionComponent = () => {
               <Spacing size={1} horizontal={!isDesktop} />
               <SidebarButton
                 key={btn.id}
-                path={btn.path}
+                path={btn.path[0]}
                 SidebarIcon={btn.icon}
-                isActive={btn.path === currentPage[currentPage.length - 1]}
+                isActive={btn.path.includes(currentPage[currentPage.length - 1])}
                 withText={isDesktop}
               >
                 {btn.title}

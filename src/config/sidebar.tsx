@@ -11,7 +11,7 @@ type SidebarButtonType = {
   id: number;
   icon: FC<React.SVGProps<SVGSVGElement> & { title?: string | undefined }>;
   title: string;
-  path: string;
+  path: string[];
 };
 
 const devSections: SidebarButtonType[] = import.meta.env.DEV
@@ -20,7 +20,7 @@ const devSections: SidebarButtonType[] = import.meta.env.DEV
         id: 5,
         icon: () => <SettingsIcon />,
         title: 'UI Kit',
-        path: RouterPaths.uiKit,
+        path: [RouterPaths.uiKit],
       },
     ]
   : [];
@@ -30,25 +30,25 @@ export const sections: SidebarButtonType[] = [
     id: 1,
     icon: () => <ChoresIcon />,
     title: 'Домашние обязанности',
-    path: RouterPaths.chores,
+    path: [RouterPaths.chores],
   },
   {
     id: 2,
     icon: () => <ExpensesIcon />,
     title: 'Трекер расходов',
-    path: RouterPaths.expenses,
+    path: [RouterPaths.expenses, RouterPaths.debts],
   },
   {
     id: 3,
     icon: () => <ListIcon />,
     title: 'Списки покупок',
-    path: RouterPaths.shoppingLists,
+    path: [RouterPaths.shoppingLists],
   },
   {
     id: 4,
     icon: () => <SettingsIcon />,
     title: 'Настройки группы',
-    path: RouterPaths.groupSettings,
+    path: [RouterPaths.groupSettings],
   },
   ...devSections,
 ];

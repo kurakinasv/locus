@@ -2,6 +2,8 @@ export * from './Auth';
 
 export * from './Chores';
 
+export * from './CloseDebt';
+
 export * from './CreateGroup';
 
 export * from './EnterGroup';

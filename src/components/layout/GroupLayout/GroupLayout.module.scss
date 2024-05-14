@@ -35,4 +35,8 @@
   max-width: 90%;
   padding: 6rem 5rem;
   flex: 1 1 auto;
+
+  @media (min-width: 1500px) {
+    max-width: 75%;
+  }
 }

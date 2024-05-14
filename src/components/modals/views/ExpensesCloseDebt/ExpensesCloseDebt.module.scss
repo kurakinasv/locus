@@ -1,0 +1,51 @@
+@import 'styles/mixins';
+
+.users {
+  @include flexCenter;
+
+  .arrow {
+    @include square(7.4rem);
+    color: $grey300;
+    transform: rotate(180deg);
+  }
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  .debt {
+    font-family: $avenirNext;
+    font-size: 1.6rem;
+    font-weight: 600;
+
+    & > span {
+      font-family: $avenirNext;
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+
+    &_red {
+      & > span {
+        color: $redMain;
+      }
+    }
+    &_green {
+      & > span {
+        color: $greenMain;
+      }
+    }
+  }
+}
+
+.field {
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: $sourceSans3;
+  font-weight: 600;
+  font-size: 1.6rem;
+}

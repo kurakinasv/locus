@@ -11,8 +11,6 @@
   background-color: $lightGrey;
   border-radius: 0.6rem;
 
-  cursor: pointer;
-
   .right {
     display: flex;
     align-items: center;
@@ -69,6 +67,7 @@
     flex-shrink: 0;
 
     color: $greyMain;
+    color: $redMain;
 
     .icon {
       padding: 0.8rem;
@@ -81,21 +80,6 @@
 
       & > svg {
         @include square(1.6rem);
-      }
-    }
-
-    .delete-icon {
-      @include square(2.4rem);
-
-      display: flex;
-      align-items: center;
-
-      color: $turquoiseMain;
-      opacity: 0.6;
-      @include animate(opacity);
-
-      @include hover {
-        opacity: 0.8;
       }
     }
   }

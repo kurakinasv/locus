@@ -1,0 +1,19 @@
+@import 'styles/mixins';
+
+.form {
+  @include defaultFormWrapper;
+  flex: 1;
+
+  &__fields {
+    flex: 1;
+  }
+}
+
+.footer-buttons {
+  width: 100%;
+  display: flex;
+
+  @include mobile {
+    flex-wrap: wrap;
+  }
+}
