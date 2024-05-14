@@ -61,6 +61,8 @@ enum Endpoints {
   createSchedule = 'createSchedule',
   editSchedule = 'editSchedule',
   editScheduledTask = 'editScheduledTask',
+  deleteSchedule = 'deleteSchedule',
+  deleteScheduleCascade = 'deleteScheduleCascade',
 }
 
 enum HTTTPMethods {
@@ -209,5 +211,16 @@ export const ENDPOINTS = {
     url: `${getScheduleApiUrl()}/task`,
     method: HTTTPMethods.PUT,
     getUrl: (scheduleId: NumberString) => `${getScheduleApiUrl()}/task/${scheduleId}`,
+  },
+  [Endpoints.deleteSchedule]: {
+    url: `${getScheduleApiUrl()}/schedule`,
+    method: HTTTPMethods.DELETE,
+    getUrl: (scheduleId: NumberString) => `${getScheduleApiUrl()}/schedule/${scheduleId}`,
+  },
+  // TODO: use only on dev
+  [Endpoints.deleteScheduleCascade]: {
+    url: `${getScheduleApiUrl()}/schedule/cascade`,
+    method: HTTTPMethods.DELETE,
+    getUrl: (scheduleId: NumberString) => `${getScheduleApiUrl()}/cascade/${scheduleId}`,
   },
 } satisfies Record<Endpoints, EndpointConfig>;

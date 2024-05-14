@@ -3,13 +3,14 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { DefaultConfirm } from 'components/modals/DefaultConfirm';
-import { useChoresStore, useUIStore } from 'store/RootStore/hooks';
+import { useSchedulesStore, useUIStore } from 'store/RootStore/hooks';
 import { DefaultId } from 'typings/api';
 import { noop } from 'utils/noop';
 
 const ScheduleDelete: React.FC = () => {
-  const { deleteSchedule } = useChoresStore();
   const { modalState, closeModal } = useUIStore<{ scheduleId: DefaultId }>();
+
+  const { deleteSchedule } = useSchedulesStore();
 
   const deleteAction = async () => {
     if (!modalState?.scheduleId) {

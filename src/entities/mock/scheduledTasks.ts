@@ -12,6 +12,7 @@ export const MOCK_SCHEDULED_TASKS: ScheduledTask[] = [
     completedAt: null,
     scheduleId: MOCK_SCHEDULE_LIST[0].id,
     userGroupId: MOCK_GROUP_MEMBERS[0].id,
+    choreId: 1,
   },
   {
     id: 2,
@@ -21,6 +22,7 @@ export const MOCK_SCHEDULED_TASKS: ScheduledTask[] = [
     completedAt: null,
     scheduleId: MOCK_SCHEDULE_LIST[1].id,
     userGroupId: MOCK_GROUP_MEMBERS[1].id,
+    choreId: 1,
   },
   {
     id: 3,
@@ -30,6 +32,7 @@ export const MOCK_SCHEDULED_TASKS: ScheduledTask[] = [
     completedAt: null,
     scheduleId: MOCK_SCHEDULE_LIST[2].id,
     userGroupId: MOCK_GROUP_MEMBERS[2].id,
+    choreId: 1,
   },
   {
     id: 4,
@@ -39,6 +42,7 @@ export const MOCK_SCHEDULED_TASKS: ScheduledTask[] = [
     completedAt: '2024-05-12',
     scheduleId: MOCK_SCHEDULE_LIST[0].id,
     userGroupId: MOCK_GROUP_MEMBERS[1].id,
+    choreId: 1,
   },
   {
     id: 5,
@@ -48,5 +52,6 @@ export const MOCK_SCHEDULED_TASKS: ScheduledTask[] = [
     completedAt: '2024-04-05',
     scheduleId: MOCK_SCHEDULE_LIST[1].id,
     userGroupId: MOCK_GROUP_MEMBERS[0].id,
+    choreId: 1,
   },
 ];

@@ -1,15 +1,27 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import axios, { AxiosResponse } from 'axios';
+import { format } from 'date-fns';
+import { makeAutoObservable, observable, runInAction } from 'mobx';
 
-import { ScheduleFrequency } from 'config/chores';
+import { ENDPOINTS } from 'config/api';
 import { SnackbarType } from 'config/snackbar';
-import { Chore } from 'entities/chore';
-import { MOCK_SCHEDULE_LIST } from 'entities/mock/schedule';
 import { ScheduleItem } from 'entities/schedule';
-import { ScheduledTask } from 'entities/scheduledTask';
+import {
+  ScheduleCreateBody,
+  ScheduleCreateParams,
+  ScheduleCreateResponse,
+  ScheduleEditParams,
+  ScheduleTaskEditBody,
+  ScheduleTaskEditParams,
+  ScheduleTasksGetParams,
+} from 'entities/schedule/params';
+import { ScheduleItemServer } from 'entities/schedule/server';
+import { ScheduledTask, ScheduledTaskServer } from 'entities/scheduledTask';
+import { normalizeScheduledTask } from 'entities/scheduledTask/normalizer';
 import RootStore from 'store/RootStore';
-import { UUIDString, DefaultId } from 'typings/api';
+import { DefaultId, DateString } from 'typings/api';
+import { cutTimezone } from 'utils/formatDate';
 import { getErrorMsg } from 'utils/getErrorMsg';
-import { sleep } from 'utils/sleep';
+import { responseIsOk } from 'utils/responseIsOk';
 
 class SchedulesStore {
   private readonly _rootStore: RootStore;
@@ -48,6 +60,10 @@ class SchedulesStore {
       {} as Record<DateString, ScheduledTask[]>
     );
   }
+
+  setSchedules = (schedules: ScheduleItem[]) => {
+    this.schedules = schedules;
+  };
 
   setActiveSchedule = (schedule: ScheduleItem | null) => {
     this.activeSchedule = schedule;
@@ -127,28 +143,46 @@ class SchedulesStore {
     }
   };
 
-  createSchedule = async (params: {
-    choreId: Chore['id'];
-    frequency: ScheduleFrequency;
-    dateFrom: Date;
-    dateTo?: Date;
-    users?: UUIDString[];
-  }) => {
+  createSchedule = async (params: ScheduleCreateParams) => {
     try {
-      console.log('createSchedule', params);
+      let members = this._rootStore.groupMemberStore.groupMembers;
 
-      // const response = await axios.post(
-      //   ENDPOINTS.createSchedule.url,
-      //   {},
-      //   { withCredentials: true }
-      // );
+      if (!members.length) {
+        members = (await this._rootStore.groupMemberStore.getAllGroupMembers()) ?? [];
+      }
 
-      await sleep(1000);
-      const response = { message: 'ok createSchedule' };
+      const userIdsToGroupMemberIds = members
+        .filter((m) => params.users?.find((userId) => userId === m.userId))
+        .map((m) => m.id);
 
-      if (response) {
-        console.log('createSchedule', response);
+      const dateFromString = cutTimezone(params.dateFrom).toISOString();
+      const dateToString = cutTimezone(
+        params.dateTo ? params.dateTo : params.dateFrom
+      ).toISOString();
+
+      const response = await axios.post<
+        ScheduleCreateResponse,
+        AxiosResponse<ScheduleCreateResponse>,
+        ScheduleCreateBody
+      >(
+        ENDPOINTS.createSchedule.url,
+        {
+          choreId: params.choreId,
+          frequency: params.frequency,
+          dateStart: dateFromString,
+          dateEnd: dateToString,
+          userGroupIds: userIdsToGroupMemberIds,
+        },
+        { withCredentials: true }
+      );
+
+      if (responseIsOk(response)) {
+        this.setSchedules([...this.schedules, response.data.schedule]);
+        this.setScheduledTasks(response.data.tasks.map(normalizeScheduledTask));
+
         this._rootStore.uiStore.snackbar.open(SnackbarType.scheduleCreated);
+
+        return true;
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
@@ -215,14 +249,14 @@ class SchedulesStore {
 
   deleteSchedule = async (scheduleId: DefaultId) => {
     try {
-      console.log('deleteSchedule', scheduleId);
-
-      await sleep(1000);
-
-      const response = { message: 'ok deleteSchedule' };
+      const response = await axios.delete<{ message: string }>(
+        ENDPOINTS.deleteScheduleCascade.getUrl(String(scheduleId)),
+        { withCredentials: true }
+      );
 
       if (response) {
-        console.log('deleteSchedule', response);
+        this.setSchedules(this.schedules.filter((s) => s.id !== scheduleId));
+        await this.getScheduledTasks();
         this._rootStore.uiStore.snackbar.open(SnackbarType.scheduleDeleted);
       }
     } catch (error) {

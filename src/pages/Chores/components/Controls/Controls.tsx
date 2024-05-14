@@ -5,27 +5,53 @@ import { DateRange } from 'react-day-picker';
 
 import { DatePickerInput, Dropdown, Input, Spacing } from 'components';
 import { useScreenType } from 'store';
-import { useChoresStore } from 'store/RootStore/hooks';
+import { useChoresStore, useSchedulesStore } from 'store/RootStore/hooks';
 import { OptionType } from 'typings/ui';
 import { debounce } from 'utils/debounce';
-
-import CloseIcon from 'img/icons/close.svg?react';
 
 import s from './Controls.module.scss';
 
 type Props = {
   dropdownPlaceholder?: string;
   dropdownOptions?: OptionType<string>[];
+  setDisplayAllTasks?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Controls: React.FC<Props> = ({ dropdownPlaceholder, dropdownOptions }) => {
+const Controls: React.FC<Props> = ({
+  dropdownPlaceholder,
+  dropdownOptions,
+  setDisplayAllTasks,
+}) => {
   const { getChoresInGroup } = useChoresStore();
+  const { getGroupSchedules } = useSchedulesStore();
 
   const screen = useScreenType();
   const isMobile = screen === 'mobile';
 
   const [search, setSearch] = React.useState('');
   const [option, setOption] = React.useState('');
+  const [range, setRange] = React.useState<DateRange | undefined>();
+
+  const isChoresTab = dropdownPlaceholder && dropdownOptions;
+
+  React.useEffect(() => {
+    // Display all only if from and to are set
+    setDisplayAllTasks?.(!!(range?.from && range?.to));
+
+    return () => {
+      setDisplayAllTasks?.(false);
+    };
+  }, [range]);
+
+  // for schedules
+  const debouncedSchedulesSearch = React.useCallback(
+    debounce(
+      async (params: { value: string; dateRange: DateRange }) =>
+        await getGroupSchedules({ name: params.value, range: params.dateRange }),
+      500
+    ),
+    []
+  );
 
   // for chores
   const debouncedSearch = React.useCallback(
@@ -39,7 +65,12 @@ const Controls: React.FC<Props> = ({ dropdownPlaceholder, dropdownOptions }) => 
 
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.currentTarget.value);
-    debouncedSearch({ value: e.currentTarget.value, option });
+
+    if (isChoresTab) {
+      debouncedSearch({ value: e.currentTarget.value, option });
+    } else {
+      debouncedSchedulesSearch({ value: e.currentTarget.value, dateRange: range });
+    }
   };
 
   const onOptionChange = (option: string) => {
@@ -47,12 +78,31 @@ const Controls: React.FC<Props> = ({ dropdownPlaceholder, dropdownOptions }) => 
     debouncedSearch({ value: search, option });
   };
 
-  const clearSearch = () => {
-    setSearch('');
-    debouncedSearch({ value: '', option });
+  const onDateRangeChange = (dateRange: DateRange | undefined) => {
+    setRange(dateRange);
+
+    if (!dateRange?.to || !dateRange?.from) {
+      return;
+    }
+
+    debouncedSchedulesSearch({ value: search, dateRange });
   };
 
-  const [range, setRange] = React.useState<DateRange | undefined>();
+  const clearSearch = () => {
+    setSearch('');
+
+    if (isChoresTab) {
+      debouncedSearch({ value: '', option });
+    } else {
+      debouncedSchedulesSearch({ value: '', dateRange: range });
+    }
+  };
+
+  const clearDateRange = () => {
+    setRange(undefined);
+    onDateRangeChange(undefined);
+    debouncedSchedulesSearch({ value: search, dateRange: undefined });
+  };
 
   return (
     <div className={cn(s.controls, isMobile && s.controls_mobile)}>
@@ -61,16 +111,18 @@ const Controls: React.FC<Props> = ({ dropdownPlaceholder, dropdownOptions }) => 
         placeholder="Поиск по названию"
         value={search}
         onChange={onSearchChange}
-        icon={search ? () => <CloseIcon className={s.icon} onClick={clearSearch} /> : undefined}
+        clearSearch={clearSearch}
       />
       <Spacing size={1.6} horizontal={!isMobile} className={s.spacing} />
       {!dropdownPlaceholder && (
         <DatePickerInput
           range={range}
-          setRange={setRange}
+          setRange={onDateRangeChange}
           placeholder="Выберите даты"
           stretched={isMobile}
           max={31}
+          fromToday={false}
+          onClearDate={clearDateRange}
         />
       )}
       {dropdownPlaceholder && dropdownOptions && (
