@@ -19,3 +19,11 @@ export * from './GroupExit';
 export * from './GroupDelete';
 
 export * from './GroupDebtsAlert';
+
+export * from './ExpensesAdd';
+
+export * from './ExpensesCloseDebt';
+
+export * from './ExpensesDelete';
+
+export * from './ExpensesEdit';
