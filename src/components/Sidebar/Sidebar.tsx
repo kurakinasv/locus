@@ -1,11 +1,14 @@
 import { FunctionComponent, useCallback } from 'react';
 
+import { observer } from 'mobx-react-lite';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Logo, Spacing } from 'components';
 import { routes } from 'config/routes';
 import { sections } from 'config/sidebar';
+import ImageStub from 'img/groupSettings/image-stub.png';
 import { useScreenType } from 'store';
+import { useGroupStore } from 'store/RootStore/hooks';
 
 import { SidebarButton } from './components';
 
@@ -15,6 +18,8 @@ const Sidebar: FunctionComponent = () => {
   const nav = useNavigate();
   const location = useLocation();
   const screen = useScreenType();
+
+  const { group } = useGroupStore();
 
   const onGroupClick = useCallback(() => {
     nav(routes.groupSettings.full);
@@ -51,12 +56,14 @@ const Sidebar: FunctionComponent = () => {
       </div>
       {isDesktop && (
         <div className={s.group} onClick={onGroupClick}>
-          <div className={s.image} />
-          <div className={s.name}>Название группы</div>
+          <div className={s.image}>
+            <img src={group?.image ?? ImageStub} alt="Обложка группы" />
+          </div>
+          <div className={s.name}>{group?.name}</div>
         </div>
       )}
     </div>
   );
 };
 
-export default Sidebar;
+export default observer(Sidebar);

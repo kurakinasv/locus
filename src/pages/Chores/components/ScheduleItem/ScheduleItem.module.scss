@@ -1,8 +1,14 @@
 @import 'styles/mixins';
 
+$shallowScreen: 360px;
+
 .wrapper {
   position: relative;
-  padding: 0.6rem 2rem;
+  padding: 0.6rem 1rem;
+
+  @include mediaScreen($tablet) {
+    padding: 0.6rem 2rem;
+  }
 
   display: flex;
   justify-content: space-between;
@@ -42,7 +48,14 @@
   .name {
     font-family: 'Source Sans 3', sans-serif;
     font-size: 1.6rem;
+    line-height: 1.8rem;
     font-weight: 400;
+
+    @media (max-width: $shallowScreen) {
+      font-size: 1.4rem;
+      line-height: 1.6rem;
+      hyphens: auto;
+    }
   }
 
   .category {
@@ -52,8 +65,70 @@
     color: $turquoiseMain;
   }
 
-  .icon {
-    max-width: 3.2rem;
-    max-height: 3.2rem;
+  .right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .additional-info {
+    display: flex;
+    align-items: center;
+
+    &__icon {
+      max-width: 3.2rem;
+      max-height: 3.2rem;
+      padding: 0.6rem;
+
+      background-color: $turquoiseMain;
+      border-radius: 50%;
+      color: $white;
+
+      @media (max-width: $shallowScreen) {
+        max-width: 2.8rem;
+        max-height: 2.8rem;
+      }
+
+      & > svg {
+        @include square(2rem);
+        max-width: 2rem;
+        max-height: 2rem;
+      }
+    }
+
+    .badge {
+      padding: 0.2rem 0.8rem;
+
+      background-color: $purple100;
+      border: 1px solid $purpleMain;
+      border-radius: 3rem;
+      color: $purpleMain;
+
+      font-family: $avenirNext;
+      font-weight: 600;
+      font-size: 1.2rem;
+
+      text-wrap: nowrap;
+    }
+  }
+
+  .common-icons {
+    display: flex;
+    align-items: center;
+
+    &__icon {
+      @include square(2.4rem);
+
+      display: flex;
+      align-items: center;
+
+      color: $turquoiseMain;
+      opacity: 0.6;
+      @include animate(opacity);
+
+      @include hover {
+        opacity: 0.8;
+      }
+    }
   }
 }

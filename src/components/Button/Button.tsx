@@ -37,6 +37,7 @@ const Button: FC<Props> = React.forwardRef<HTMLButtonElement, Props>(
       theme = ButtonTheme.filled,
       opensModal = false,
       closesModal = false,
+      type = 'button',
       onClick,
       ...props
     },
@@ -52,6 +53,7 @@ const Button: FC<Props> = React.forwardRef<HTMLButtonElement, Props>(
 
     const buttonProps = {
       ...props,
+      type,
       className: wrapperStyles,
       disabled: disabled || loading,
       ref: forwardedRef,

@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import { DefaultConfirm } from 'components/modals/DefaultConfirm';
-import { useUserStore } from 'store/RootStore/hooks';
+import { useGroupMemberStore } from 'store/RootStore/hooks';
 import { noop } from 'utils/noop';
 import { sleep } from 'utils/sleep';
 
 const GroupExit: React.FC = () => {
-  const { exitGroup } = useUserStore();
+  const { exitGroup } = useGroupMemberStore();
 
   const exitAction = async () => {
     await sleep(700);

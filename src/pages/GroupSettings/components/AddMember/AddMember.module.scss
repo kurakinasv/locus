@@ -1,0 +1,13 @@
+@import 'styles/mixins';
+
+.copy {
+  & > input {
+    &:hover {
+      background-color: $turquoise100;
+    }
+
+    cursor: pointer;
+
+    @include animate(background-color);
+  }
+}

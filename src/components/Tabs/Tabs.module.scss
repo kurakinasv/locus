@@ -39,11 +39,15 @@
     &:focus-visible {
       box-shadow: 0 0 0 2px $turquoiseMain;
     }
+
+    &:disabled {
+      cursor: default;
+    }
   }
 }
 
 .content {
-  padding: 2rem;
+  padding: 1rem;
   flex-grow: 1;
 
   background-color: $white;
@@ -52,6 +56,10 @@
   outline: none;
   box-shadow: 0 17px 27.8px 4px rgba(0, 0, 0, 0.05);
   border: 3px solid $turquoise200;
+
+  @include mediaScreen($tablet) {
+    padding: 2rem;
+  }
 
   &__wrapper {
     display: flex;

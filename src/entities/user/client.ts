@@ -1,12 +1,14 @@
+import { UUIDString } from 'typings/api';
+
 export type User = {
-  id: number;
+  id: UUIDString;
   name?: string;
   surname?: string;
   username: string;
   email: string;
-  image?: string;
-  phone?: string;
-  birthday?: string;
-  createdAt: string;
-  adminInGroups?: number[];
+  // image?: string;
+  // phone?: string;
+  // birthday?: string;
+  // createdAt: string;
+  // adminInGroups?: number[];
 };

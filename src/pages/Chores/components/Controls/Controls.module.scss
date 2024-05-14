@@ -18,3 +18,12 @@
     }
   }
 }
+
+.icon {
+  @include defaultInputIconStyles;
+
+  right: 1rem;
+
+  max-width: 1.6rem;
+  max-height: 1.6rem;
+}
