@@ -63,7 +63,7 @@ export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
 
   // expenses
   [ModalEnum.expensesAdd]: {
-    title: 'Добавить расход',
+    title: 'Добавить трату',
     component: <ExpensesAdd />,
   },
   [ModalEnum.expensesCloseDebt]: {
@@ -71,7 +71,7 @@ export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
     component: <ExpensesCloseDebt />,
   },
   [ModalEnum.expensesEdit]: {
-    title: 'Редактировать расход',
+    title: 'Редактировать трату',
     component: <ExpensesEdit />,
   },
 
@@ -111,7 +111,7 @@ export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
     confirm: true,
   },
   [ModalEnum.expensesDelete]: {
-    title: 'Удалить расход',
+    title: 'Удалить трату',
     component: <ExpensesDelete />,
     confirm: true,
   },

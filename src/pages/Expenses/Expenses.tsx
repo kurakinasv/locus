@@ -3,9 +3,11 @@ import React, { FC, useState } from 'react';
 import cn from 'classnames';
 
 import { Button, Dropdown, Input, Spacing, Title } from 'components';
+import { ModalEnum } from 'components/modals';
 import { mockOptions } from 'config/mock/options';
 import { MOCK_EXPENSES } from 'entities/mock/expenses';
 import { useScreenType } from 'store';
+import { useUIStore } from 'store/RootStore/hooks';
 import { noop } from 'utils/noop';
 
 import CalendarIcon from 'img/icons/calendar.svg?react';
@@ -17,15 +19,21 @@ import { StatBanner, ExpenseItem } from './components';
 import s from './Expenses.module.scss';
 
 const Expenses: FC = () => {
+  const { openModal } = useUIStore();
+
   const screen = useScreenType();
   const isDesktop = screen === 'desktop';
 
   const [date, setDate] = useState<string>('');
 
+  const onOpenModal = () => {
+    openModal(ModalEnum.expensesAdd);
+  };
+
   return (
     <>
       <div className={s.buttons}>
-        <Button icon={<PlusIcon />} stretched onClick={noop}>
+        <Button icon={<PlusIcon />} stretched onClick={onOpenModal}>
           Внести расходы
         </Button>
         <Spacing size={isDesktop ? 1.6 : 0.8} horizontal={isDesktop} stretched />
