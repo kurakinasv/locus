@@ -9,7 +9,7 @@ import s from './Input.module.scss';
 
 type InputProps = PropsWithClassName & {
   value: string | number;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
   disabled?: boolean;
   icon?: FC<SVGProps<SVGSVGElement>>;
@@ -37,7 +37,7 @@ const Input: FC<InputProps> = ({
     <div className={cn(s.wrapper, className)}>
       {Icon && <Icon className={s.icon} />}
       <input
-        className={cn(s.input, errorMessage && s.input_error)}
+        className={cn(s.input, errorMessage && touched && s.input_error)}
         value={value ?? undefined}
         name={name}
         placeholder={placeholder}

@@ -20,6 +20,7 @@ const PhotoUpload: React.FC<Props> = ({ image, stub, name, setValue }) => {
     inputRef.current?.click();
   };
 
+  // todo: check image size and formats
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) {

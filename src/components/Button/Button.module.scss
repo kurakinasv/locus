@@ -13,7 +13,13 @@
 
   &:disabled {
     background-color: $grey300;
+    border-color: $grey300;
+    color: $white;
     @include disableSelect;
+
+    .label {
+      color: $white;
+    }
   }
 
   &:active {
@@ -73,6 +79,11 @@
       }
     }
   }
+}
+
+.defalt-wrapper {
+  @include flexCenter;
+  color: $white;
 }
 
 .icon {

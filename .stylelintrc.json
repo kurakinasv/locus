@@ -7,7 +7,7 @@
       {
         "except": ["first-nested"],
         "ignore": ["after-comment"],
-        "ignoreAtRules": ["include", "import"]
+        "ignoreAtRules": ["include", "import", "else"]
       }
     ],
     "color-function-notation": null,

@@ -1,0 +1,78 @@
+@import 'styles/mixins';
+
+:global(#snackbar-portal) {
+  position: fixed;
+  z-index: $snackbarZIndex;
+  bottom: 0;
+  right: 0;
+
+  width: 100%;
+  max-width: 50rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.snackbar {
+  position: relative;
+  bottom: calc(#{$tabbarHeight} + 1rem);
+
+  max-width: 50rem;
+  padding: 1rem;
+
+  border-radius: 10px;
+
+  @include mediaScreen($desktop) {
+    bottom: 2rem;
+  }
+
+  &.success {
+    background-color: $green100;
+    color: $greenMain;
+    border: 1px solid $greenMain;
+  }
+
+  &.info {
+    background-color: $blue100;
+    color: $blueMain;
+    border: 1px solid $blueMain;
+  }
+
+  &.error {
+    background-color: $red100;
+    color: $redMain;
+    border: 1px solid $redMain;
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__icon {
+    @include square(3.2rem);
+    margin-right: 1rem;
+  }
+
+  &__text {
+    font-size: 1.6rem;
+    flex: 1;
+    color: $black;
+  }
+
+  &__button {
+    @include square(1.8rem);
+    color: inherit;
+    opacity: 0.7;
+    cursor: pointer;
+    @include animate(opacity, 0.1s);
+
+    &:hover {
+      opacity: 0.4;
+    }
+
+    & > svg {
+      @include square(100%);
+    }
+  }
+}

@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 
 import { Spacing, Title } from 'components';
-import { mockOptions } from 'config/mock/options';
 import { MOCK_SCHEDULE_LIST } from 'entities/mock/schedule';
 
 import { Controls, ScheduleItem } from '..';
@@ -9,7 +8,7 @@ import { Controls, ScheduleItem } from '..';
 const ScheduleTab: FC = () => {
   return (
     <div>
-      <Controls dropdownOptions={mockOptions} dropdownPlaceholder="Выберите неделю" />
+      <Controls />
 
       <Spacing size={2.6} />
       <Title size="h2">Сегодня, 16 декабря</Title>

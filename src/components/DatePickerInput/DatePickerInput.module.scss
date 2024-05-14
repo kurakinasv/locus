@@ -1,0 +1,48 @@
+@import 'styles/mixins';
+
+.wrapper {
+  min-width: 30rem;
+  position: relative;
+
+  .stretched {
+    width: 100%;
+  }
+
+  & .icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1.8rem;
+
+    color: $turquoiseMain;
+    @include animate(color);
+
+    &:hover {
+      color: rgba($turquoiseMain, 0.8);
+      cursor: pointer;
+    }
+  }
+}
+
+:global(.rdp.rdp) {
+  --rdp-accent-color: #{$turquoiseMain}; /* Accent color for the background of selected days. */
+  --rdp-background-color: #{$white}; /* Background color for the hovered/focused elements. */
+
+  background-color: var(--rdp-background-color);
+
+  margin: 0.4rem 0 0;
+}
+
+.datePicker {
+  position: absolute;
+  z-index: $dropdownZIndex;
+
+  border-radius: 6px;
+  box-shadow:
+    0 10px 38px -10px rgba(22, 23, 24, 0.35),
+    0 10px 20px -15px rgba(22, 23, 24, 0.2);
+
+  :global(.rdp-months) {
+    padding: 1rem;
+  }
+}
