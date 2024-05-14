@@ -6,6 +6,8 @@ import { FieldInputProps } from 'formik';
 import { Spacing } from 'components/Spacing';
 import { PropsWithClassName } from 'typings/props';
 
+import CloseIcon from 'img/icons/close.svg?react';
+
 import s from './Input.module.scss';
 
 type InputProps = PropsWithClassName & {
@@ -18,6 +20,8 @@ type InputProps = PropsWithClassName & {
   touched?: boolean;
   errorMessage?: string;
   label?: React.ReactNode;
+  hideCloseIcon?: boolean;
+  clearSearch?: VoidFunction;
   field?: FieldInputProps<string>;
 } & InputHTMLAttributes<HTMLInputElement>;
 
@@ -31,7 +35,9 @@ const Input: FC<InputProps> = ({
   errorMessage = '',
   label,
   className,
+  hideCloseIcon = false,
   onChange,
+  clearSearch,
   field: formikField,
   form,
   ...props
@@ -39,7 +45,11 @@ const Input: FC<InputProps> = ({
   return (
     <div className={cn(s.wrapper, className)}>
       <div className={s['input-wrapper']}>
-        {Icon && <Icon className={s.icon} />}
+        {!hideCloseIcon && clearSearch && !!value ? (
+          <CloseIcon className={s['close-icon']} onClick={clearSearch} />
+        ) : Icon ? (
+          <Icon className={s.icon} />
+        ) : undefined}
         <input
           className={cn(s.input, errorMessage && touched && s.input_error)}
           value={value ?? undefined}

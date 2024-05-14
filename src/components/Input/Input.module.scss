@@ -11,14 +11,11 @@
   .input-wrapper {
     position: relative;
 
-    & .icon {
+    & .icon,
+    & .close-icon {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      right: 1.8rem;
-
-      max-width: 2rem;
-      max-height: 2rem;
 
       color: $turquoiseMain;
       @include animate(color);
@@ -27,6 +24,20 @@
         color: rgba($turquoiseMain, 0.8);
         cursor: pointer;
       }
+    }
+
+    & .icon {
+      right: 1.8rem;
+
+      max-width: 2rem;
+      max-height: 2rem;
+    }
+
+    & .close-icon {
+      right: 1rem;
+
+      max-width: 1.6rem;
+      max-height: 1.6rem;
     }
   }
 }

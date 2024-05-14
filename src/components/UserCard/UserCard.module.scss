@@ -16,8 +16,19 @@
 
   @include animate(background-color);
 
+  &:disabled {
+    user-select: none;
+    pointer-events: none;
+    border-color: $grey300;
+    opacity: 0.8;
+  }
+
   &_selected {
     border-color: $turquoiseMain;
+
+    &:disabled {
+      border-color: $greyMain;
+    }
   }
 
   &:hover {

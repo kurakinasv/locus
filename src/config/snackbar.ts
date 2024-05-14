@@ -15,6 +15,7 @@ export enum SnackbarType {
   scheduleCreated = 'scheduleCreated',
   scheduleEdited = 'scheduleEdited',
   scheduleDeleted = 'scheduleDeleted',
+  taskEdited = 'taskEdited',
 }
 
 export const SNACKBAR_CONFIG: Record<SnackbarType, { message: string; theme: SnackbarTheme }> = {
@@ -56,6 +57,10 @@ export const SNACKBAR_CONFIG: Record<SnackbarType, { message: string; theme: Sna
   },
   [SnackbarType.scheduleDeleted]: {
     message: 'Расписание успешно удалено',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.taskEdited]: {
+    message: 'Задача успешно изменена',
     theme: SnackbarTheme.success,
   },
 };

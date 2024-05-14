@@ -43,6 +43,8 @@ type InputProps = PropsWithClassName & {
   errorMessage?: string;
   mode?: DaySelectionMode;
   max?: number;
+  fromToday?: boolean;
+  onClearDate?: VoidFunction;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 // todo: divide on two components
@@ -52,6 +54,7 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
       defaultRange,
       range,
       setRange,
+      defaultDate,
       selectedDate,
       setSelectedDate,
       placeholder,
@@ -62,6 +65,8 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
       errorMessage,
       mode = 'range',
       max,
+      fromToday = true,
+      onClearDate,
       className,
     },
     forwardedRef
@@ -79,6 +84,12 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
         setFormatedDate(formated ?? '');
       }
     }, [defaultRange]);
+
+    useEffect(() => {
+      if (defaultDate) {
+        setFormatedDate(defaultDate?.toLocaleDateString() ?? '');
+      }
+    }, [defaultDate]);
 
     const onRangeChange = useCallback(() => {
       const formated = `${range?.from?.toLocaleDateString()} - ${range?.to?.toLocaleDateString()}`;
@@ -100,6 +111,11 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
       setDatePickerOpen((v) => !v);
     };
 
+    const handleInputClear = () => {
+      setFormatedDate('');
+      onClearDate?.();
+    };
+
     return (
       <div ref={forwardedRef} className={stretched ? s['ref-wrapper'] : undefined}>
         <div className={cn(s.wrapper, stretched && s.stretched, className)} ref={ref}>
@@ -113,6 +129,7 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
             label={label}
             errorMessage={errorMessage}
             touched={touched}
+            clearSearch={handleInputClear}
           />
           {datePickerOpen && mode === 'range' && (
             <DayPicker
@@ -125,6 +142,7 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
               className={s.datePicker}
               weekStartsOn={1}
               showOutsideDays
+              fromDate={fromToday ? new Date() : undefined}
               initialFocus
             />
           )}
@@ -138,6 +156,7 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
               className={s.datePicker}
               weekStartsOn={1}
               showOutsideDays
+              fromDate={fromToday ? new Date() : undefined}
             />
           )}
         </div>

@@ -12,10 +12,11 @@ import s from './UsersSlider.module.scss';
 
 type Props = {
   users: UsersSelectListType;
+  disabled?: boolean;
   onUserClick: (id: User['id']) => VoidFunction;
 };
 
-const UsersSlider: React.FC<Props> = ({ users, onUserClick }) => {
+const UsersSlider: React.FC<Props> = ({ users, disabled = false, onUserClick }) => {
   const screen = useScreenType();
   const isDesktop = screen === 'desktop';
 
@@ -40,6 +41,7 @@ const UsersSlider: React.FC<Props> = ({ users, onUserClick }) => {
               // todo: pass image
               // image={user.image}
               selected={user.selected}
+              disabled={disabled}
               onClick={onUserClick(user.id)}
             />
           </SwiperSlide>
