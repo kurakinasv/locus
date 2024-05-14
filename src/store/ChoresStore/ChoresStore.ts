@@ -11,7 +11,6 @@ import RootStore from 'store/RootStore';
 import { DefaultId } from 'typings/api';
 import { getErrorMsg } from 'utils/getErrorMsg';
 import { responseIsOk } from 'utils/responseIsOk';
-import { sleep } from 'utils/sleep';
 
 class ChoresStore {
   private readonly _rootStore: RootStore;
