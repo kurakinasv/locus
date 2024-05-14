@@ -15,6 +15,9 @@ import { ProfileDelete } from './views/ProfileDelete';
 import { ProfileExit } from './views/ProfileExit';
 import { ScheduleDelete } from './views/ScheduleDelete';
 import { ScheduleEdit } from './views/ScheduleEdit';
+import { ShoppingListAdd } from './views/ShoppingListAdd';
+import { ShoppingListDelete } from './views/ShoppingListDelete';
+import { ShoppingListEdit } from './views/ShoppingListEdit';
 
 type ModalConfigType = {
   title?: string;
@@ -32,6 +35,10 @@ export enum ModalEnum {
   expensesCloseDebt = 'expenses-close-debt',
   expensesDelete = 'expenses-delete',
   expensesEdit = 'expenses-edit',
+
+  shoppingListAdd = 'shopping-list-add',
+  shoppingListEdit = 'shopping-list-edit',
+  shoppingListDelete = 'shopping-list-delete',
 
   profileExit = 'profile-exit',
   profileDelete = 'profile-delete',
@@ -75,6 +82,16 @@ export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
     component: <ExpensesEdit />,
   },
 
+  // shopping list
+  [ModalEnum.shoppingListAdd]: {
+    title: 'Новый список',
+    component: <ShoppingListAdd />,
+  },
+  [ModalEnum.shoppingListEdit]: {
+    title: 'Изменить список',
+    component: <ShoppingListEdit />,
+  },
+
   // confirms
   [ModalEnum.profileExit]: {
     title: 'Выйти из аккаунта',
@@ -113,6 +130,11 @@ export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
   [ModalEnum.expensesDelete]: {
     title: 'Удалить трату',
     component: <ExpensesDelete />,
+    confirm: true,
+  },
+  [ModalEnum.shoppingListDelete]: {
+    title: 'Удалить список',
+    component: <ShoppingListDelete />,
     confirm: true,
   },
 };
