@@ -2,6 +2,7 @@
 
 .form {
   @include defaultFormWrapper;
+  flex: 1;
 
   &__fields {
     flex: 1;

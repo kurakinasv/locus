@@ -13,10 +13,11 @@ import s from './UsersSlider.module.scss';
 type Props = {
   users: UsersSelectListType;
   disabled?: boolean;
-  onUserClick: (id: User['id']) => VoidFunction;
+  getCardFooter?: (user: User) => React.ReactNode;
+  onUserClick?: (id: User['id']) => VoidFunction;
 };
 
-const UsersSlider: React.FC<Props> = ({ users, disabled = false, onUserClick }) => {
+const UsersSlider: React.FC<Props> = ({ users, disabled = false, onUserClick, getCardFooter }) => {
   const screen = useScreenType();
   const isDesktop = screen === 'desktop';
 
@@ -42,7 +43,8 @@ const UsersSlider: React.FC<Props> = ({ users, disabled = false, onUserClick }) 
               // image={user.image}
               selected={user.selected}
               disabled={disabled}
-              onClick={onUserClick(user.id)}
+              onClick={onUserClick?.(user.id)}
+              footer={getCardFooter?.(user)}
             />
           </SwiperSlide>
         ))}

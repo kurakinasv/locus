@@ -7,6 +7,7 @@ export enum RouterPaths {
   group = 'group',
   chores = 'chores',
   expenses = 'expenses',
+  debts = 'debts',
   shoppingLists = 'shoppingLists',
   groupSettings = 'settings',
   profileSettings = 'profileSettings',
@@ -48,6 +49,10 @@ export const routes: {
   expenses: {
     mask: RouterPaths.expenses,
     full: `/${RouterPaths.group}/${RouterPaths.expenses}`,
+  },
+  debts: {
+    mask: RouterPaths.debts,
+    full: `/${RouterPaths.group}/${RouterPaths.debts}`,
   },
   shoppingLists: {
     mask: RouterPaths.shoppingLists,

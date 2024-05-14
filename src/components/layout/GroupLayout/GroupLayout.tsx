@@ -16,7 +16,7 @@ const GroupLayout: React.FC = () => {
   const splitLocation = location.pathname.split('/');
 
   const title = useMemo(() => {
-    return sections.find(({ path }) => path === splitLocation.at(-1))?.title;
+    return sections.find(({ path }) => path.includes(splitLocation.at(-1) ?? ''))?.title;
   }, [splitLocation]);
 
   return (

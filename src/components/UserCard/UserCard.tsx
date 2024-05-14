@@ -14,6 +14,7 @@ type Props = {
   image?: string;
   selected?: boolean;
   disabled?: boolean;
+  footer?: React.ReactNode;
   onClick?: VoidFunction;
 };
 
@@ -22,6 +23,7 @@ const UserCard: React.FC<Props> = ({
   image,
   selected = false,
   disabled = false,
+  footer,
   onClick,
 }) => {
   return (
@@ -40,6 +42,7 @@ const UserCard: React.FC<Props> = ({
       </div>
       <Spacing />
       <Text className={s.name}>{name}</Text>
+      {footer ?? null}
     </button>
   );
 };

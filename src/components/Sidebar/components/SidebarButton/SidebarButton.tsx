@@ -20,6 +20,7 @@ const SidebarButton: FC<PropsWithChildren<Props>> = ({
   path,
   withText = true,
   children,
+  isActive,
 }) => {
   const screen = useScreenType();
   const isMobile = screen === 'mobile';
@@ -27,9 +28,7 @@ const SidebarButton: FC<PropsWithChildren<Props>> = ({
   return (
     <NavLink
       to={path}
-      className={({ isActive }) =>
-        cn(s.wrapper, isActive && s.active, isMobile && s.wrapper_mobile)
-      }
+      className={cn(s.wrapper, isActive && s.active, isMobile && s.wrapper_mobile)}
     >
       <SidebarIcon className={s.image} />
       {withText && (

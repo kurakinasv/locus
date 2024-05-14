@@ -8,6 +8,7 @@ import { GroupLayout } from 'components/layout/GroupLayout';
 import { RouterPaths } from 'config/routes';
 import { Auth } from 'pages/Auth';
 import { Chores } from 'pages/Chores';
+import { CloseDebt } from 'pages/CloseDebt';
 import { CreateGroup } from 'pages/CreateGroup';
 import { EnterGroup } from 'pages/EnterGroup';
 import { Entry } from 'pages/Entry';
@@ -37,10 +38,12 @@ const Router: FC = () => {
     <>
       <Route path={RouterPaths.chores} element={<Chores />} />
       <Route path={RouterPaths.expenses} element={<Expenses />} />
+      <Route path={RouterPaths.debts} element={<CloseDebt />} />
       <Route path={RouterPaths.shoppingLists} element={<ShoppingLists />} />
       <Route path={RouterPaths.groupSettings} element={<GroupSettings />} />
       {isDev && <Route path={RouterPaths.uiKit} element={<UIKit />} />}
-      <Route index element={<Navigate to={RouterPaths.chores} replace />} />
+      {/* <Route index element={<Navigate to={RouterPaths.chores} replace />} /> */}
+      <Route index element={<Navigate to={RouterPaths.debts} replace />} />
     </>
   );
 

@@ -1,10 +1,12 @@
 import React, { FC, useState } from 'react';
 
 import cn from 'classnames';
+import { useNavigate } from 'react-router-dom';
 
 import { Button, Dropdown, Input, Spacing, Title } from 'components';
 import { ModalEnum } from 'components/modals';
 import { mockOptions } from 'config/mock/options';
+import { routes } from 'config/routes';
 import { MOCK_EXPENSES } from 'entities/mock/expenses';
 import { useScreenType } from 'store';
 import { useUIStore } from 'store/RootStore/hooks';
@@ -19,6 +21,7 @@ import { StatBanner, ExpenseItem } from './components';
 import s from './Expenses.module.scss';
 
 const Expenses: FC = () => {
+  const nav = useNavigate();
   const { openModal } = useUIStore();
 
   const screen = useScreenType();
@@ -26,18 +29,22 @@ const Expenses: FC = () => {
 
   const [date, setDate] = useState<string>('');
 
-  const onOpenModal = () => {
-    openModal(ModalEnum.expensesAdd);
+  const onOpenModal = (modal: ModalEnum) => () => {
+    openModal(modal);
+  };
+
+  const onGoToDebtsPage = () => {
+    nav(routes.debts.full);
   };
 
   return (
     <>
       <div className={s.buttons}>
-        <Button icon={<PlusIcon />} stretched onClick={onOpenModal}>
+        <Button icon={<PlusIcon />} stretched onClick={onOpenModal(ModalEnum.expensesAdd)}>
           Внести расходы
         </Button>
         <Spacing size={isDesktop ? 1.6 : 0.8} horizontal={isDesktop} stretched />
-        <Button icon={<ExpenseIcon />} stretched onClick={noop}>
+        <Button icon={<ExpenseIcon />} stretched onClick={onGoToDebtsPage}>
           Закрыть долг
         </Button>
       </div>
@@ -77,7 +84,7 @@ const Expenses: FC = () => {
       <div>
         {MOCK_EXPENSES.map((expense) => (
           <React.Fragment key={expense.id}>
-            <ExpenseItem {...expense} />
+            <ExpenseItem {...expense} onDelete={onOpenModal(ModalEnum.expensesDelete)} />
             <Spacing size={1} />
           </React.Fragment>
         ))}
