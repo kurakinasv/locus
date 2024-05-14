@@ -2,8 +2,12 @@
 
 .checkbox {
   &__wrapper {
-    @include square(2.5rem);
+    @include square(2rem);
     @include flexCenter;
+
+    @include mediaScreen($tablet) {
+      @include square(2.5rem);
+    }
 
     background-color: $white;
     border-radius: 6px;
@@ -28,7 +32,12 @@
   }
 
   &__icon {
-    max-width: 1.4rem;
-    max-height: 1.4rem;
+    max-width: 1.2rem;
+    max-height: 1.2rem;
+
+    @include mediaScreen($tablet) {
+      max-width: 1.4rem;
+      max-height: 1.4rem;
+    }
   }
 }

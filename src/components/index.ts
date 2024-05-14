@@ -25,3 +25,15 @@ export * from './Price';
 export * from './Checkbox';
 
 export * from './DatePickerInput';
+
+export * from './UserCard';
+
+export * from './UsersSlider';
+
+export * from './ErrorMessageLabel';
+
+export * from './WarningBlock';
+
+export * from './Stub';
+
+export * from './Spinner';

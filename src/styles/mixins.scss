@@ -75,3 +75,41 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@mixin defaultFormWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin hover {
+  @include mediaScreen($tablet) {
+    &:hover {
+      @content;
+    }
+  }
+  @include mobile {
+    &:active {
+      @content;
+    }
+  }
+}
+
+@mixin defaultInputIconStyles {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1.8rem;
+
+  max-width: 2rem;
+  max-height: 2rem;
+
+  color: $turquoiseMain;
+  @include animate(color);
+
+  &:hover {
+    color: rgba($turquoiseMain, 0.8);
+    cursor: pointer;
+  }
+}

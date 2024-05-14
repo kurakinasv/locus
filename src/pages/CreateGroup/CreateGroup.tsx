@@ -3,14 +3,14 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Button, ButtonTheme, Input, Spacing, Title } from 'components';
-import { useUserStore } from 'store/RootStore/hooks';
+import { useGroupStore } from 'store/RootStore/hooks';
 
 import ArrowSVG from 'img/icons/arrow-left.svg?react';
 
 import s from './CreateGroup.module.scss';
 
 const CreateGroup: React.FC = () => {
-  const { enterGroup } = useUserStore();
+  const { createGroup } = useGroupStore();
   const nav = useNavigate();
 
   const goBack = () => {
@@ -21,6 +21,10 @@ const CreateGroup: React.FC = () => {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.currentTarget.value);
+  };
+
+  const onCreateGroup = () => {
+    createGroup(value);
   };
 
   return (
@@ -34,7 +38,7 @@ const CreateGroup: React.FC = () => {
           Назад
         </Button>
         <Spacing size={1} horizontal />
-        <Button onClick={enterGroup} disabled={!value}>
+        <Button onClick={onCreateGroup} disabled={!value}>
           Создать
         </Button>
       </div>

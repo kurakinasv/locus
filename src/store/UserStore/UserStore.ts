@@ -1,55 +1,161 @@
-import { makeAutoObservable, observable } from 'mobx';
+import axios from 'axios';
+import { makeAutoObservable, runInAction } from 'mobx';
 
-import { MOCK_USERS } from 'entities/mock/user';
+import { ENDPOINTS } from 'config/api';
+import { axiosInstance } from 'config/api/requests';
+import { SnackbarType } from 'config/snackbar';
+import { GroupServer } from 'entities/group';
+import { GroupMemberServer } from 'entities/groupMember';
+import { User } from 'entities/user';
+import { UserServer } from 'entities/user/server';
+import GroupMemberModel from 'store/models/GroupMemberModel';
 import { UserModel } from 'store/models/UserModel';
+import RootStore from 'store/RootStore';
+import { UUIDString } from 'typings/api';
+import { getErrorMsg } from 'utils/getErrorMsg';
+import { responseIsOk } from 'utils/responseIsOk';
 
-// todo: logic
 class UserStore {
-  isAuth = false;
-  inGroup = false;
+  private readonly _rootStore: RootStore;
 
   user: UserModel | null = null;
+  inGroup = false;
+  userDebtInGroup: number | null = null;
+  userGroups: GroupMemberModel[] = [];
 
-  constructor() {
-    makeAutoObservable(this, {
-      user: observable.ref,
-    });
+  constructor(rootStore: RootStore) {
+    this._rootStore = rootStore;
+
+    makeAutoObservable(this);
   }
 
-  getUserDebt() {
+  get userDebt() {
     // todo: add logic
-    return Math.floor(Math.random() * 10) > 4;
+    return this.userDebtInGroup;
   }
 
-  login = () => {
-    this.isAuth = true;
-    this.user = new UserModel(MOCK_USERS[0]);
+  setUser(user: User | null) {
+    this.user = user ? new UserModel(user) : null;
+  }
+
+  setInGroup = (inGroup: boolean) => {
+    this.inGroup = inGroup;
   };
 
-  logout = () => {
-    this.isAuth = false;
-    this.inGroup = false;
+  getUser = async () => {
+    try {
+      const response = await axiosInstance.get<UserServer>(ENDPOINTS.getUser.url, {
+        withCredentials: true,
+      });
+
+      if (responseIsOk(response)) {
+        this.setUser(response.data);
+
+        await this.getUserDebtInGroup();
+
+        return;
+      }
+
+      this._rootStore.uiStore.snackbar.open(SnackbarType.error);
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
   };
 
-  deleteAccount = () => {
-    this.isAuth = false;
-    this.inGroup = false;
+  getUserDebtInGroup = async () => {
+    try {
+      const usersDebts = await this._rootStore.groupMemberStore.getGroupUserExpenses();
+
+      if (!usersDebts) {
+        return;
+      }
+
+      if (!usersDebts.length) {
+        runInAction(() => {
+          this.userDebtInGroup = 0;
+        });
+        return;
+      }
+
+      const userExpensesDebts = Object.entries(usersDebts).find(
+        ([userId]) => userId === this.user?.id
+      );
+
+      if (!userExpensesDebts) {
+        runInAction(() => {
+          this.userDebtInGroup = 0;
+        });
+        return;
+      }
+
+      const debt = Object.values(userExpensesDebts[1]).reduce((debt, amount) => debt + amount, 0);
+
+      runInAction(() => {
+        this.userDebtInGroup = debt;
+      });
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
   };
 
-  enterGroup = () => {
-    this.inGroup = true;
+  deleteAccount = async () => {
+    try {
+      const response = await axios.post(ENDPOINTS.deleteAccount.url, {}, { withCredentials: true });
+
+      if (responseIsOk(response)) {
+        this._rootStore.authStore.setAuth(false);
+        this._rootStore.userStore.setInGroup(false);
+        this.setUser(null);
+
+        return;
+      }
+
+      this._rootStore.uiStore.snackbar.open(SnackbarType.error);
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
   };
 
-  createGroup = () => {
-    this.inGroup = true;
+  joinGroup = async (code: UUIDString) => {
+    try {
+      const response = await axios.post<{ group: GroupServer; userInGroup: GroupMemberServer }>(
+        ENDPOINTS.joinGroup.url,
+        { code },
+        { withCredentials: true }
+      );
+
+      if (responseIsOk(response)) {
+        this.setInGroup(true);
+        this._rootStore.groupStore.setGroup(response.data.group);
+        this._rootStore.groupMemberStore.setGroupMembers([
+          ...this._rootStore.groupMemberStore.groupMembers,
+          response.data.userInGroup,
+        ]);
+
+        return;
+      }
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
   };
 
-  exitGroup = () => {
-    this.inGroup = false;
-  };
+  /** Get current user's user group instances */
+  getUserGroups = async () => {
+    try {
+      const response = await axios.get<GroupMemberServer[]>(ENDPOINTS.getUserGroups.url, {
+        withCredentials: true,
+      });
 
-  deleteGroup = () => {
-    this.inGroup = false;
+      if (responseIsOk(response)) {
+        runInAction(() => {
+          this.userGroups = response.data;
+        });
+
+        return response.data;
+      }
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
   };
 }
 

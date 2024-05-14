@@ -5,18 +5,39 @@
   min-width: 24rem;
   position: relative;
 
-  & .icon {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 1.8rem;
+  // to deacrese label's line-height
+  line-height: 1.4rem;
 
-    color: $turquoiseMain;
-    @include animate(color);
+  .input-wrapper {
+    position: relative;
 
-    &:hover {
-      color: rgba($turquoiseMain, 0.8);
-      cursor: pointer;
+    & .icon,
+    & .close-icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+
+      color: $turquoiseMain;
+      @include animate(color);
+
+      &:hover {
+        color: rgba($turquoiseMain, 0.8);
+        cursor: pointer;
+      }
+    }
+
+    & .icon {
+      right: 1.8rem;
+
+      max-width: 2rem;
+      max-height: 2rem;
+    }
+
+    & .close-icon {
+      right: 1rem;
+
+      max-width: 1.6rem;
+      max-height: 1.6rem;
     }
   }
 }
@@ -86,4 +107,12 @@
   font-size: 1.2rem;
   color: $redMain;
   text-align: left;
+}
+
+.label {
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  font-family: $avenirNext;
+  font-weight: 400;
+  color: $grey400;
 }

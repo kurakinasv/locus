@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Logo, Spacing, Title } from 'components';
 import { routes } from 'config/routes';
-import { useUserStore } from 'store/RootStore/hooks';
+import { useAuthStore } from 'store/RootStore/hooks';
 
 import NotificationsIcon from 'img/icons/notifications.svg?react';
 import UserIcon from 'img/icons/user.svg?react';
@@ -20,7 +20,7 @@ type Props = {
 const Header: FC<Props> = ({ title, hasGroup = false }) => {
   const nav = useNavigate();
   const location = useLocation();
-  const { isAuth } = useUserStore();
+  const { isAuth } = useAuthStore();
 
   const onProfileClick = useCallback(() => {
     nav(routes.profileSettings.full);

@@ -1,18 +1,14 @@
 import * as React from 'react';
 
 import { DefaultConfirm } from 'components/modals/DefaultConfirm';
-import { useUIStore, useUserStore } from 'store/RootStore/hooks';
+import { useAuthStore } from 'store/RootStore/hooks';
 import { noop } from 'utils/noop';
-import { sleep } from 'utils/sleep';
 
 const ProfileExit: React.FC = () => {
-  const { logout } = useUserStore();
-  const { closeModal } = useUIStore();
+  const { logout } = useAuthStore();
 
   const exitAction = async () => {
-    await sleep(700);
-    logout();
-    closeModal();
+    await logout();
   };
 
   return (

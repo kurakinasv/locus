@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { observer } from 'mobx-react-lite';
+
 import { Button } from 'components/Button';
 import { ModalEnum } from 'components/modals';
 import { Spacing } from 'components/Spacing';
@@ -13,11 +15,11 @@ import s from './Footer.module.scss';
 
 const Footer: React.FC = () => {
   const screen = useScreenType();
-  const { getUserDebt } = useUserStore();
+  const { userDebt } = useUserStore();
   const { openModal } = useUIStore();
 
   const openGroupModal = (modal: ModalEnum) => () => {
-    if (getUserDebt()) {
+    if (userDebt) {
       openModal(ModalEnum.groupDebtsAlert);
       return;
     }
@@ -48,4 +50,4 @@ const Footer: React.FC = () => {
   );
 };
 
-export default Footer;
+export default observer(Footer);

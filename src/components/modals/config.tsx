@@ -2,11 +2,15 @@ import React from 'react';
 
 import { AddChore } from './views/AddChore';
 import { AddSchedule } from './views/AddSchedule';
+import { ChoreArchive } from './views/ChoreArchive';
+import { ChoreEdit } from './views/ChoreEdit';
 import { GroupDebtsAlert } from './views/GroupDebtsAlert';
 import { GroupDelete } from './views/GroupDelete';
 import { GroupExit } from './views/GroupExit';
 import { ProfileDelete } from './views/ProfileDelete';
 import { ProfileExit } from './views/ProfileExit';
+import { ScheduleDelete } from './views/ScheduleDelete';
+import { ScheduleEdit } from './views/ScheduleEdit';
 
 type ModalConfigType = {
   title?: string;
@@ -16,13 +20,17 @@ type ModalConfigType = {
 
 export enum ModalEnum {
   addChore = 'add-chore',
+  editChore = 'edit-chore',
   addSchedule = 'add-schedule',
+  editSchedule = 'edit-schedule',
 
   profileExit = 'profile-exit',
   profileDelete = 'profile-delete',
   groupExit = 'group-exit',
   groupDelete = 'group-delete',
   groupDebtsAlert = 'group-debts-alert',
+  archiveChore = 'archive-chore',
+  deleteSchedule = 'delete-schedule',
 }
 
 export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
@@ -31,9 +39,17 @@ export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
     title: 'Новая задача',
     component: <AddChore />,
   },
+  [ModalEnum.editChore]: {
+    title: 'Изменить задачу',
+    component: <ChoreEdit />,
+  },
   [ModalEnum.addSchedule]: {
     title: 'Создать расписание',
     component: <AddSchedule />,
+  },
+  [ModalEnum.editSchedule]: {
+    title: 'Изменить расписание',
+    component: <ScheduleEdit />,
   },
 
   // confirms
@@ -59,6 +75,16 @@ export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
   },
   [ModalEnum.groupDebtsAlert]: {
     component: <GroupDebtsAlert />,
+    confirm: true,
+  },
+  [ModalEnum.archiveChore]: {
+    title: 'Архивировать задачу',
+    component: <ChoreArchive />,
+    confirm: true,
+  },
+  [ModalEnum.deleteSchedule]: {
+    title: 'Удалить расписание',
+    component: <ScheduleDelete />,
     confirm: true,
   },
 };

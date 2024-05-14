@@ -13,12 +13,24 @@ type Props = {
   name: string;
   image?: string;
   selected?: boolean;
+  disabled?: boolean;
   onClick?: VoidFunction;
 };
 
-const UserCard: React.FC<Props> = ({ name, image, selected = false, onClick }) => {
+const UserCard: React.FC<Props> = ({
+  name,
+  image,
+  selected = false,
+  disabled = false,
+  onClick,
+}) => {
   return (
-    <button className={cn(s.wrapper, selected && s['wrapper_selected'])} onClick={onClick}>
+    <button
+      type="button"
+      className={cn(s.wrapper, selected && s['wrapper_selected'])}
+      disabled={disabled}
+      onClick={onClick}
+    >
       <div className={s.photo}>
         {image ? (
           <img className={s.image} src={image} alt={`Аватар пользователя ${name}`} />

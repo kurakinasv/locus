@@ -1,0 +1,16 @@
+@import 'styles/mixins';
+
+.stub {
+  width: 100%;
+  padding: 5rem;
+
+  @include flexCenter;
+  flex-direction: column;
+
+  &__icon {
+    @include square(12rem);
+
+    color: $grey400;
+    opacity: 0.6;
+  }
+}

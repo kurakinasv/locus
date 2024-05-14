@@ -1,7 +1,11 @@
 @import 'styles/mixins';
 
+.ref-wrapper {
+  width: 100%;
+}
+
 .wrapper {
-  min-width: 30rem;
+  min-width: 25rem;
   position: relative;
 
   .stretched {
@@ -41,6 +45,10 @@
   box-shadow:
     0 10px 38px -10px rgba(22, 23, 24, 0.35),
     0 10px 20px -15px rgba(22, 23, 24, 0.2);
+
+  @media (max-width: calc(300px + calc(#{$contentVerticalIndentMobile} * 2) + 2rem)) {
+    @include centerAbsolute(x);
+  }
 
   :global(.rdp-months) {
     padding: 1rem;

@@ -13,17 +13,15 @@ import s from './ProfileSettings.module.scss';
 const ProfileSettings: FC = () => {
   const nav = useNavigate();
 
-  const { user, login } = useUserStore();
-
-  React.useEffect(() => {
-    if (!user) {
-      login();
-    }
-  }, []);
+  const { user } = useUserStore();
 
   const onGoBack = useCallback(() => {
     nav(-1);
   }, []);
+
+  if (!user) {
+    return;
+  }
 
   return (
     <div className={s.wrapper}>
