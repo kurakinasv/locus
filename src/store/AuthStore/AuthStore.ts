@@ -33,8 +33,13 @@ class AuthStore {
     localStorage.setItem(USER_STORAGE, JSON.stringify(user.id));
     this._rootStore.userStore.setUser(user);
 
-    await this._rootStore.groupMemberStore.getGroupMember();
-    await this._rootStore.groupMemberStore.getAllGroupMembers();
+    await this._rootStore.groupMemberStore.init();
+
+    const currentMember = this._rootStore.groupMemberStore.currentGroupMember;
+
+    if (currentMember) {
+      await this._rootStore.groupStore.getGroup(currentMember.groupId);
+    }
 
     this.setAuth(true);
   };
@@ -51,7 +56,6 @@ class AuthStore {
         return;
       }
 
-      // todo: add loading state
       await this._rootStore.userStore.getUser();
       await this._rootStore.groupMemberStore.init();
 

@@ -44,6 +44,10 @@ class GroupStore {
         : response.data.image;
       this.setGroup({ ...response.data, image });
 
+      this._rootStore.groupMemberStore.setGroupMembers(
+        response.data.users.map((u) => u?.UserGroup)
+      );
+
       return response.data;
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));

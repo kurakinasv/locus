@@ -13,7 +13,6 @@ import { responseIsOk } from 'utils/responseIsOk';
 class GroupMemberStore {
   private readonly _rootStore: RootStore;
 
-  groupMembersIds: UUIDString[] = [];
   groupMembers: GroupMemberModel[] = [];
 
   currentMember: GroupMemberModel | null = null;
@@ -42,6 +41,10 @@ class GroupMemberStore {
     );
   }
 
+  get groupMembersIds(): GroupMemberModel['id'][] {
+    return this.groupMembers.map((groupMember) => groupMember.userId);
+  }
+
   setGroupMembers = (groupMembers: GroupMemberClient[]) => {
     this.groupMembers = groupMembers;
   };
@@ -50,8 +53,8 @@ class GroupMemberStore {
     const groupsIds = await this._rootStore.userStore.getUserGroups();
 
     if (groupsIds?.length) {
-      await this._rootStore.groupMemberStore.getGroupMember();
-      await this._rootStore.groupMemberStore.getAllGroupMembers();
+      await this.getGroupMember();
+      await this.getAllGroupMembers();
     }
   };
 
@@ -83,11 +86,8 @@ class GroupMemberStore {
       });
 
       if (responseIsOk(response) && response.data !== null) {
+        this.setGroupMembers(response.data);
         this._rootStore.userStore.setInGroup(true);
-        runInAction(() => {
-          this.groupMembers = response.data;
-          this.groupMembersIds = response.data.map((userInGroup) => userInGroup.id);
-        });
 
         return response.data;
       }
