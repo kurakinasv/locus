@@ -3,7 +3,7 @@ import { Group } from 'entities/group';
 import { User } from 'entities/user';
 import { DateString, DefaultId } from 'typings/api';
 
-export type ExpenseCategory = {
+export type ExpenseCategoryServer = {
   id: DefaultId;
   name: string;
   icon: string | null;
@@ -11,7 +11,7 @@ export type ExpenseCategory = {
   groupId: Group['id'];
 };
 
-export type ExpenseClient = {
+export type ExpenseServer = {
   id: DefaultId;
   name: string;
   amount: number;
@@ -22,5 +22,5 @@ export type ExpenseClient = {
   status: ExpenseStatus;
   createdBy: User['id'];
   groupId: Group['id'];
-  categoryId: ExpenseCategory['id'] | null;
+  categoryId: ExpenseCategoryServer['id'] | null;
 };

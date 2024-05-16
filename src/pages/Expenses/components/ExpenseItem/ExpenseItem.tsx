@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Price } from 'components/Price';
 import { Spacing } from 'components/Spacing';
+import { ExpenseCategory, ExpenseClient } from 'entities/expense';
 import { useScreenType } from 'store';
 import { formatLocaleDateToDDMM } from 'utils/formatDate';
 
@@ -11,19 +12,21 @@ import TrashIcon from 'img/icons/trash.svg?react';
 import s from './ExpenseItem.module.scss';
 
 type Props = {
-  date: string;
-  category: string;
-  description: string;
-  price: number;
+  id: ExpenseClient['id'];
+  date: ExpenseClient['purchaseDate'];
+  categoryId: ExpenseCategory['id'] | null;
+  description: ExpenseClient['description'];
+  amount: ExpenseClient['amount'];
   onDelete?: ((e: React.MouseEvent) => void) | VoidFunction;
   onClick?: VoidFunction;
 };
 
 const ExpenseItem: React.FC<Props> = ({
+  id,
   date,
-  category,
+  categoryId: category,
   description,
-  price,
+  amount,
   onDelete,
   onClick,
 }) => {
@@ -57,7 +60,7 @@ const ExpenseItem: React.FC<Props> = ({
       <div className={s.left}>
         <div className={s.icon}>{mockIcon}</div>
         <Spacing size={1.6} horizontal />
-        <Price>{price.toLocaleString('ru-RU')}</Price>
+        <Price>{amount.toLocaleString('ru-RU')}</Price>
         {onDelete && (
           <>
             <Spacing size={isMobile ? 1 : 3} horizontal />

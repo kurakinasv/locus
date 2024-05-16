@@ -115,6 +115,7 @@ const Expenses: FC = () => {
           <React.Fragment key={expense.id}>
             <ExpenseItem
               {...expense}
+              date={expense.purchaseDate}
               onDelete={handleDelete}
               onClick={onOpenEditModal(expense.id)}
             />

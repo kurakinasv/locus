@@ -20,6 +20,8 @@ const getChoreApiUrl = () => `${getBaseUrl()}/chore`;
 
 const getScheduleApiUrl = () => `${getBaseUrl()}/schedule`;
 
+const getExpenseApiUrl = () => `${getBaseUrl()}/expense`;
+
 enum Endpoints {
   // auth
   login = 'login',
@@ -64,6 +66,13 @@ enum Endpoints {
   editScheduledTask = 'editScheduledTask',
   deleteSchedule = 'deleteSchedule',
   deleteScheduleCascade = 'deleteScheduleCascade',
+
+  // expense
+  getExpense = 'getExpense',
+  getGroupExpenses = 'getGroupExpenses',
+  createExpense = 'createExpense',
+  editExpense = 'editExpense',
+  deleteExpense = 'deleteExpense',
 }
 
 enum HTTTPMethods {
@@ -227,5 +236,31 @@ export const ENDPOINTS = {
     url: `${getScheduleApiUrl()}/schedule/cascade`,
     method: HTTTPMethods.DELETE,
     getUrl: (scheduleId: NumberString) => `${getScheduleApiUrl()}/cascade/${scheduleId}`,
+  },
+
+  // expenses
+  [Endpoints.getExpense]: {
+    url: `${getExpenseApiUrl()}/expense`,
+    method: HTTTPMethods.GET,
+    getUrl: (expenseId: NumberString) => `${getExpenseApiUrl()}/expense/${expenseId}`,
+  },
+  [Endpoints.getGroupExpenses]: {
+    url: `${getExpenseApiUrl()}/expenses`,
+    method: HTTTPMethods.GET,
+    getUrl: (query: string) => `${getExpenseApiUrl()}/expenses${query}`,
+  },
+  [Endpoints.createExpense]: {
+    url: `${getExpenseApiUrl()}/expense`,
+    method: HTTTPMethods.POST,
+  },
+  [Endpoints.editExpense]: {
+    url: `${getExpenseApiUrl()}/expense`,
+    method: HTTTPMethods.PUT,
+    getUrl: (expenseId: NumberString) => `${getExpenseApiUrl()}/expense/${expenseId}`,
+  },
+  [Endpoints.deleteExpense]: {
+    url: `${getExpenseApiUrl()}/expense`,
+    method: HTTTPMethods.DELETE,
+    getUrl: (expenseId: NumberString) => `${getExpenseApiUrl()}/expense/${expenseId}`,
   },
 } satisfies Record<Endpoints, EndpointConfig>;
