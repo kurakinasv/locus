@@ -42,8 +42,7 @@ const Router: FC = () => {
       <Route path={RouterPaths.shoppingLists} element={<ShoppingLists />} />
       <Route path={RouterPaths.groupSettings} element={<GroupSettings />} />
       {isDev && <Route path={RouterPaths.uiKit} element={<UIKit />} />}
-      {/* <Route index element={<Navigate to={RouterPaths.chores} replace />} /> */}
-      <Route index element={<Navigate to={RouterPaths.debts} replace />} />
+      <Route index element={<Navigate to={RouterPaths.chores} replace />} />
     </>
   );
 

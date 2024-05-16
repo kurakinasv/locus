@@ -47,6 +47,7 @@ class AuthStore {
 
       if (!userId) {
         this.setAuth(false);
+        this.meta.stopLoading();
         return;
       }
 
@@ -64,6 +65,7 @@ class AuthStore {
 
       this.meta.stopLoading();
     } catch (error) {
+      this.meta.stopLoading();
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
   };
@@ -84,6 +86,7 @@ class AuthStore {
 
       this.meta.stopLoading();
     } catch (error) {
+      this.meta.stopLoading();
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
   };
@@ -110,6 +113,7 @@ class AuthStore {
 
       this.meta.stopLoading();
     } catch (error) {
+      this.meta.stopLoading();
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
   };
@@ -130,6 +134,7 @@ class AuthStore {
 
       this.meta.stopLoading();
     } catch (error) {
+      this.meta.stopLoading();
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
   };

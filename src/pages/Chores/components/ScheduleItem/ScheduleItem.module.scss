@@ -76,15 +76,19 @@ $shallowScreen: 360px;
     align-items: center;
 
     &__icon {
+      @include square(3.2rem);
       max-width: 3.2rem;
       max-height: 3.2rem;
       padding: 0.6rem;
+
+      @include flexCenter;
 
       background-color: $turquoiseMain;
       border-radius: 50%;
       color: $white;
 
       @media (max-width: $shallowScreen) {
+        @include square(2.8rem);
         max-width: 2.8rem;
         max-height: 2.8rem;
       }
