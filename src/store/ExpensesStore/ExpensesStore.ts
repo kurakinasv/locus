@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import { ENDPOINTS } from 'config/api';
 import { axiosInstance } from 'config/api/requests';
 import { SnackbarType } from 'config/snackbar';
 import { ExpenseClient } from 'entities/expense';
-import { ExpenseCreateParams, ExpensesGetParams } from 'entities/expense/params';
+import { ExpenseCreateBody, ExpenseCreateParams, ExpensesGetParams } from 'entities/expense/params';
 import RootStore from 'store/RootStore';
 import { cutTimezone } from 'utils/formatDate';
 import { getErrorMsg } from 'utils/getErrorMsg';
@@ -85,11 +85,26 @@ class ExpensesStore {
     }
   };
 
-  createExpense = async (expenseData: ExpenseCreateParams) => {
+  createExpense = async ({ usersIds, ...params }: ExpenseCreateParams) => {
     try {
-      const response = await axios.post<ExpenseClient>(ENDPOINTS.createExpense.url, expenseData, {
-        withCredentials: true,
-      });
+      const response = await axios.post<
+        ExpenseClient,
+        AxiosResponse<ExpenseClient>,
+        ExpenseCreateBody
+      >(
+        ENDPOINTS.createExpense.url,
+        {
+          ...params,
+          currency: 'RUB',
+          splitMethod: 'equally',
+          userGroupIds: usersIds.map(
+            (m) => this._rootStore.groupMemberStore.userGroupIdByUserId[m]
+          ),
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       if (responseIsOk(response)) {
         this.setExpenses([...this.groupExpenses, response.data]);

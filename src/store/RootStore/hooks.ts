@@ -49,3 +49,7 @@ export const useSchedulesStore = () => {
 export const useExpensesStore = () => {
   return useRootStore().expensesStore;
 };
+
+export const useExpenseCategoriesStore = () => {
+  return useRootStore().expenseCategoriesStore;
+};

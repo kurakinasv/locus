@@ -8,7 +8,7 @@ export type CreateFormValues = FieldValues & {
   description: string;
   amount: number;
   purchaseDate: Date;
-  // userIds: UUIDString;
+  categoryName: string;
 };
 
 export type EditFormValues = FieldValues & {
@@ -51,6 +51,11 @@ export const addExpenseMap = {
   category: {
     name: 'category',
     placeholder: 'Категория',
+    type: 'text',
+  },
+  categoryName: {
+    name: 'categoryName',
+    placeholder: 'Введите название категории',
     type: 'text',
   },
   description: {

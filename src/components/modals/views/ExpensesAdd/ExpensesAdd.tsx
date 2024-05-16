@@ -1,28 +1,50 @@
 import * as React from 'react';
 
+import cn from 'classnames';
 import { Controller, useForm } from 'react-hook-form';
 
+import { Button, ButtonTheme } from 'components/Button';
 import { DatePickerInput } from 'components/DatePickerInput';
 import { Dropdown } from 'components/Dropdown';
 import { ErrorMessageLabel } from 'components/ErrorMessageLabel';
 import { Input } from 'components/Input';
 import { FormWrapper } from 'components/modals/components';
 import { Spacing } from 'components/Spacing';
+import { Text } from 'components/Text';
 import { Title } from 'components/Title';
 import { UsersSlider } from 'components/UsersSlider';
+import { CREATE_CATEGORY_ID } from 'config/chores';
 import { VALIDATION_MESSAGES } from 'config/form';
-import { mockOptions } from 'config/mock/options';
 import { SnackbarType } from 'config/snackbar';
 import { addExpenseMap, CreateFormValues } from 'entities/expense/form';
+import { ExpenseCreateParams } from 'entities/expense/params';
+import {
+  ExpenseCategoryIcon,
+  expenseCategoryIconsMap,
+  expenseCategoryIconsNames,
+} from 'entities/expenseCategory';
 import { useUsersSelect } from 'hooks/useUsersSelect';
-import { useUIStore } from 'store/RootStore/hooks';
+import { useExpenseCategoriesStore, useExpensesStore, useUIStore } from 'store/RootStore/hooks';
+import { SizeEnum } from 'typings/ui';
+
+import RubleIcon from 'img/icons/ruble.svg?react';
+
+import s from './ExpensesAdd.module.scss';
 
 const ExpensesAdd: React.FC = () => {
   const { closeModal, snackbar } = useUIStore();
 
-  const { register, handleSubmit, control, formState } = useForm<CreateFormValues>();
+  const { createExpense } = useExpensesStore();
+  const { categoriesOptionsWithCreate, createCategory } = useExpenseCategoriesStore();
+
+  const { register, handleSubmit, control, formState, watch } = useForm<CreateFormValues>();
 
   const { onUserClick, users } = useUsersSelect();
+
+  const [selectedIcon, setIcon] = React.useState<ExpenseCategoryIcon>('other');
+
+  const option = watch(addExpenseMap.category.name);
+  const createNewCategory = option === CREATE_CATEGORY_ID;
 
   const onSubmit = React.useCallback(
     async (data: CreateFormValues) => {
@@ -31,22 +53,68 @@ const ExpensesAdd: React.FC = () => {
         return;
       }
 
+      let categoryId;
+
+      if (createNewCategory && data.categoryName) {
+        const category = await createCategory({ name: data.categoryName, icon: selectedIcon });
+
+        if (!category) {
+          return;
+        }
+
+        categoryId = category.id;
+      }
+
       const selectedUsers = users.filter((user) => user.selected).map((user) => user.id);
 
-      // const createParams = {};
+      const createParams: ExpenseCreateParams = {
+        amount: data.amount,
+        categoryId: createNewCategory ? categoryId : data.categoryId,
+        description: data.description,
+        name: data.name.trim(),
+        purchaseDate: data.purchaseDate,
+        usersIds: selectedUsers,
+      };
 
       console.log('onSubmit', data, selectedUsers);
 
-      // const created = await createSchedule(createParams);
+      const created = await createExpense(createParams);
 
-      // if (!created) {
-      //   return;
-      // }
+      if (!created) {
+        return;
+      }
 
       closeModal();
     },
     [users]
   );
+
+  const onChooseIcon = (category: ExpenseCategoryIcon) => () => {
+    setIcon(category);
+  };
+
+  // todo: move to component
+  const icons = React.useMemo(() => {
+    return expenseCategoryIconsNames.map((icon) => {
+      const Icon = expenseCategoryIconsMap[icon];
+
+      return (
+        <Button
+          key={icon}
+          theme={ButtonTheme.text}
+          size={SizeEnum.s}
+          className={cn(
+            s['category-button'],
+            icon === selectedIcon && s['category-button_selected']
+          )}
+          onClick={onChooseIcon(icon)}
+          type="button"
+        >
+          <Icon className={s.icon} />
+        </Button>
+      );
+    });
+  }, [selectedIcon]);
 
   return (
     <FormWrapper<CreateFormValues>
@@ -59,19 +127,16 @@ const ExpensesAdd: React.FC = () => {
         name={addExpenseMap.name.name}
         rules={{ required: true }}
         render={({ field }) => (
-          <>
-            <Input
-              {...field}
-              {...addExpenseMap.name}
-              value={field.value}
-              {...register(addExpenseMap.name.name)}
-            />
-            <ErrorMessageLabel
-              errors={formState.errors}
-              name={addExpenseMap.name.name}
-              message={VALIDATION_MESSAGES.required}
-            />
-          </>
+          <Input
+            {...field}
+            {...addExpenseMap.name}
+            value={field.value}
+            {...register(addExpenseMap.name.name)}
+            errorMessage={
+              formState.errors[addExpenseMap.name.name]?.type ? VALIDATION_MESSAGES.required : ''
+            }
+            touched={!!formState.errors[addExpenseMap.name.name]?.type}
+          />
         )}
       />
       <Spacing size={1.4} />
@@ -83,7 +148,7 @@ const ExpensesAdd: React.FC = () => {
           <>
             <Dropdown
               {...field}
-              options={mockOptions}
+              options={categoriesOptionsWithCreate}
               selectedOption={field.value}
               onChange={field.onChange}
               {...addExpenseMap.category}
@@ -98,6 +163,34 @@ const ExpensesAdd: React.FC = () => {
         )}
       />
       <Spacing size={1.4} />
+
+      {createNewCategory && (
+        <>
+          <Controller<CreateFormValues>
+            control={control}
+            name={addExpenseMap.categoryName.name}
+            rules={{ required: createNewCategory }}
+            render={({ field }) => (
+              <Input
+                {...field}
+                {...addExpenseMap.categoryName}
+                touched={!!formState.errors[addExpenseMap.categoryName.name]?.type}
+                errorMessage={
+                  formState.errors[addExpenseMap.categoryName.name]?.type
+                    ? VALIDATION_MESSAGES.required
+                    : ''
+                }
+              />
+            )}
+          />
+          <Spacing size={1} />
+          <Text color="gray">Выберите иконку категории</Text>
+          <Spacing size={1} />
+          <div className={s['category-icons']}>{icons}</div>
+          <Spacing size={1.4} />
+        </>
+      )}
+
       <Controller<CreateFormValues>
         control={control}
         name={addExpenseMap.description.name}
@@ -116,19 +209,17 @@ const ExpensesAdd: React.FC = () => {
         name={addExpenseMap.amount.name}
         rules={{ required: true }}
         render={({ field }) => (
-          <>
-            <Input
-              {...field}
-              {...addExpenseMap.amount}
-              value={field.value}
-              {...register(addExpenseMap.amount.name)}
-            />
-            <ErrorMessageLabel
-              errors={formState.errors}
-              name={addExpenseMap.amount.name}
-              message={VALIDATION_MESSAGES.required}
-            />
-          </>
+          <Input
+            {...field}
+            {...addExpenseMap.amount}
+            icon={RubleIcon}
+            value={field.value}
+            {...register(addExpenseMap.amount.name)}
+            errorMessage={
+              formState.errors[addExpenseMap.amount.name]?.type ? VALIDATION_MESSAGES.required : ''
+            }
+            touched={!!formState.errors[addExpenseMap.amount.name]?.type}
+          />
         )}
       />
       <Spacing size={1.4} />

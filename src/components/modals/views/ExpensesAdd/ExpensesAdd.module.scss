@@ -1,1 +1,31 @@
 @import 'styles/mixins';
+
+// todo: move to component
+.category-icons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.category-button {
+  min-width: 0;
+  @include square(5rem);
+  padding: 0.6rem;
+  border-radius: 50%;
+
+  @include animate(opacity);
+
+  &_selected {
+    border: 2px solid $turquoiseMain;
+  }
+
+  & > span {
+    display: flex;
+    align-items: center;
+  }
+
+  & .icon {
+    @include square(100%);
+    color: $turquoiseMain;
+  }
+}
