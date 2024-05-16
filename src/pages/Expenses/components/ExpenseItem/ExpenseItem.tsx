@@ -2,7 +2,8 @@ import * as React from 'react';
 
 import { Price } from 'components/Price';
 import { Spacing } from 'components/Spacing';
-import { ExpenseCategory, ExpenseClient } from 'entities/expense';
+import { ExpenseClient } from 'entities/expense';
+import { ExpenseCategory } from 'entities/expenseCategory';
 import { useScreenType } from 'store';
 import { formatLocaleDateToDDMM } from 'utils/formatDate';
 

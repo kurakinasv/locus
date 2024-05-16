@@ -1,4 +1,5 @@
-import { ExpenseCategory, ExpenseClient } from 'entities/expense';
+import { ExpenseClient } from 'entities/expense';
+import { ExpenseCategory } from 'entities/expenseCategory';
 
 import { MOCK_USERS } from './user';
 
@@ -6,7 +7,7 @@ export const MOCK_EXPENSE_CATEGORIES: ExpenseCategory[] = [
   {
     id: 1,
     name: 'Интернет, связь',
-    icon: 'internet',
+    icon: 'other',
     isArchived: false,
     groupId: '1',
   },

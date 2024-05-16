@@ -1,8 +1,7 @@
 import { SplitMethod } from 'config/expenses';
+import { ExpenseCategory } from 'entities/expenseCategory';
 import { Group } from 'entities/group';
 import { User } from 'entities/user';
-
-import { ExpenseCategory } from './client';
 
 export type ExpensesGetParams = {
   categoryId?: string;

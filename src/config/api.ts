@@ -73,6 +73,10 @@ enum Endpoints {
   createExpense = 'createExpense',
   editExpense = 'editExpense',
   deleteExpense = 'deleteExpense',
+
+  // expense categories
+  getExpenseCategories = 'getExpenseCategories',
+  createExpenseCategory = 'createExpenseCategory',
 }
 
 enum HTTTPMethods {
@@ -262,5 +266,15 @@ export const ENDPOINTS = {
     url: `${getExpenseApiUrl()}/expense`,
     method: HTTTPMethods.DELETE,
     getUrl: (expenseId: NumberString) => `${getExpenseApiUrl()}/expense/${expenseId}`,
+  },
+
+  // expense categories
+  [Endpoints.getExpenseCategories]: {
+    url: `${getExpenseApiUrl()}/category`,
+    method: HTTTPMethods.GET,
+  },
+  [Endpoints.createExpenseCategory]: {
+    url: `${getExpenseApiUrl()}/category`,
+    method: HTTTPMethods.POST,
   },
 } satisfies Record<Endpoints, EndpointConfig>;

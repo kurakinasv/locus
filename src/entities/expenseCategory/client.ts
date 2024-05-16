@@ -10,72 +10,42 @@ import SoapIcon from 'img/categories/soap.svg?react';
 import SprayBottleIcon from 'img/categories/spray-bottle.svg?react';
 import TshirtIcon from 'img/categories/tshirt.svg?react';
 import WashingMachineIcon from 'img/categories/washing-machine.svg?react';
-import BroomIcon from 'img/choreCategories/broom.svg?react';
-import FlaskIcon from 'img/choreCategories/flask.svg?react';
-import OnigiriIcon from 'img/choreCategories/onigiri.svg?react';
-import OvenIcon from 'img/choreCategories/oven.svg?react';
-import PlantIcon from 'img/choreCategories/plant.svg?react';
-import PotIcon from 'img/choreCategories/pot.svg?react';
-import ToiletIcon from 'img/choreCategories/toilet.svg?react';
-import TrashIcon from 'img/choreCategories/trash.svg?react';
 
-export type Chore = {
+export type ExpenseCategory = {
   id: DefaultId;
   name: string;
-  points: number;
+  icon: ExpenseCategoryIcon | null;
   isArchived: boolean;
-  categoryId: ChoreCategory['id'];
   groupId: Group['id'];
 };
 
-export type ChoreCategory = {
-  id: number;
-  name: string;
-  icon: ChoreCategoryIcon;
-  isArchived: boolean;
-};
-
-export const choreCategoryIconsNames = [
+export const expenseCategoryIconsNames = [
   'other',
   'bath',
-  'broom',
   'cart',
-  'flask',
   'kitchenSet',
-  'onigiri',
-  'oven',
   'paw',
   'plant',
-  'pot',
   'soap',
   'sprayBottle',
-  'toilet',
-  'trash',
   'tshirt',
   'washingMachine',
 ] as const;
 
-export type ChoreCategoryIcon = (typeof choreCategoryIconsNames)[number];
+export type ExpenseCategoryIcon = (typeof expenseCategoryIconsNames)[number];
 
-export const choreCategoryIconsMap: Record<
-  ChoreCategoryIcon,
+export const expenseCategoryIconsMap: Record<
+  ExpenseCategoryIcon,
   React.FC<React.SVGProps<SVGSVGElement>>
 > = {
   other: OtherIcon,
   bath: BathIcon,
-  broom: BroomIcon,
   cart: CartIcon,
-  flask: FlaskIcon,
   kitchenSet: KitchenSetIcon,
-  onigiri: OnigiriIcon,
-  oven: OvenIcon,
   paw: PawIcon,
-  plant: PlantIcon,
-  pot: PotIcon,
+  plant: TshirtIcon,
   soap: SoapIcon,
   sprayBottle: SprayBottleIcon,
-  toilet: ToiletIcon,
-  trash: TrashIcon,
   tshirt: TshirtIcon,
   washingMachine: WashingMachineIcon,
 };
