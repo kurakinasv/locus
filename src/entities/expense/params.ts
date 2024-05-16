@@ -17,7 +17,7 @@ export type ExpenseCreateParams = {
   amount: number;
   description?: string | null;
   purchaseDate: Date;
-  categoryId?: ExpenseCategory['id'];
+  categoryId: ExpenseCategory['id'];
   usersIds: User['id'][];
 };
 

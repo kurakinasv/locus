@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { format } from 'date-fns';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import { ENDPOINTS } from 'config/api';
@@ -6,7 +7,10 @@ import { axiosInstance } from 'config/api/requests';
 import { SnackbarType } from 'config/snackbar';
 import { ExpenseClient } from 'entities/expense';
 import { ExpenseCreateBody, ExpenseCreateParams, ExpensesGetParams } from 'entities/expense/params';
+import { ExpenseServer } from 'entities/expense/server';
+import { ExpenseCategory } from 'entities/expenseCategory';
 import RootStore from 'store/RootStore';
+import { DateString } from 'typings/api';
 import { cutTimezone } from 'utils/formatDate';
 import { getErrorMsg } from 'utils/getErrorMsg';
 import { responseIsOk } from 'utils/responseIsOk';
@@ -23,17 +27,36 @@ class ExpensesStore {
     makeAutoObservable(this);
   }
 
+  get expensesMonthMap(): Record<DateString, ExpenseClient[]> {
+    return this.groupExpenses.reduce(
+      (acc, expense) => {
+        const expenseDate = new Date(expense.purchaseDate);
+        const dateKey = format(new Date(expenseDate), 'yyyy-MM');
+
+        let restAcc = [] as ExpenseClient[];
+
+        if (Object.keys(acc).length) {
+          restAcc = acc[dateKey] ?? [];
+        }
+
+        return {
+          ...acc,
+          [dateKey]: [...restAcc, expense],
+        };
+      },
+      {} as Record<DateString, ExpenseClient[]>
+    );
+  }
+
   setExpenses = (expenses: ExpenseClient[]) => {
     this.groupExpenses = expenses;
   };
 
   getExpense = async (expenseId: ExpenseClient['id']) => {
     try {
-      const response = await axios.get<ExpenseClient>(
+      const response = await axiosInstance.get<ExpenseClient>(
         ENDPOINTS.getExpense.getUrl(String(expenseId)),
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
 
       if (responseIsOk(response)) {
@@ -48,7 +71,7 @@ class ExpensesStore {
     }
   };
 
-  getGroupExpenses = async (params: ExpensesGetParams) => {
+  getGroupExpenses = async (params?: ExpensesGetParams) => {
     try {
       let query = '';
 
@@ -70,13 +93,11 @@ class ExpensesStore {
 
       const response = await axiosInstance.get<ExpenseClient[]>(
         ENDPOINTS.getGroupExpenses.getUrl(encodeURI(query)),
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
 
       if (responseIsOk(response)) {
-        this.setExpenses(response.data);
+        this.setExpenses(response.data.map(this.normalizeExpense));
 
         return response.data;
       }
@@ -107,7 +128,8 @@ class ExpensesStore {
       );
 
       if (responseIsOk(response)) {
-        this.setExpenses([...this.groupExpenses, response.data]);
+        this.setExpenses([...this.groupExpenses, this.normalizeExpense(response.data)]);
+
         this._rootStore.uiStore.snackbar.open(SnackbarType.expenseCreated);
       }
 
@@ -128,7 +150,7 @@ class ExpensesStore {
       );
 
       if (responseIsOk(response)) {
-        this.setExpenses(response.data);
+        this.setExpenses(response.data.map(this.normalizeExpense));
         this._rootStore.uiStore.snackbar.open(SnackbarType.scheduleEdited);
       }
     } catch (error) {
@@ -147,12 +169,18 @@ class ExpensesStore {
 
       if (responseIsOk(response)) {
         const filteredExpenses = this.groupExpenses.filter((expense) => expense.id !== id);
-        this.setExpenses(filteredExpenses);
+        this.setExpenses(filteredExpenses.map(this.normalizeExpense));
         this._rootStore.uiStore.snackbar.open(SnackbarType.expenseDeleted);
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
+  };
+
+  normalizeExpense = (expense: ExpenseServer): ExpenseClient => {
+    const category = this._rootStore.expenseCategoriesStore.getById(expense.categoryId);
+
+    return { ...expense, category };
   };
 }
 

@@ -2,6 +2,7 @@
 
 .expense {
   width: 100%;
+  min-height: 6rem;
   padding: 0.6rem 2rem 0.6rem 1rem;
 
   display: flex;
@@ -32,7 +33,7 @@
   }
 
   .text {
-    .category {
+    .name {
       font-family: $avenirNext;
       font-size: 1.6rem;
       line-height: 1.8rem;
@@ -41,7 +42,7 @@
 
       @include mediaScreen($desktop) {
         font-size: 2rem;
-        line-height: 2.2rem;
+        line-height: 2.4rem;
       }
     }
 
@@ -60,6 +61,13 @@
         font-size: 1.4rem;
         line-height: 1.6rem;
       }
+    }
+
+    .category {
+      font-family: $sourceSans3;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: $turquoiseMain;
     }
   }
 
@@ -81,6 +89,12 @@
 
       & > svg {
         @include square(1.6rem);
+      }
+
+      @include mediaScreen($desktop) {
+        & > svg {
+          @include square(2.2rem);
+        }
       }
     }
 

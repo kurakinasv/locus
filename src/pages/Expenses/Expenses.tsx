@@ -1,18 +1,17 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 
 import cn from 'classnames';
 import { format } from 'date-fns';
 import { enUS, ru } from 'date-fns/locale';
+import { observer } from 'mobx-react-lite';
 import { DateRange } from 'react-day-picker';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, DatePickerInput, Dropdown, Spacing, Title } from 'components';
+import { Button, DatePickerInput, Dropdown, Spacing, Spinner, Title } from 'components';
 import { ModalEnum } from 'components/modals';
-import { mockOptions } from 'config/mock/options';
 import { routes } from 'config/routes';
-import { MOCK_EXPENSES } from 'entities/mock/expenses';
 import { useScreenType } from 'store';
-import { useUIStore } from 'store/RootStore/hooks';
+import { useExpenseCategoriesStore, useExpensesStore, useUIStore } from 'store/RootStore/hooks';
 
 import ExpenseIcon from 'img/icons/expense.svg?react';
 import PlusIcon from 'img/icons/plus.svg?react';
@@ -25,11 +24,25 @@ const Expenses: FC = () => {
   const nav = useNavigate();
   const { openModal } = useUIStore();
 
+  const { groupExpenses, expensesMonthMap, getGroupExpenses } = useExpensesStore();
+  const { categoriesOptions, getCategories } = useExpenseCategoriesStore();
+
   const screen = useScreenType();
   const isDesktop = screen === 'desktop';
 
   const [range, setRange] = React.useState<DateRange | undefined>();
   const [option, setOption] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+
+  useEffect(() => {
+    const init = async () => {
+      setLoading(true);
+      await Promise.all([getCategories(), getGroupExpenses()]);
+      setLoading(false);
+    };
+
+    init();
+  }, []);
 
   const onOpenModal = (modal: ModalEnum) => () => {
     openModal(modal);
@@ -51,6 +64,10 @@ const Expenses: FC = () => {
   const clearDateRange = () => {
     setRange(undefined);
   };
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <>
@@ -82,7 +99,7 @@ const Expenses: FC = () => {
       <Spacing size={isDesktop ? 3.2 : 2} />
       <div className={cn(s.controls, !isDesktop && s.controls_mobile)}>
         <Dropdown
-          options={mockOptions}
+          options={categoriesOptions}
           placeholder="Категория"
           stretched={!isDesktop}
           selectedOption={option}
@@ -103,28 +120,38 @@ const Expenses: FC = () => {
       </div>
 
       <Spacing size={2.4} />
-      <Title size="h2">
-        {format(new Date(), 'LLLL y', {
-          locale: navigator.language === 'ru-RU' ? ru : enUS,
-        })}
-      </Title>
-      <Spacing size={isDesktop ? 2 : 1} />
 
       <div>
-        {MOCK_EXPENSES.map((expense) => (
-          <React.Fragment key={expense.id}>
-            <ExpenseItem
-              {...expense}
-              date={expense.purchaseDate}
-              onDelete={handleDelete}
-              onClick={onOpenEditModal(expense.id)}
-            />
-            <Spacing size={1} />
-          </React.Fragment>
-        ))}
+        {expensesMonthMap &&
+          Object.entries(expensesMonthMap).map(([month, expenses]) => {
+            return (
+              <React.Fragment key={month}>
+                <Title size="h2">
+                  {format(new Date(month), 'LLLL y', {
+                    locale: navigator.language === 'ru-RU' ? ru : enUS,
+                  })}
+                </Title>
+                <Spacing size={1.2} />
+
+                {expenses.map((expense) => (
+                  <React.Fragment key={expense.id}>
+                    <ExpenseItem
+                      {...expense}
+                      date={expense.purchaseDate}
+                      onDelete={handleDelete}
+                      onClick={onOpenEditModal(expense.id)}
+                    />
+                    <Spacing size={1} />
+                  </React.Fragment>
+                ))}
+
+                <Spacing size={1} />
+              </React.Fragment>
+            );
+          })}
       </div>
     </>
   );
 };
 
-export default Expenses;
+export default observer(Expenses);

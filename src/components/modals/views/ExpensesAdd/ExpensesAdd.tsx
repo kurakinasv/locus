@@ -69,7 +69,7 @@ const ExpensesAdd: React.FC = () => {
 
       const createParams: ExpenseCreateParams = {
         amount: data.amount,
-        categoryId: createNewCategory ? categoryId : data.categoryId,
+        categoryId: createNewCategory && categoryId ? categoryId : Number(data.category),
         description: data.description,
         name: data.name.trim(),
         purchaseDate: data.purchaseDate,
@@ -235,6 +235,7 @@ const ExpensesAdd: React.FC = () => {
             selectedDate={field.value}
             setSelectedDate={field.onChange}
             stretched
+            fromToday={false}
             touched
             errorMessage={
               formState.errors[addExpenseMap.purchaseDate.name]?.type === 'required'

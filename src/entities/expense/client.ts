@@ -16,4 +16,5 @@ export type ExpenseClient = {
   createdBy: User['id'];
   groupId: Group['id'];
   categoryId: ExpenseCategory['id'] | null;
+  category: ExpenseCategory | null;
 };

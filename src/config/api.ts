@@ -270,7 +270,7 @@ export const ENDPOINTS = {
 
   // expense categories
   [Endpoints.getExpenseCategories]: {
-    url: `${getExpenseApiUrl()}/category`,
+    url: `${getExpenseApiUrl()}/categories`,
     method: HTTTPMethods.GET,
   },
   [Endpoints.createExpenseCategory]: {

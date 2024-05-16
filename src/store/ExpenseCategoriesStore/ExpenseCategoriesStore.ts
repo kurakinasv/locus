@@ -34,6 +34,14 @@ class ExpenseCategoriesStore {
     return [CREATE_CATEGORY_OPTION, ...this.categoriesOptions];
   }
 
+  getById = (id: ExpenseCategory['id'] | null) => {
+    if (!id) {
+      return null;
+    }
+
+    return this.categories.find((cat) => cat.id === id) ?? null;
+  };
+
   setCategories = (categories: ExpenseCategory[]) => {
     this.categories = categories;
   };
