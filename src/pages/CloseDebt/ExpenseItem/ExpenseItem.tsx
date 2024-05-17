@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import { Price } from 'components/Price';
 import { Spacing } from 'components/Spacing';
+import { ExpenseClient } from 'entities/expense';
+import { ExpenseCategory } from 'entities/expenseCategory';
 import { useScreenType } from 'store';
 import { formatLocaleDateToDDMM } from 'utils/formatDate';
 
@@ -10,14 +12,14 @@ import CalendarIcon from 'img/icons/calendar.svg?react';
 import s from './ExpenseItem.module.scss';
 
 type Props = {
-  date: string;
-  category: string;
-  description: string;
-  price: number;
+  date: ExpenseClient['purchaseDate'];
+  categoryName: ExpenseCategory['name'];
+  description: ExpenseClient['description'];
+  price: ExpenseClient['amount'];
 };
 
 // TODO: move to shared
-const ExpenseItem: React.FC<Props> = ({ date, category, description, price }) => {
+const ExpenseItem: React.FC<Props> = ({ date, categoryName, description, price }) => {
   const screen = useScreenType();
   const isDesktop = screen === 'desktop';
 
@@ -41,7 +43,7 @@ const ExpenseItem: React.FC<Props> = ({ date, category, description, price }) =>
         </div>
         <Spacing size={1.2} horizontal />
         <div className={s.text}>
-          <div className={s.category}>{category}</div>
+          <div className={s.category}>{categoryName}</div>
           <div className={s.description}>{description}</div>
         </div>
       </div>

@@ -8,10 +8,9 @@ import { Price } from 'components/Price';
 import { Spacing } from 'components/Spacing';
 import { Title } from 'components/Title';
 import { UsersSlider } from 'components/UsersSlider';
-import { MOCK_EXPENSES } from 'entities/mock/expenses';
 import { useUsersSelect } from 'hooks/useUsersSelect';
 import { useScreenType } from 'store';
-import { useUIStore } from 'store/RootStore/hooks';
+import { useExpensesStore, useUIStore } from 'store/RootStore/hooks';
 import { SizeEnum } from 'typings/ui';
 
 import ArrowIcon from 'img/icons/arrow-left.svg?react';
@@ -24,6 +23,8 @@ import s from './CloseDebt.module.scss';
 const CloseDebt: React.FC = () => {
   const nav = useNavigate();
   const { openModal } = useUIStore();
+
+  const { groupExpenses } = useExpensesStore();
 
   const { users } = useUsersSelect();
 
@@ -61,10 +62,15 @@ const CloseDebt: React.FC = () => {
       <Title size="h2">Закрыть свой долг</Title>
       <Spacing size={1.4} />
       <div>
-        {MOCK_EXPENSES.map((expense) => (
+        {groupExpenses.map((expense) => (
           <React.Fragment key={expense.id}>
             <div className={s.expense}>
-              <ExpenseItem {...expense} />
+              <ExpenseItem
+                {...expense}
+                date={expense.purchaseDate}
+                price={expense.amount}
+                categoryName={expense.category?.name ?? ''}
+              />
               <Spacing size={isDesktop ? 1.5 : 0.4} horizontal />
               <Button
                 theme={ButtonTheme.outlined}

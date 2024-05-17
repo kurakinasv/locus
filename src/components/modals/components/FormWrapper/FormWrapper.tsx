@@ -13,6 +13,7 @@ type Props<FormFieldsT extends FieldValues> = React.PropsWithChildren & {
   actionButtonLabel: string;
   cancelButtonLabel?: string;
   hasCancelButton?: boolean;
+  isSubmitDisabled?: boolean;
   handleSubmit: React.FormEventHandler<HTMLFormElement>;
 };
 
@@ -22,6 +23,7 @@ const FormWrapper = <FormFieldsT extends FieldValues>({
   actionButtonLabel,
   cancelButtonLabel = 'Отменить',
   hasCancelButton = false,
+  isSubmitDisabled,
   handleSubmit,
 }: Props<FormFieldsT>) => {
   const screen = useScreenType();
@@ -50,9 +52,11 @@ const FormWrapper = <FormFieldsT extends FieldValues>({
           type="submit"
           stretched
           disabled={
-            !formState.isDirty ||
-            !Object.keys(formState.dirtyFields).length ||
-            formState.isSubmitting
+            isSubmitDisabled !== undefined
+              ? isSubmitDisabled
+              : !formState.isDirty ||
+                !Object.keys(formState.dirtyFields).length ||
+                formState.isSubmitting
           }
           loading={formState.isSubmitting}
         >

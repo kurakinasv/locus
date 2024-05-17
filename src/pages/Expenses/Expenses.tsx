@@ -24,7 +24,7 @@ const Expenses: FC = () => {
   const nav = useNavigate();
   const { openModal } = useUIStore();
 
-  const { groupExpenses, expensesMonthMap, getGroupExpenses } = useExpensesStore();
+  const { expensesMonthMap, getGroupExpenses } = useExpensesStore();
   const { categoriesOptions, getCategories } = useExpenseCategoriesStore();
 
   const screen = useScreenType();

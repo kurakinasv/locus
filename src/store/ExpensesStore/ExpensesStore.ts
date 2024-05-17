@@ -6,9 +6,16 @@ import { ENDPOINTS } from 'config/api';
 import { axiosInstance } from 'config/api/requests';
 import { SnackbarType } from 'config/snackbar';
 import { ExpenseClient } from 'entities/expense';
-import { ExpenseCreateBody, ExpenseCreateParams, ExpensesGetParams } from 'entities/expense/params';
+import {
+  ExpenseCreateBody,
+  ExpenseCreateParams,
+  ExpenseCreateResponse,
+  ExpenseEditBody,
+  ExpenseEditParams,
+  ExpensesGetParams,
+} from 'entities/expense/params';
 import { ExpenseServer } from 'entities/expense/server';
-import { ExpenseCategory } from 'entities/expenseCategory';
+import { GroupMemberClient } from 'entities/groupMember';
 import RootStore from 'store/RootStore';
 import { DateString } from 'typings/api';
 import { cutTimezone } from 'utils/formatDate';
@@ -52,19 +59,21 @@ class ExpensesStore {
     this.groupExpenses = expenses;
   };
 
-  getExpense = async (expenseId: ExpenseClient['id']) => {
+  getExpense = async (expenseId: ExpenseClient['id']): Promise<ExpenseClient | void> => {
     try {
-      const response = await axiosInstance.get<ExpenseClient>(
+      const response = await axiosInstance.get<ExpenseServer>(
         ENDPOINTS.getExpense.getUrl(String(expenseId)),
         { withCredentials: true }
       );
 
       if (responseIsOk(response)) {
+        const expense = this.normalizeExpense(response.data);
+
         runInAction(() => {
-          this.activeExpense = response.data;
+          this.activeExpense = expense;
         });
 
-        return response.data;
+        return expense;
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
@@ -91,7 +100,7 @@ class ExpensesStore {
         query = `${query}${sym}from=${dateFrom}&to=${dateTo}`;
       }
 
-      const response = await axiosInstance.get<ExpenseClient[]>(
+      const response = await axiosInstance.get<ExpenseServer[]>(
         ENDPOINTS.getGroupExpenses.getUrl(encodeURI(query)),
         { withCredentials: true }
       );
@@ -109,8 +118,8 @@ class ExpensesStore {
   createExpense = async ({ usersIds, ...params }: ExpenseCreateParams) => {
     try {
       const response = await axios.post<
-        ExpenseClient,
-        AxiosResponse<ExpenseClient>,
+        ExpenseCreateResponse,
+        AxiosResponse<ExpenseCreateResponse>,
         ExpenseCreateBody
       >(
         ENDPOINTS.createExpense.url,
@@ -118,6 +127,7 @@ class ExpensesStore {
           ...params,
           currency: 'RUB',
           splitMethod: 'equally',
+          purchaseDate: cutTimezone(params.purchaseDate).toISOString(),
           userGroupIds: usersIds.map(
             (m) => this._rootStore.groupMemberStore.userGroupIdByUserId[m]
           ),
@@ -128,7 +138,7 @@ class ExpensesStore {
       );
 
       if (responseIsOk(response)) {
-        this.setExpenses([...this.groupExpenses, this.normalizeExpense(response.data)]);
+        this.setExpenses([...this.groupExpenses, this.normalizeExpense(response.data.expense)]);
 
         this._rootStore.uiStore.snackbar.open(SnackbarType.expenseCreated);
       }
@@ -139,11 +149,21 @@ class ExpensesStore {
     }
   };
 
-  editExpense = async ({ id, ...expenseData }: ExpenseClient) => {
+  editExpense = async ({ id, ...expenseData }: ExpenseEditParams) => {
     try {
-      const response = await axios.put<ExpenseClient[]>(
+      const response = await axios.put<
+        ExpenseServer[],
+        AxiosResponse<ExpenseServer[]>,
+        ExpenseEditBody
+      >(
         ENDPOINTS.editExpense.getUrl(String(id)),
-        expenseData,
+        {
+          ...expenseData,
+          categoryId: expenseData.categoryId,
+          purchaseDate: expenseData.purchaseDate
+            ? cutTimezone(expenseData.purchaseDate).toISOString()
+            : undefined,
+        },
         {
           withCredentials: true,
         }
@@ -169,7 +189,7 @@ class ExpensesStore {
 
       if (responseIsOk(response)) {
         const filteredExpenses = this.groupExpenses.filter((expense) => expense.id !== id);
-        this.setExpenses(filteredExpenses.map(this.normalizeExpense));
+        this.setExpenses(filteredExpenses);
         this._rootStore.uiStore.snackbar.open(SnackbarType.expenseDeleted);
       }
     } catch (error) {
@@ -179,8 +199,9 @@ class ExpensesStore {
 
   normalizeExpense = (expense: ExpenseServer): ExpenseClient => {
     const category = this._rootStore.expenseCategoriesStore.getById(expense.categoryId);
+    const userGroupIds: GroupMemberClient['id'][] = expense.userGroups.map(({ id }) => id);
 
-    return { ...expense, category };
+    return { ...expense, category, userGroupIds };
   };
 }
 

@@ -27,6 +27,8 @@ export const MOCK_EXPENSES: ExpenseClient[] = [
     name: 'Интернет, связь',
     splitMethod: 'equally',
     status: 'pending',
+    category: MOCK_EXPENSE_CATEGORIES[0],
+    userGroupIds: [MOCK_USERS[0].id],
   },
   {
     id: 2,
@@ -40,6 +42,8 @@ export const MOCK_EXPENSES: ExpenseClient[] = [
     name: 'Интернет, связь',
     splitMethod: 'equally',
     status: 'pending',
+    category: MOCK_EXPENSE_CATEGORIES[0],
+    userGroupIds: [MOCK_USERS[0].id],
   },
   {
     id: 3,
@@ -53,5 +57,7 @@ export const MOCK_EXPENSES: ExpenseClient[] = [
     name: 'Интернет, связь',
     splitMethod: 'equally',
     status: 'pending',
+    category: MOCK_EXPENSE_CATEGORIES[0],
+    userGroupIds: [MOCK_USERS[0].id, MOCK_USERS[1].id],
   },
 ];

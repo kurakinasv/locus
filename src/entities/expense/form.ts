@@ -1,7 +1,5 @@
 import { FieldValues } from 'react-hook-form';
 
-import { UUIDString } from 'typings/api';
-
 export type CreateFormValues = FieldValues & {
   name: string;
   category: string;
@@ -17,7 +15,6 @@ export type EditFormValues = FieldValues & {
   description: string;
   amount: number;
   purchaseDate: Date;
-  userIds: UUIDString;
 };
 
 export type DebtFormValues = FieldValues & {
@@ -26,7 +23,6 @@ export type DebtFormValues = FieldValues & {
   description: string;
   amount: number;
   purchaseDate: Date;
-  userIds: UUIDString;
 };
 
 type FieldConfig =

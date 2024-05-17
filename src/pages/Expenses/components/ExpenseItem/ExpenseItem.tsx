@@ -12,7 +12,6 @@ import TrashIcon from 'img/icons/trash.svg?react';
 import s from './ExpenseItem.module.scss';
 
 type Props = {
-  id: ExpenseClient['id'];
   name: ExpenseClient['name'];
   date: ExpenseClient['purchaseDate'];
   categoryId: ExpenseCategory['id'] | null;
@@ -24,7 +23,6 @@ type Props = {
 };
 
 const ExpenseItem: React.FC<Props> = ({
-  id,
   name,
   date,
   category,
