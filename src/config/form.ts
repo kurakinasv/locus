@@ -6,4 +6,6 @@ export const VALIDATION_MESSAGES = {
   usernameMaxLength: 'Максимальное число символов – 20',
   integerValues: 'Введите целое число',
   categoryNameMaxLength: 'Максимальное число символов – 30',
+  minSum: 'Минимальная сумма – ',
+  maxSum: 'Максимальная сумма – ',
 };

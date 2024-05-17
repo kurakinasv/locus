@@ -1,11 +1,17 @@
 import axios, { AxiosResponse } from 'axios';
 import { compareAsc, format } from 'date-fns';
-import { makeAutoObservable, runInAction, toJS } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 import { ENDPOINTS } from 'config/api';
 import { axiosInstance } from 'config/api/requests';
 import { SnackbarType } from 'config/snackbar';
-import { DebtsClient, ExpenseClient, ExpenseWithDebt } from 'entities/expense';
+import {
+  DebtsClient,
+  ExpenseClient,
+  ExpenseWithDebt,
+  UserExpenseEditBody,
+  UserExpenseEditParams,
+} from 'entities/expense';
 import {
   DebtsResponse,
   ExpenseCreateBody,
@@ -29,6 +35,7 @@ class ExpensesStore {
 
   readonly meta = {
     getExpenses: new MetaModel(),
+    editUserDebt: new MetaModel(),
   };
 
   activeExpense: ExpenseClient | null = null;
@@ -292,6 +299,36 @@ class ExpensesStore {
         });
       }
     } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
+
+  editUserDebt = async ({ expenseId, amountToPay }: UserExpenseEditParams) => {
+    try {
+      this.meta.editUserDebt.startLoading();
+
+      const userId = this._rootStore.userStore.user?.id;
+      const userGroupId = this._rootStore.groupMemberStore.userGroupIdByUserId[userId ?? ''];
+
+      const response = await axios.put<
+        ExpenseServer[],
+        AxiosResponse<ExpenseServer[]>,
+        UserExpenseEditBody
+      >(
+        ENDPOINTS.editUserDebt.getUrl(String(expenseId)),
+        { amountToPay, userGroupId },
+        { withCredentials: true }
+      );
+
+      if (responseIsOk(response)) {
+        await this.getUsersDebts();
+        this.setExpenses(response.data.map(this.normalizeExpense));
+      }
+
+      this.meta.editUserDebt.stopLoading();
+      this._rootStore.uiStore.snackbar.open(SnackbarType.debtEdited);
+    } catch (error) {
+      this.meta.editUserDebt.stopLoading();
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
   };

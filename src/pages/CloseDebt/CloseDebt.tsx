@@ -13,6 +13,7 @@ import { Spinner } from 'components/Spinner';
 import { Stub } from 'components/Stub';
 import { Title } from 'components/Title';
 import { UsersSlider } from 'components/UsersSlider';
+import { ExpenseWithDebt } from 'entities/expense';
 import { useUsersSelect } from 'hooks/useUsersSelect';
 import { useScreenType } from 'store';
 import { useExpensesStore, useUIStore } from 'store/RootStore/hooks';
@@ -49,8 +50,8 @@ const CloseDebt: React.FC = () => {
     nav(-1);
   };
 
-  const onCloseDebt = () => {
-    openModal(ModalEnum.expensesCloseDebt);
+  const onCloseDebt = (expense: ExpenseWithDebt) => () => {
+    openModal(ModalEnum.expensesCloseDebt, { expense });
   };
 
   return (
@@ -111,7 +112,7 @@ const CloseDebt: React.FC = () => {
                         theme={ButtonTheme.outlined}
                         icon={<MoneyIcon />}
                         className={s.expense__button}
-                        onClick={onCloseDebt}
+                        onClick={onCloseDebt(expense)}
                       >
                         {isDesktop ? 'Перевести' : ''}
                       </Button>

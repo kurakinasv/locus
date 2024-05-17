@@ -9,7 +9,7 @@ type Props =
   | {
       name: string;
       errors: FieldErrors<FieldValues>;
-      message: React.ReactNode;
+      message?: React.ReactNode;
       formik?: false;
     }
   | {
@@ -19,11 +19,15 @@ type Props =
       formik: true;
     };
 
-const ErrorMessageLabel: React.FC<Props> = ({ errors, message, name, formik = false }) => {
+const ErrorMessageLabel: React.FC<Props> = ({ errors, message: msg, name, formik = false }) => {
   return formik === true ? (
-    <p className={s.error}>{message}</p>
+    <p className={s.error}>{msg}</p>
   ) : (
-    <ErrorMessage errors={errors} name={name} render={() => <p className={s.error}>{message}</p>} />
+    <ErrorMessage
+      errors={errors}
+      name={name}
+      render={({ message }) => <p className={s.error}>{message ?? msg}</p>}
+    />
   );
 };
 

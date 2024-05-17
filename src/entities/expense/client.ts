@@ -13,7 +13,7 @@ export type ExpenseClient = {
   description: string | null;
   purchaseDate: DateString;
   splitMethod: SplitMethod;
-  status: ExpenseStatus;
+  expenseStatus: ExpenseStatus;
   createdBy: User['id'];
   groupId: Group['id'];
   categoryId: ExpenseCategory['id'] | null;

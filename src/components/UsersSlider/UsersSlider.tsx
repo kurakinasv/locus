@@ -67,11 +67,8 @@ const UsersSlider: React.FC<Props> = ({
         {filteredUsers.map((user) => (
           <SwiperSlide key={user.id}>
             <UserCard
-              name={
-                user.id === currentUser?.id && replaceCurrentUserName
-                  ? 'Вы'
-                  : user.name || user.username
-              }
+              name={user.name || user.username}
+              replaceCurrentUserName={replaceCurrentUserName && user.id === currentUser?.id}
               // todo: pass image
               // image={user.image}
               selected={user.selected}

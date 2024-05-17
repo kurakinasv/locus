@@ -16,7 +16,7 @@ class MetaModel {
     this.loading = false;
   };
 
-  serIsError = (error: boolean) => {
+  setIsError = (error: boolean) => {
     this.error = error;
   };
 }

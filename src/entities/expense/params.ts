@@ -73,3 +73,13 @@ export type DebtsClient = Record<
   User['id'],
   Record<ExpenseClient['id'], UserExpense['debtAmount']>
 >;
+
+export type UserExpenseEditParams = {
+  expenseId: ExpenseClient['id'];
+  amountToPay: number;
+};
+
+export type UserExpenseEditBody = {
+  amountToPay: number;
+  userGroupId: GroupMemberModel['id'];
+};
