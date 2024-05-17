@@ -1,12 +1,13 @@
 import axios, { AxiosResponse } from 'axios';
-import { format } from 'date-fns';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { compareAsc, format } from 'date-fns';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
 
 import { ENDPOINTS } from 'config/api';
 import { axiosInstance } from 'config/api/requests';
 import { SnackbarType } from 'config/snackbar';
-import { ExpenseClient } from 'entities/expense';
+import { DebtsClient, ExpenseClient, ExpenseWithDebt } from 'entities/expense';
 import {
+  DebtsResponse,
   ExpenseCreateBody,
   ExpenseCreateParams,
   ExpenseCreateResponse,
@@ -18,7 +19,7 @@ import { ExpenseServer } from 'entities/expense/server';
 import { GroupMemberClient } from 'entities/groupMember';
 import MetaModel from 'store/models/MetaModel';
 import RootStore from 'store/RootStore';
-import { DateString } from 'typings/api';
+import { DateString, UUIDString } from 'typings/api';
 import { cutTimezone } from 'utils/formatDate';
 import { getErrorMsg } from 'utils/getErrorMsg';
 import { responseIsOk } from 'utils/responseIsOk';
@@ -32,6 +33,7 @@ class ExpensesStore {
 
   activeExpense: ExpenseClient | null = null;
   groupExpenses: ExpenseClient[] = [];
+  debts: DebtsClient | null = null;
 
   constructor(rootStore: RootStore) {
     this._rootStore = rootStore;
@@ -58,6 +60,77 @@ class ExpensesStore {
       },
       {} as Record<DateString, ExpenseClient[]>
     );
+  }
+
+  get expenseById() {
+    return this.groupExpenses.reduce(
+      (acc, expense) => {
+        return {
+          ...acc,
+          [expense.id]: expense,
+        };
+      },
+      {} as Record<ExpenseClient['id'], ExpenseClient>
+    );
+  }
+
+  get usersDebtsTotalAmounts() {
+    const debts = this.debts
+      ? Object.entries(this.debts).reduce(
+          (acc, [userId, userDebts]) => {
+            return {
+              ...acc,
+              [userId]: Object.values(userDebts).reduce((acc, debt) => acc + debt, 0),
+            };
+          },
+          {} as Record<UUIDString, number>
+        )
+      : {};
+
+    return debts;
+  }
+
+  /** Current user's debts sorted by date and filtered by month */
+  get userDebtsMonthMap(): Record<DateString, ExpenseWithDebt[]> {
+    const userId = this._rootStore.userStore.user?.id;
+
+    if (!(this.debts && userId && Object.keys(this.debts).includes(userId))) {
+      return {};
+    }
+
+    const userDebts = this.debts[userId];
+
+    // [ { [expenseId]: debt-amount }, ... ]
+    const debts = Object.entries(userDebts).reduce(
+      (acc, [expenseId, debtAmount]) => {
+        const expense = this.expenseById[Number(expenseId)];
+
+        const expenseDate = new Date(expense.purchaseDate);
+        const dateKey = format(new Date(expenseDate), 'yyyy-MM');
+
+        let restAcc = [] as ExpenseWithDebt[];
+
+        if (Object.keys(acc).length) {
+          restAcc = acc[dateKey] ?? [];
+        }
+
+        return {
+          ...acc,
+          [dateKey]: [...restAcc, { ...expense, debtAmount }],
+        };
+      },
+      {} as Record<DateString, ExpenseWithDebt[]>
+    );
+
+    const newDebts = {} as Record<string, ExpenseWithDebt[]>;
+
+    for (const [date, expensesArray] of Object.entries(debts)) {
+      newDebts[date] = [...expensesArray].sort((a, b) => {
+        return compareAsc(new Date(b.purchaseDate), new Date(a.purchaseDate));
+      });
+    }
+
+    return newDebts;
   }
 
   setExpenses = (expenses: ExpenseClient[]) => {
@@ -201,6 +274,22 @@ class ExpensesStore {
         const filteredExpenses = this.groupExpenses.filter((expense) => expense.id !== id);
         this.setExpenses(filteredExpenses);
         this._rootStore.uiStore.snackbar.open(SnackbarType.expenseDeleted);
+      }
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
+
+  getUsersDebts = async () => {
+    try {
+      const response = await axios.get<DebtsResponse>(ENDPOINTS.getUsersDebts.url, {
+        withCredentials: true,
+      });
+
+      if (responseIsOk(response)) {
+        runInAction(() => {
+          this.debts = response.data;
+        });
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));

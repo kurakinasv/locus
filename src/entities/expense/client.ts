@@ -20,3 +20,7 @@ export type ExpenseClient = {
   category: ExpenseCategory | null;
   userGroupIds: GroupMemberClient['id'][];
 };
+
+export type ExpenseWithDebt = ExpenseClient & {
+  debtAmount: number;
+};

@@ -14,13 +14,13 @@ const getGroupApiUrl = () => `${getBaseUrl()}/group`;
 
 const getUserGroupApiUrl = () => `${getBaseUrl()}/user-group`;
 
-const getUserExpenseApiUrl = () => `${getBaseUrl()}/user-expense`;
-
 const getChoreApiUrl = () => `${getBaseUrl()}/chore`;
 
 const getScheduleApiUrl = () => `${getBaseUrl()}/schedule`;
 
 const getExpenseApiUrl = () => `${getBaseUrl()}/expense`;
+
+const getUserExpenseApiUrl = () => `${getBaseUrl()}/user-expense`;
 
 enum Endpoints {
   // auth
@@ -73,6 +73,7 @@ enum Endpoints {
   createExpense = 'createExpense',
   editExpense = 'editExpense',
   deleteExpense = 'deleteExpense',
+  getUsersDebts = 'getUsersDebts',
 
   // expense categories
   getExpenseCategories = 'getExpenseCategories',
@@ -266,6 +267,10 @@ export const ENDPOINTS = {
     url: `${getExpenseApiUrl()}/expense`,
     method: HTTTPMethods.DELETE,
     getUrl: (expenseId: NumberString) => `${getExpenseApiUrl()}/expense/${expenseId}`,
+  },
+  [Endpoints.getUsersDebts]: {
+    url: `${getUserExpenseApiUrl()}/group`,
+    method: HTTTPMethods.GET,
   },
 
   // expense categories

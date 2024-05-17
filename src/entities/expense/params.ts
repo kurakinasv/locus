@@ -3,7 +3,8 @@ import { DateRange } from 'react-day-picker';
 import { Currency, SplitMethod } from 'config/expenses';
 import { ExpenseCategory } from 'entities/expenseCategory';
 import { User } from 'entities/user';
-import { UserExpenseServer } from 'entities/userExpense';
+import { UserServer } from 'entities/user/server';
+import { UserExpense, UserExpenseServer } from 'entities/userExpense';
 import GroupMemberModel from 'store/models/GroupMemberModel';
 import { DateString } from 'typings/api';
 
@@ -62,3 +63,13 @@ export type ExpenseEditBody = {
   splitMethod?: SplitMethod;
   userGroupIds?: GroupMemberModel['id'][];
 };
+
+export type DebtsResponse = Record<
+  UserServer['id'],
+  Record<ExpenseServer['id'], UserExpenseServer['debtAmount']>
+>;
+
+export type DebtsClient = Record<
+  User['id'],
+  Record<ExpenseClient['id'], UserExpense['debtAmount']>
+>;

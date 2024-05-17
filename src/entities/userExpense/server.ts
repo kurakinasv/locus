@@ -6,6 +6,7 @@ import { DefaultId } from 'typings/api';
 export type UserExpenseServer = {
   id: DefaultId;
   status: UserExpenseStatus;
+  debtAmount: number;
   userGroupId: GroupMemberClient['id'];
   expenseId: ExpenseClient['id'];
 };
