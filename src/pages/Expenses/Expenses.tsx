@@ -7,11 +7,12 @@ import { observer } from 'mobx-react-lite';
 import { DateRange } from 'react-day-picker';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, DatePickerInput, Dropdown, Spacing, Spinner, Title } from 'components';
+import { Button, DatePickerInput, Dropdown, Spacing, Spinner, Stub, Title } from 'components';
 import { ModalEnum } from 'components/modals';
 import { routes } from 'config/routes';
 import { useScreenType } from 'store';
 import { useExpenseCategoriesStore, useExpensesStore, useUIStore } from 'store/RootStore/hooks';
+import { debounce } from 'utils/debounce';
 
 import ExpenseIcon from 'img/icons/expense.svg?react';
 import PlusIcon from 'img/icons/plus.svg?react';
@@ -24,7 +25,7 @@ const Expenses: FC = () => {
   const nav = useNavigate();
   const { openModal } = useUIStore();
 
-  const { expensesMonthMap, getGroupExpenses } = useExpensesStore();
+  const { expensesMonthMap, getGroupExpenses, meta } = useExpensesStore();
   const { categoriesOptions, getCategories } = useExpenseCategoriesStore();
 
   const screen = useScreenType();
@@ -44,8 +45,8 @@ const Expenses: FC = () => {
     init();
   }, []);
 
-  const onOpenModal = (modal: ModalEnum) => () => {
-    openModal(modal);
+  const onOpenCreateModal = () => {
+    openModal(ModalEnum.expensesAdd);
   };
 
   const onOpenEditModal = (expenseId: number) => () => {
@@ -56,23 +57,48 @@ const Expenses: FC = () => {
     nav(routes.debts.full);
   };
 
-  const handleDelete = (e: React.MouseEvent) => {
+  const onOpenDeleteModal = (expenseId: number) => (e: React.MouseEvent) => {
     e.stopPropagation();
-    onOpenModal(ModalEnum.expensesDelete)();
+    openModal(ModalEnum.expensesDelete, { expenseId });
   };
 
-  const clearDateRange = () => {
-    setRange(undefined);
+  const debouncedFilter = React.useCallback(
+    debounce(
+      async ({ option, range }: { option: string; range: DateRange }) =>
+        await getGroupExpenses({ categoryId: option, range: range }),
+      500
+    ),
+    []
+  );
+
+  const onOptionChange = (option: string) => {
+    setOption(option);
+    debouncedFilter({ option, range });
+  };
+
+  const onDateRangeChange = (dateRange: DateRange | undefined) => {
+    setRange(dateRange);
+
+    if (!dateRange?.to || !dateRange?.from) {
+      return;
+    }
+
+    debouncedFilter({ option, range: dateRange });
   };
 
   if (loading) {
     return <Spinner />;
   }
 
+  const clearDateRange = () => {
+    setRange(undefined);
+    debouncedFilter({ option, range: undefined });
+  };
+
   return (
     <>
       <div className={s.buttons}>
-        <Button icon={<PlusIcon />} stretched onClick={onOpenModal(ModalEnum.expensesAdd)}>
+        <Button icon={<PlusIcon />} stretched onClick={onOpenCreateModal}>
           Внести расходы
         </Button>
         <Spacing size={isDesktop ? 1.6 : 0.8} horizontal={isDesktop} stretched />
@@ -103,7 +129,7 @@ const Expenses: FC = () => {
           placeholder="Категория"
           stretched={!isDesktop}
           selectedOption={option}
-          onChange={setOption}
+          onChange={onOptionChange}
         />
         <Spacing size={1.6} horizontal={isDesktop} className={s.spacing} />
         <DatePickerInput
@@ -111,9 +137,9 @@ const Expenses: FC = () => {
           placeholder="Выберите даты"
           className={s.input}
           range={range}
-          setRange={setRange}
+          setRange={onDateRangeChange}
           stretched={!isDesktop}
-          max={31}
+          max={90}
           fromToday={false}
           onClearDate={clearDateRange}
         />
@@ -122,7 +148,10 @@ const Expenses: FC = () => {
       <Spacing size={2.4} />
 
       <div>
-        {expensesMonthMap &&
+        {meta.getExpenses.loading && <Spinner />}
+        {!Object.keys(expensesMonthMap).length && !meta.getExpenses.loading && <Stub />}
+        {!!Object.keys(expensesMonthMap).length &&
+          !meta.getExpenses.loading &&
           Object.entries(expensesMonthMap).map(([month, expenses]) => {
             return (
               <React.Fragment key={month}>
@@ -138,7 +167,7 @@ const Expenses: FC = () => {
                     <ExpenseItem
                       {...expense}
                       date={expense.purchaseDate}
-                      onDelete={handleDelete}
+                      onDelete={onOpenDeleteModal(expense.id)}
                       onClick={onOpenEditModal(expense.id)}
                     />
                     <Spacing size={1} />

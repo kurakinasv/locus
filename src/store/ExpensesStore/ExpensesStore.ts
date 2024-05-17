@@ -16,6 +16,7 @@ import {
 } from 'entities/expense/params';
 import { ExpenseServer } from 'entities/expense/server';
 import { GroupMemberClient } from 'entities/groupMember';
+import MetaModel from 'store/models/MetaModel';
 import RootStore from 'store/RootStore';
 import { DateString } from 'typings/api';
 import { cutTimezone } from 'utils/formatDate';
@@ -24,6 +25,10 @@ import { responseIsOk } from 'utils/responseIsOk';
 
 class ExpensesStore {
   private readonly _rootStore: RootStore;
+
+  readonly meta = {
+    getExpenses: new MetaModel(),
+  };
 
   activeExpense: ExpenseClient | null = null;
   groupExpenses: ExpenseClient[] = [];
@@ -82,6 +87,8 @@ class ExpensesStore {
 
   getGroupExpenses = async (params?: ExpensesGetParams) => {
     try {
+      this.meta.getExpenses.startLoading();
+
       let query = '';
 
       if (params?.categoryId) {
@@ -107,9 +114,12 @@ class ExpensesStore {
 
       if (responseIsOk(response)) {
         this.setExpenses(response.data.map(this.normalizeExpense));
+        this.meta.getExpenses.stopLoading();
 
         return response.data;
       }
+
+      this.meta.getExpenses.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }

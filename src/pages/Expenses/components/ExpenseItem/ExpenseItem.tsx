@@ -61,9 +61,9 @@ const ExpenseItem: React.FC<Props> = ({
       </div>
       <Spacing size={0.8} horizontal />
       <div className={s.left}>
-        <div className={s.icon}>{<Icon />}</div>
-        <Spacing size={1.6} horizontal />
         <Price>{amount.toLocaleString('ru-RU')}</Price>
+        <Spacing size={1.6} horizontal />
+        <div className={s.icon}>{<Icon />}</div>
         {onDelete && (
           <>
             <Spacing size={isMobile ? 1 : 3} horizontal />

@@ -36,6 +36,7 @@ type FieldConfig =
       placeholder: string;
       type: 'number';
       min: number;
+      step: number;
     };
 
 export const addExpenseMap = {
@@ -64,6 +65,7 @@ export const addExpenseMap = {
     placeholder: 'Сумма',
     type: 'number',
     min: 0,
+    step: 0.01,
   },
   purchaseDate: {
     name: 'purchaseDate',

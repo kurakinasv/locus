@@ -1,3 +1,5 @@
+import { DateRange } from 'react-day-picker';
+
 import { Currency, SplitMethod } from 'config/expenses';
 import { ExpenseCategory } from 'entities/expenseCategory';
 import { User } from 'entities/user';
@@ -10,10 +12,7 @@ import { ExpenseServer } from './server';
 
 export type ExpensesGetParams = {
   categoryId?: string;
-  range?: {
-    from: Date;
-    to: Date;
-  };
+  range?: DateRange;
 };
 
 // todo: add currency and splitMethod
