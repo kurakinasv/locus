@@ -55,8 +55,6 @@ class ShoppingListStore implements ILocalStore {
         return;
       }
 
-      console.log('response.data', response.data);
-
       this.setShoppingLists(response.data.map(normalizeShoppingList));
 
       this.meta.getLists.stopLoading();
@@ -74,6 +72,8 @@ class ShoppingListStore implements ILocalStore {
         ENDPOINTS.getShoppingList.getUrl(String(listId)),
         { withCredentials: true }
       );
+
+      console.log('response', response);
 
       if (!responseIsOk(response)) {
         return;
@@ -111,15 +111,17 @@ class ShoppingListStore implements ILocalStore {
       this.setShoppingLists([...this.lists, normalizeShoppingList(response.data)]);
 
       this._rootStore.uiStore.snackbar.open(SnackbarType.listCreated);
+
+      return response.data;
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
   };
 
-  editShoppingList = async (params: ListEditParams, listId: ShoppingList['id']) => {
+  editShoppingList = async (params: ListEditParams) => {
     try {
       const response = await axiosInstance.put<ShoppingListServer[]>(
-        ENDPOINTS.editShoppingList.getUrl(String(listId)),
+        ENDPOINTS.editShoppingList.getUrl(String(params.id)),
         {
           name: params.name?.trim(),
           description: params.description?.trim(),

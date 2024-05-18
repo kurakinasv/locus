@@ -2,12 +2,12 @@ import { FieldValues } from 'react-hook-form';
 
 export type CreateFormValues = FieldValues & {
   name: string;
-  date: Date;
+  date?: Date;
 };
 
 export type EditFormValues = FieldValues & {
   name: string;
-  date: Date;
+  date?: Date;
 };
 
 type FieldConfig = {

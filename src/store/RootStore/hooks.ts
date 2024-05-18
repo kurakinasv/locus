@@ -53,3 +53,7 @@ export const useExpensesStore = () => {
 export const useExpenseCategoriesStore = () => {
   return useRootStore().expenseCategoriesStore;
 };
+
+export const useShoppingListStore = () => {
+  return useRootStore().shoppingListStore;
+};

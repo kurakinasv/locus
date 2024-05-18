@@ -8,6 +8,7 @@ import ExpensesStore from 'store/ExpensesStore';
 import GroupMemberStore from 'store/GroupMemberStore';
 import GroupStore from 'store/GroupStore';
 import SchedulesStore from 'store/SchedulesStore/SchedulesStore';
+import ShoppingListStore from 'store/ShoppingListStore';
 import UIStore from 'store/UIStore';
 import UserStore from 'store/UserStore';
 
@@ -23,6 +24,7 @@ class RootStore {
   readonly schedulesStore: SchedulesStore;
   readonly expensesStore: ExpensesStore;
   readonly expenseCategoriesStore: ExpenseCategoriesStore;
+  readonly shoppingListStore: ShoppingListStore;
 
   readonly isDev: boolean;
 
@@ -42,6 +44,7 @@ class RootStore {
     this.schedulesStore = new SchedulesStore(this);
     this.expensesStore = new ExpensesStore(this);
     this.expenseCategoriesStore = new ExpenseCategoriesStore(this);
+    this.shoppingListStore = new ShoppingListStore(this);
   }
 }
 

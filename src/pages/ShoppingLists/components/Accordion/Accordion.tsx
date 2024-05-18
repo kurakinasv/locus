@@ -23,9 +23,9 @@ import s from './Accordion.module.scss';
 type Props = {
   id: ShoppingList['id'];
   isOpenDefault?: boolean;
-  name: string;
+  name: ShoppingList['name'];
   products: Product[];
-  purchaseDate: string;
+  purchaseDate: ShoppingList['purchaseDate'];
 };
 
 const Accordion: React.FC<Props> = ({
@@ -76,12 +76,16 @@ const Accordion: React.FC<Props> = ({
           <Title size="h2" className={s.title__text}>
             {name}
           </Title>
-          <Spacing size={1.2} horizontal />
-          <div className={s.date}>
-            <span className={s.middot}>{<>&middot;</>}</span>
-            <Spacing size={1.2} horizontal />
-            {formatLocaleToLongDate(purchaseDate)}
-          </div>
+          {purchaseDate && (
+            <>
+              <Spacing size={1.2} horizontal />
+              <div className={s.date}>
+                <span className={s.middot}>{<>&middot;</>}</span>
+                <Spacing size={1.2} horizontal />
+                {formatLocaleToLongDate(purchaseDate)}
+              </div>
+            </>
+          )}
         </div>
         <ChevronIcon className={cn(s.icon, isOpen && s.icon_open)} />
       </div>

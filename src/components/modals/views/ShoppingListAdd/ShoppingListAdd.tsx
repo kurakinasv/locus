@@ -9,25 +9,26 @@ import { FormWrapper } from 'components/modals/components';
 import { Spacing } from 'components/Spacing';
 import { VALIDATION_MESSAGES } from 'config/form';
 import { CreateFormValues, addListMap } from 'entities/shoppingList/form';
-import { useUIStore } from 'store/RootStore/hooks';
-
-// import s from './ShoppingListAdd.module.scss';
+import { useShoppingListStore, useUIStore } from 'store/RootStore/hooks';
 
 const ShoppingListAdd: React.FC = () => {
   const { closeModal } = useUIStore();
 
+  const { createShoppingList } = useShoppingListStore();
+
   const { register, handleSubmit, control, formState } = useForm<CreateFormValues>();
 
   const onSubmit = React.useCallback(async (data: CreateFormValues) => {
-    // const createParams = {};
+    const createParams = {
+      name: data.name.trim(),
+      date: data.date,
+    };
 
-    console.log('onSubmit', data);
+    const created = await createShoppingList(createParams);
 
-    // const created = await createSchedule(createParams);
-
-    // if (!created) {
-    //   return;
-    // }
+    if (!created) {
+      return;
+    }
 
     closeModal();
   }, []);
@@ -41,7 +42,7 @@ const ShoppingListAdd: React.FC = () => {
       <Controller<CreateFormValues>
         control={control}
         name={addListMap.name.name}
-        rules={{ required: true }}
+        rules={{ required: { value: true, message: VALIDATION_MESSAGES.required } }}
         render={({ field }) => (
           <>
             <Input
@@ -50,11 +51,7 @@ const ShoppingListAdd: React.FC = () => {
               value={field.value}
               {...register(addListMap.name.name)}
             />
-            <ErrorMessageLabel
-              errors={formState.errors}
-              name={addListMap.name.name}
-              message={VALIDATION_MESSAGES.required}
-            />
+            <ErrorMessageLabel errors={formState.errors} name={addListMap.name.name} />
           </>
         )}
       />
@@ -62,7 +59,6 @@ const ShoppingListAdd: React.FC = () => {
       <Controller<CreateFormValues>
         control={control}
         name={addListMap.date.name}
-        rules={{ required: true }}
         render={({ field }) => (
           <DatePickerInput
             {...field}

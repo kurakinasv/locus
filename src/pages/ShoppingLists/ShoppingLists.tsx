@@ -7,9 +7,7 @@ import { ModalEnum } from 'components/modals';
 import { Spacing } from 'components/Spacing';
 import { Spinner } from 'components/Spinner';
 import { Stub } from 'components/Stub';
-import { useLocalStore } from 'hooks/useLocalStore';
-import ShoppingListStore from 'store/locals/ShoppingListStore';
-import { useRootStore, useUIStore } from 'store/RootStore/hooks';
+import { useShoppingListStore, useUIStore } from 'store/RootStore/hooks';
 
 import PlusIcon from 'img/icons/plus.svg?react';
 
@@ -18,14 +16,11 @@ import { Accordion } from './components';
 const ShoppingLists: FC = () => {
   const { openModal } = useUIStore();
 
-  const rootStore = useRootStore();
-
-  const store = useLocalStore(() => new ShoppingListStore(rootStore));
-  const { meta, lists } = store;
+  const { lists, meta, getShoppingLists } = useShoppingListStore();
 
   useEffect(() => {
-    store.getShoppingLists();
-  }, [store]);
+    getShoppingLists();
+  }, []);
 
   return (
     <>

@@ -10,16 +10,16 @@ import { Spacing } from 'components/Spacing';
 import { VALIDATION_MESSAGES } from 'config/form';
 import { MOCK_SHOPPING_LISTS } from 'entities/mock/shoppingList';
 import { EditFormValues, addListMap } from 'entities/shoppingList/form';
-import { useUIStore } from 'store/RootStore/hooks';
+import { useShoppingListStore, useUIStore } from 'store/RootStore/hooks';
 import { DefaultId } from 'typings/api';
 import { toUTC } from 'utils/formatDate';
-
-// import s from './ShoppingListEdit.module.scss';
 
 const ShoppingListEdit: React.FC = () => {
   const { closeModal, modalState } = useUIStore<{ listId: DefaultId }>();
 
-  const { register, handleSubmit, control, formState } = useForm<EditFormValues>();
+  const { getShopingList, editShoppingList } = useShoppingListStore();
+
+  const { register, handleSubmit, control, formState, setValue } = useForm<EditFormValues>();
 
   const [initial, setInitial] = React.useState<EditFormValues>();
 
@@ -28,17 +28,22 @@ const ShoppingListEdit: React.FC = () => {
       return;
     }
 
-    const list = MOCK_SHOPPING_LISTS[0];
+    const list = await getShopingList(modalState.listId);
 
     if (!list) {
       return;
     }
 
+    const initialDate = list.purchaseDate ? toUTC(new Date(list.purchaseDate)) : undefined;
+
     setInitial({
       name: list.name,
-      date: new Date(list.purchaseDate),
+      date: initialDate,
     });
-  }, []);
+
+    setValue(addListMap.name.name, list.name);
+    setValue(addListMap.date.name, initialDate);
+  }, [modalState?.listId]);
 
   React.useEffect(() => {
     init();
@@ -47,12 +52,20 @@ const ShoppingListEdit: React.FC = () => {
   const onSubmit = React.useCallback(async (data: EditFormValues) => {
     console.log('onSubmit', data);
 
-    // await editList({})
+    if (!modalState) {
+      return;
+    }
+
+    await editShoppingList({
+      id: modalState.listId,
+      name: data.name.trim(),
+      purchaseDate: data.date,
+    });
 
     closeModal();
   }, []);
 
-  const initialDate = initial ? toUTC(initial[addListMap.date.name]) : undefined;
+  const initialDate = initial ? initial[addListMap.date.name] : undefined;
 
   return (
     <FormWrapper
@@ -86,7 +99,6 @@ const ShoppingListEdit: React.FC = () => {
         control={control}
         name={addListMap.date.name}
         defaultValue={initialDate}
-        rules={{ required: true }}
         render={({ field }) => (
           <DatePickerInput
             {...field}
