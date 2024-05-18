@@ -91,6 +91,7 @@ enum Endpoints {
   deleteShoppingList = 'deleteShoppingList',
 
   // shopping list items
+  getProducts = 'getProducts',
   addProduct = 'addProduct',
   editProduct = 'editProduct',
   deleteProduct = 'deleteProduct',
@@ -335,19 +336,24 @@ export const ENDPOINTS = {
   },
 
   // shopping list items
+  [Endpoints.getProducts]: {
+    url: `${getShoppingListApiUrl()}`,
+    method: HTTTPMethods.GET,
+    getUrl: (listId: NumberString) => `${getShoppingListApiUrl()}/${listId}/items`,
+  },
   [Endpoints.addProduct]: {
-    url: `${getShoppingListApiUrl()}/item`,
+    url: `${getShoppingListApiUrl()}`,
     method: HTTTPMethods.POST,
     getUrl: (listId: NumberString) => `${getShoppingListApiUrl()}/${listId}/item`,
   },
   [Endpoints.editProduct]: {
-    url: `${getShoppingListApiUrl()}/item`,
+    url: `${getShoppingListApiUrl()}`,
     method: HTTTPMethods.PUT,
     getUrl: (listId: NumberString, listItemId: NumberString) =>
       `${getShoppingListApiUrl()}/${listId}/item/${listItemId}`,
   },
   [Endpoints.deleteProduct]: {
-    url: `${getShoppingListApiUrl()}/item`,
+    url: `${getShoppingListApiUrl()}`,
     method: HTTTPMethods.DELETE,
     getUrl: (listId: NumberString, listItemId: NumberString) =>
       `${getShoppingListApiUrl()}/${listId}/item/${listItemId}`,

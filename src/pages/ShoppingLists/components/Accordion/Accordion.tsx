@@ -1,17 +1,19 @@
 import * as React from 'react';
 
 import cn from 'classnames';
+import { observer } from 'mobx-react-lite';
 
-import { Button, ButtonTheme, Input, Spacing } from 'components';
+import { Button, ButtonTheme, Input, Spacing, Spinner } from 'components';
 import { ModalEnum } from 'components/modals';
 import { Title } from 'components/Title';
 import { Product } from 'entities/product';
 import { ShoppingList } from 'entities/shoppingList';
+import { useLocalStore } from 'hooks/useLocalStore';
 import { useScreenType } from 'store';
-import { useUIStore } from 'store/RootStore/hooks';
+import { ProductsStore } from 'store/locals';
+import { useRootStore, useUIStore } from 'store/RootStore/hooks';
 import { SizeEnum } from 'typings/ui';
 import { formatLocaleToLongDate } from 'utils/formatDate';
-import { noop } from 'utils/noop';
 
 import ChevronIcon from 'img/icons/chevron-icon.svg?react';
 import PlusIcon from 'img/icons/plus.svg?react';
@@ -24,23 +26,18 @@ type Props = {
   id: ShoppingList['id'];
   isOpenDefault?: boolean;
   name: ShoppingList['name'];
-  products: Product[];
   purchaseDate: ShoppingList['purchaseDate'];
 };
 
-const Accordion: React.FC<Props> = ({
-  id,
-  isOpenDefault = false,
-  name,
-  products,
-  purchaseDate,
-}) => {
+const Accordion: React.FC<Props> = ({ id, isOpenDefault = false, name, purchaseDate }) => {
   const { openModal } = useUIStore();
+
+  const rootStore = useRootStore();
+  const productsStore = useLocalStore(() => new ProductsStore(rootStore, id));
 
   const [isOpen, setIsOpen] = React.useState(isOpenDefault);
   const [newProduct, setNewProduct] = React.useState('');
   const [price, setPrice] = React.useState<number | ''>('');
-  // const [products, setProducts] = React.useState<ProductType[]>(MOCK_PRODUCTS);
 
   const screen = useScreenType();
   const isDesktop = screen === 'desktop';
@@ -49,12 +46,17 @@ const Accordion: React.FC<Props> = ({
     setIsOpen(!isOpen);
   };
 
-  // const handleAddProduct = () => {
-  //   if (newProduct.trim() !== '') {
-  //     setProducts([...products, newProduct]);
-  //     setNewProduct('');
-  //   }
-  // };
+  React.useEffect(() => {
+    productsStore.getProducts();
+  }, [productsStore]);
+
+  const handleAddProduct = async () => {
+    if (newProduct.trim() !== '') {
+      await productsStore.createProduct({ name: newProduct, price: price ? price : null });
+      setNewProduct('');
+      setPrice('');
+    }
+  };
 
   const onChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isNaN(Number(e.target.value))) {
@@ -67,6 +69,22 @@ const Accordion: React.FC<Props> = ({
 
   const onOpenModal = (modal: ModalEnum) => () => {
     openModal(modal, { listId: id });
+  };
+
+  const handleDeleteListItem =
+    (id: Product['id']) => async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      await productsStore.deleteProduct(id);
+    };
+
+  const onCheckedChange = (id: Product['id'], bought: Product['bought']) => async () => {
+    const product = productsStore.products.find((p) => p.id === id);
+
+    if (!product) {
+      return;
+    }
+
+    await productsStore.editProduct({ listItemId: id, bought: !bought });
   };
 
   return (
@@ -96,10 +114,10 @@ const Accordion: React.FC<Props> = ({
           <div className={s.inputs}>
             <Button
               icon={<PlusIcon />}
-              onClick={noop}
+              onClick={handleAddProduct}
               theme={ButtonTheme.text}
               aria-label="Добавить продукт"
-              disabled={!newProduct || !price}
+              disabled={!newProduct}
             />
             <Spacing size={isDesktop ? 1.6 : 0.6} horizontal />
             <div className={s.wrapper}>
@@ -121,10 +139,17 @@ const Accordion: React.FC<Props> = ({
           </div>
           <Spacing size={2} />
           <ul>
-            {products.map((product, i) => (
+            {productsStore.meta.getProducts.loading && <Spinner />}
+            {productsStore.products.map((product, i) => (
               <React.Fragment key={product.id}>
-                <ListItem name={product.name} completed={product.bought} price={product.price} />
-                {i !== products.length - 1 && <Spacing size={1} />}
+                <ListItem
+                  name={product.name}
+                  completed={product.bought}
+                  price={product.price}
+                  onDelete={handleDeleteListItem(product.id)}
+                  onCheckedChange={onCheckedChange(product.id, product.bought)}
+                />
+                {i !== productsStore.products.length - 1 && <Spacing size={1} />}
               </React.Fragment>
             ))}
           </ul>
@@ -145,4 +170,4 @@ const Accordion: React.FC<Props> = ({
   );
 };
 
-export default React.memo(Accordion);
+export default observer(Accordion);

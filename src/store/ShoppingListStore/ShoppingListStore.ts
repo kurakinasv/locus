@@ -10,14 +10,13 @@ import {
   ShoppingListServer,
   normalizeShoppingList,
 } from 'entities/shoppingList';
-import { ILocalStore } from 'store/interfaces';
 import MetaModel from 'store/models/MetaModel';
 import RootStore from 'store/RootStore';
 import { cutTimezone } from 'utils/formatDate';
 import { getErrorMsg } from 'utils/getErrorMsg';
 import { responseIsOk } from 'utils/responseIsOk';
 
-class ShoppingListStore implements ILocalStore {
+class ShoppingListStore {
   private readonly _rootStore: RootStore;
 
   readonly meta = {
@@ -72,8 +71,6 @@ class ShoppingListStore implements ILocalStore {
         ENDPOINTS.getShoppingList.getUrl(String(listId)),
         { withCredentials: true }
       );
-
-      console.log('response', response);
 
       if (!responseIsOk(response)) {
         return;

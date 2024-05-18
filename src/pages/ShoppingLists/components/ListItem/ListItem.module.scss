@@ -2,6 +2,7 @@
 
 .wrapper {
   position: relative;
+  min-height: 5rem;
   padding: 0.6rem 2rem;
 
   display: flex;
@@ -57,4 +58,19 @@
   display: flex;
   align-items: center;
   color: $greyMain;
+}
+
+.delete-icon {
+  @include square(2.4rem);
+
+  display: flex;
+  align-items: center;
+
+  color: $turquoiseMain;
+  opacity: 0.6;
+  @include animate(opacity);
+
+  @include hover {
+    opacity: 0.8;
+  }
 }
