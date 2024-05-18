@@ -5,7 +5,7 @@ import cn from 'classnames';
 import { Button, ButtonTheme, Input, Spacing } from 'components';
 import { ModalEnum } from 'components/modals';
 import { Title } from 'components/Title';
-import { ProductType } from 'entities/product';
+import { Product } from 'entities/product';
 import { ShoppingList } from 'entities/shoppingList';
 import { useScreenType } from 'store';
 import { useUIStore } from 'store/RootStore/hooks';
@@ -24,7 +24,7 @@ type Props = {
   id: ShoppingList['id'];
   isOpenDefault?: boolean;
   name: string;
-  products: ProductType[];
+  products: Product[];
   purchaseDate: string;
 };
 

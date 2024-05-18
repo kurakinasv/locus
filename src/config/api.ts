@@ -22,6 +22,8 @@ const getExpenseApiUrl = () => `${getBaseUrl()}/expense`;
 
 const getUserExpenseApiUrl = () => `${getBaseUrl()}/user-expense`;
 
+const getShoppingListApiUrl = () => `${getBaseUrl()}/shopping-list`;
+
 enum Endpoints {
   // auth
   login = 'login',
@@ -80,6 +82,18 @@ enum Endpoints {
   // expense categories
   getExpenseCategories = 'getExpenseCategories',
   createExpenseCategory = 'createExpenseCategory',
+
+  // shopping list
+  getShoppingLists = 'getShoppingLists',
+  getShoppingList = 'getShoppingList',
+  createShoppingList = 'createShoppingList',
+  editShoppingList = 'editShoppingList',
+  deleteShoppingList = 'deleteShoppingList',
+
+  // shopping list items
+  addProduct = 'addProduct',
+  editProduct = 'editProduct',
+  deleteProduct = 'deleteProduct',
 }
 
 enum HTTTPMethods {
@@ -92,7 +106,7 @@ enum HTTTPMethods {
 type EndpointConfig = {
   url: string;
   method: HTTTPMethods;
-  getUrl?: (id: string) => string;
+  getUrl?: ((id: string) => string) | ((id: string, itemId: string) => string);
 };
 
 export const ENDPOINTS = {
@@ -292,5 +306,50 @@ export const ENDPOINTS = {
   [Endpoints.createExpenseCategory]: {
     url: `${getExpenseApiUrl()}/category`,
     method: HTTTPMethods.POST,
+  },
+
+  // shopping lists
+  [Endpoints.getShoppingList]: {
+    url: `${getShoppingListApiUrl()}/list`,
+    method: HTTTPMethods.GET,
+    getUrl: (listId: NumberString) => `${getShoppingListApiUrl()}/list/${listId}`,
+  },
+  [Endpoints.getShoppingLists]: {
+    url: `${getShoppingListApiUrl()}/lists`,
+    method: HTTTPMethods.GET,
+    getUrl: (query: string) => `${getShoppingListApiUrl()}/lists${query}`,
+  },
+  [Endpoints.createShoppingList]: {
+    url: `${getShoppingListApiUrl()}/list`,
+    method: HTTTPMethods.POST,
+  },
+  [Endpoints.editShoppingList]: {
+    url: `${getShoppingListApiUrl()}/list`,
+    method: HTTTPMethods.PUT,
+    getUrl: (listId: NumberString) => `${getShoppingListApiUrl()}/list/${listId}`,
+  },
+  [Endpoints.deleteShoppingList]: {
+    url: `${getShoppingListApiUrl()}/list`,
+    method: HTTTPMethods.DELETE,
+    getUrl: (listId: NumberString) => `${getShoppingListApiUrl()}/list/${listId}`,
+  },
+
+  // shopping list items
+  [Endpoints.addProduct]: {
+    url: `${getShoppingListApiUrl()}/item`,
+    method: HTTTPMethods.POST,
+    getUrl: (listId: NumberString) => `${getShoppingListApiUrl()}/${listId}/item`,
+  },
+  [Endpoints.editProduct]: {
+    url: `${getShoppingListApiUrl()}/item`,
+    method: HTTTPMethods.PUT,
+    getUrl: (listId: NumberString, listItemId: NumberString) =>
+      `${getShoppingListApiUrl()}/${listId}/item/${listItemId}`,
+  },
+  [Endpoints.deleteProduct]: {
+    url: `${getShoppingListApiUrl()}/item`,
+    method: HTTTPMethods.DELETE,
+    getUrl: (listId: NumberString, listItemId: NumberString) =>
+      `${getShoppingListApiUrl()}/${listId}/item/${listItemId}`,
   },
 } satisfies Record<Endpoints, EndpointConfig>;

@@ -20,6 +20,9 @@ export enum SnackbarType {
   expenseEdited = 'expenseEdited',
   expenseDeleted = 'expenseDeleted',
   debtEdited = 'debtEdited',
+  listCreated = 'listCreated',
+  listEdited = 'listEdited',
+  listDeleted = 'listDeleted',
 }
 
 export const SNACKBAR_CONFIG: Record<SnackbarType, { message: string; theme: SnackbarTheme }> = {
@@ -81,6 +84,18 @@ export const SNACKBAR_CONFIG: Record<SnackbarType, { message: string; theme: Sna
   },
   [SnackbarType.debtEdited]: {
     message: 'Информация о долге успешно изменена',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.listCreated]: {
+    message: 'Список успешно создан',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.listEdited]: {
+    message: 'Список успешно изменен',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.listDeleted]: {
+    message: 'Список успешно удален',
     theme: SnackbarTheme.success,
   },
 };

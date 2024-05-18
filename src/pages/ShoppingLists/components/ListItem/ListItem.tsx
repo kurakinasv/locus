@@ -14,7 +14,7 @@ import s from './ListItem.module.scss';
 type Props = {
   name: string;
   completed: boolean;
-  price?: number;
+  price?: number | null;
 };
 
 const ListItem: FC<Props> = ({ name, completed, price }) => {
