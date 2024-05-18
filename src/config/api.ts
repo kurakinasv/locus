@@ -73,6 +73,7 @@ enum Endpoints {
   createExpense = 'createExpense',
   editExpense = 'editExpense',
   deleteExpense = 'deleteExpense',
+  getUserExpenses = 'getUserExpenses',
   getUsersDebts = 'getUsersDebts',
   editUserDebt = 'editUserDebt',
 
@@ -268,6 +269,10 @@ export const ENDPOINTS = {
     url: `${getExpenseApiUrl()}/expense`,
     method: HTTTPMethods.DELETE,
     getUrl: (expenseId: NumberString) => `${getExpenseApiUrl()}/expense/${expenseId}`,
+  },
+  [Endpoints.getUserExpenses]: {
+    url: `${getUserExpenseApiUrl()}/user-expenses`,
+    method: HTTTPMethods.GET,
   },
   [Endpoints.getUsersDebts]: {
     url: `${getUserExpenseApiUrl()}/group`,

@@ -11,7 +11,12 @@ import { Button, DatePickerInput, Dropdown, Spacing, Spinner, Stub, Title } from
 import { ModalEnum } from 'components/modals';
 import { routes } from 'config/routes';
 import { useScreenType } from 'store';
-import { useExpenseCategoriesStore, useExpensesStore, useUIStore } from 'store/RootStore/hooks';
+import {
+  useExpenseCategoriesStore,
+  useExpensesStore,
+  useUIStore,
+  useUserStore,
+} from 'store/RootStore/hooks';
 import { debounce } from 'utils/debounce';
 
 import ExpenseIcon from 'img/icons/expense.svg?react';
@@ -25,8 +30,18 @@ const Expenses: FC = () => {
   const nav = useNavigate();
   const { openModal } = useUIStore();
 
-  const { expensesMonthMap, getGroupExpenses, meta } = useExpensesStore();
+  const {
+    expensesMonthMap,
+    getGroupExpenses,
+    getUsersDebts,
+    meta,
+    usersDebtsTotalAmounts,
+    currentMonthGroupExpenses,
+    currentMonthUserExpenses,
+    getUserExpenses,
+  } = useExpensesStore();
   const { categoriesOptions, getCategories } = useExpenseCategoriesStore();
+  const { user } = useUserStore();
 
   const screen = useScreenType();
   const isDesktop = screen === 'desktop';
@@ -38,7 +53,7 @@ const Expenses: FC = () => {
   useEffect(() => {
     const init = async () => {
       setLoading(true);
-      await Promise.all([getCategories(), getGroupExpenses()]);
+      await Promise.all([getCategories(), getGroupExpenses(), getUsersDebts(), getUserExpenses()]);
       setLoading(false);
     };
 
@@ -95,6 +110,10 @@ const Expenses: FC = () => {
     debouncedFilter({ option, range: undefined });
   };
 
+  const currentMonth = format(new Date(), 'LLLL', {
+    locale: navigator.language === 'ru-RU' ? ru : enUS,
+  });
+
   return (
     <>
       <div className={s.buttons}>
@@ -109,15 +128,19 @@ const Expenses: FC = () => {
 
       <Spacing size={isDesktop ? 3.2 : 2} />
       <div className={s.stats}>
-        <StatBanner value={100000000} description={<>за&nbsp;ноябрь</>} color="turquoise" />
         <StatBanner
-          value={100000000}
-          description={<>общие траты за&nbsp;ноябрь</>}
+          value={currentMonthGroupExpenses}
+          description={<>общие траты за&nbsp;{currentMonth}</>}
+          color="turquoise"
+        />
+        <StatBanner
+          value={currentMonthUserExpenses}
+          description={<>личные траты за&nbsp;{currentMonth}</>}
           color="purple"
         />
         <StatBanner
-          value={100000000}
-          description={<>общие траты за&nbsp;ноябрь</>}
+          value={usersDebtsTotalAmounts[user?.id ?? '']}
+          description={<>текущий долг</>}
           color="orange"
         />
       </div>

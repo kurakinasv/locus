@@ -16,7 +16,7 @@ const StatBanner: React.FC<Props> = ({ value, description, color = 'turquoise' }
   return (
     <div className={cn(s.banner, s[`banner_color-${color}`])}>
       <span className={s.price}>
-        {value.toLocaleString('ru-RU')}
+        {(value ?? 0).toLocaleString('ru-RU')}
         <span className={s.currency}>
           <RubleSVG />
         </span>

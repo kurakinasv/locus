@@ -42,6 +42,9 @@ class ExpensesStore {
   groupExpenses: ExpenseClient[] = [];
   debts: DebtsClient | null = null;
 
+  userExpensesByMonth: Record<DateString, number[]> | null = null;
+  totalPersonalSum: number = 0;
+
   constructor(rootStore: RootStore) {
     this._rootStore = rootStore;
 
@@ -140,6 +143,24 @@ class ExpensesStore {
     return newDebts;
   }
 
+  get currentMonthGroupExpenses() {
+    const expenses = this.expensesMonthMap[format(new Date(), 'yyyy-MM')] ?? [];
+
+    return expenses.reduce((sum, expense) => sum + Number(expense.amount), 0);
+  }
+
+  get currentMonthUserExpenses() {
+    if (!this.userExpensesByMonth) {
+      return 0;
+    }
+
+    const expensesAmounts = this.userExpensesByMonth[format(new Date(), 'yyyy-MM')] ?? [];
+
+    const userMonthSum = expensesAmounts.reduce((sum, amount) => sum + amount, 0);
+
+    return userMonthSum;
+  }
+
   setExpenses = (expenses: ExpenseClient[]) => {
     this.groupExpenses = expenses;
   };
@@ -201,6 +222,7 @@ class ExpensesStore {
 
       this.meta.getExpenses.stopLoading();
     } catch (error) {
+      this.meta.getExpenses.stopLoading();
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
   };
@@ -281,6 +303,26 @@ class ExpensesStore {
         const filteredExpenses = this.groupExpenses.filter((expense) => expense.id !== id);
         this.setExpenses(filteredExpenses);
         this._rootStore.uiStore.snackbar.open(SnackbarType.expenseDeleted);
+      }
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
+
+  getUserExpenses = async () => {
+    try {
+      const response = await axios.get<{
+        userExpenses: Record<DateString, number[]>;
+        totalPersonalSum: number;
+      }>(ENDPOINTS.getUserExpenses.url, {
+        withCredentials: true,
+      });
+
+      if (responseIsOk(response)) {
+        runInAction(() => {
+          this.userExpensesByMonth = response.data.userExpenses;
+          this.totalPersonalSum = response.data.totalPersonalSum;
+        });
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
