@@ -8,11 +8,15 @@ export const MOCK_SHOPPING_LISTS: ShoppingList[] = [
     name: 'Первый список покупок',
     products: MOCK_PRODUCTS,
     purchaseDate: new Date().toISOString(),
+    description: 'Первый список покупок',
+    groupId: '1',
   },
   {
     id: 2,
     name: 'Второй список покупок',
     products: MOCK_PRODUCTS,
     purchaseDate: '2021-08-02',
+    description: 'Второй список покупок',
+    groupId: '1',
   },
 ];

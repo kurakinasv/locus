@@ -40,8 +40,16 @@
 }
 
 .field {
-  max-width: 34rem;
-  margin: 0 auto;
+  @include flexCenter;
+
+  &__wrapper {
+    width: 100%;
+    max-width: 34rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 
 .title {

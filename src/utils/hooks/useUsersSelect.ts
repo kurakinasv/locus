@@ -15,13 +15,15 @@ export const useUsersSelect = (single = false) => {
   const [users, setUsers] = React.useState<UsersSelectListType>(() =>
     group?.users ? initializeUsers(group.users) : []
   );
+  const [touched, setTouched] = React.useState(false);
 
   const onUserClick = React.useCallback(
     (id: User['id']) => () => {
+      setTouched(true);
       setUsers((prev) => (single ? chooseSingleUser(prev, id) : chooseMultipleUsers(prev, id)));
     },
     [single]
   );
 
-  return { users, setUsers, onUserClick };
+  return { users, touched, setUsers, onUserClick };
 };

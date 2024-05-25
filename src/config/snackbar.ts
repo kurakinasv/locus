@@ -16,6 +16,13 @@ export enum SnackbarType {
   scheduleEdited = 'scheduleEdited',
   scheduleDeleted = 'scheduleDeleted',
   taskEdited = 'taskEdited',
+  expenseCreated = 'expenseCreated',
+  expenseEdited = 'expenseEdited',
+  expenseDeleted = 'expenseDeleted',
+  debtEdited = 'debtEdited',
+  listCreated = 'listCreated',
+  listEdited = 'listEdited',
+  listDeleted = 'listDeleted',
 }
 
 export const SNACKBAR_CONFIG: Record<SnackbarType, { message: string; theme: SnackbarTheme }> = {
@@ -61,6 +68,34 @@ export const SNACKBAR_CONFIG: Record<SnackbarType, { message: string; theme: Sna
   },
   [SnackbarType.taskEdited]: {
     message: 'Задача успешно изменена',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.expenseCreated]: {
+    message: 'Трата успешно внесена',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.expenseEdited]: {
+    message: 'Информация о трате успешно изменена',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.expenseDeleted]: {
+    message: 'Трата успешно удалена',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.debtEdited]: {
+    message: 'Информация о долге успешно изменена',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.listCreated]: {
+    message: 'Список успешно создан',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.listEdited]: {
+    message: 'Список успешно изменен',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.listDeleted]: {
+    message: 'Список успешно удален',
     theme: SnackbarTheme.success,
   },
 };

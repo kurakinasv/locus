@@ -1,26 +1,63 @@
-import { ExpenseItem } from 'entities/expense';
+import { ExpenseClient } from 'entities/expense';
+import { ExpenseCategory } from 'entities/expenseCategory';
 
-export const MOCK_EXPENSES: ExpenseItem[] = [
+import { MOCK_USERS } from './user';
+
+export const MOCK_EXPENSE_CATEGORIES: ExpenseCategory[] = [
   {
     id: 1,
-    date: new Date().toLocaleDateString(),
-    category: 'Интернет, связь',
+    name: 'Интернет, связь',
+    icon: 'other',
+    isArchived: false,
+    groupId: '1',
+  },
+];
+
+export const MOCK_EXPENSES: ExpenseClient[] = [
+  {
+    id: 1,
+    purchaseDate: new Date().toLocaleDateString(),
+    categoryId: MOCK_EXPENSE_CATEGORIES[0].id,
     description:
       'Небольшое или большое описание этой траты небольшое или большое описание этой траты',
-    price: 500,
+    amount: 500,
+    createdBy: MOCK_USERS[0].id,
+    currency: 'RUB',
+    groupId: '1',
+    name: 'Интернет, связь',
+    splitMethod: 'equally',
+    expenseStatus: 'pending',
+    category: MOCK_EXPENSE_CATEGORIES[0],
+    userGroupIds: [MOCK_USERS[0].id],
   },
   {
     id: 2,
-    date: new Date().toLocaleDateString(),
-    category: 'Интернет, связь',
+    purchaseDate: new Date().toLocaleDateString(),
+    categoryId: MOCK_EXPENSE_CATEGORIES[0].id,
     description: 'Небольшое или большое описание этой траты',
-    price: 500,
+    amount: 500,
+    createdBy: MOCK_USERS[0].id,
+    currency: 'RUB',
+    groupId: '1',
+    name: 'Интернет, связь',
+    splitMethod: 'equally',
+    expenseStatus: 'pending',
+    category: MOCK_EXPENSE_CATEGORIES[0],
+    userGroupIds: [MOCK_USERS[0].id],
   },
   {
     id: 3,
-    date: new Date().toLocaleDateString(),
-    category: 'Интернет, связь',
+    purchaseDate: new Date().toLocaleDateString(),
+    categoryId: MOCK_EXPENSE_CATEGORIES[0].id,
     description: 'Небольшое или большое описание этой траты',
-    price: 500,
+    amount: 500,
+    createdBy: MOCK_USERS[0].id,
+    currency: 'RUB',
+    groupId: '1',
+    name: 'Интернет, связь',
+    splitMethod: 'equally',
+    expenseStatus: 'pending',
+    category: MOCK_EXPENSE_CATEGORIES[0],
+    userGroupIds: [MOCK_USERS[0].id, MOCK_USERS[1].id],
   },
 ];

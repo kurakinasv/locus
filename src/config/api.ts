@@ -14,11 +14,15 @@ const getGroupApiUrl = () => `${getBaseUrl()}/group`;
 
 const getUserGroupApiUrl = () => `${getBaseUrl()}/user-group`;
 
-const getUserExpenseApiUrl = () => `${getBaseUrl()}/user-expense`;
-
 const getChoreApiUrl = () => `${getBaseUrl()}/chore`;
 
 const getScheduleApiUrl = () => `${getBaseUrl()}/schedule`;
+
+const getExpenseApiUrl = () => `${getBaseUrl()}/expense`;
+
+const getUserExpenseApiUrl = () => `${getBaseUrl()}/user-expense`;
+
+const getShoppingListApiUrl = () => `${getBaseUrl()}/shopping-list`;
 
 enum Endpoints {
   // auth
@@ -64,6 +68,33 @@ enum Endpoints {
   editScheduledTask = 'editScheduledTask',
   deleteSchedule = 'deleteSchedule',
   deleteScheduleCascade = 'deleteScheduleCascade',
+
+  // expense
+  getExpense = 'getExpense',
+  getGroupExpenses = 'getGroupExpenses',
+  createExpense = 'createExpense',
+  editExpense = 'editExpense',
+  deleteExpense = 'deleteExpense',
+  getUserExpenses = 'getUserExpenses',
+  getUsersDebts = 'getUsersDebts',
+  editUserDebt = 'editUserDebt',
+
+  // expense categories
+  getExpenseCategories = 'getExpenseCategories',
+  createExpenseCategory = 'createExpenseCategory',
+
+  // shopping list
+  getShoppingLists = 'getShoppingLists',
+  getShoppingList = 'getShoppingList',
+  createShoppingList = 'createShoppingList',
+  editShoppingList = 'editShoppingList',
+  deleteShoppingList = 'deleteShoppingList',
+
+  // shopping list items
+  getProducts = 'getProducts',
+  addProduct = 'addProduct',
+  editProduct = 'editProduct',
+  deleteProduct = 'deleteProduct',
 }
 
 enum HTTTPMethods {
@@ -76,7 +107,7 @@ enum HTTTPMethods {
 type EndpointConfig = {
   url: string;
   method: HTTTPMethods;
-  getUrl?: (id: string) => string;
+  getUrl?: ((id: string) => string) | ((id: string, itemId: string) => string);
 };
 
 export const ENDPOINTS = {
@@ -227,5 +258,104 @@ export const ENDPOINTS = {
     url: `${getScheduleApiUrl()}/schedule/cascade`,
     method: HTTTPMethods.DELETE,
     getUrl: (scheduleId: NumberString) => `${getScheduleApiUrl()}/cascade/${scheduleId}`,
+  },
+
+  // expenses
+  [Endpoints.getExpense]: {
+    url: `${getExpenseApiUrl()}/expense`,
+    method: HTTTPMethods.GET,
+    getUrl: (expenseId: NumberString) => `${getExpenseApiUrl()}/expense/${expenseId}`,
+  },
+  [Endpoints.getGroupExpenses]: {
+    url: `${getExpenseApiUrl()}/expenses`,
+    method: HTTTPMethods.GET,
+    getUrl: (query: string) => `${getExpenseApiUrl()}/expenses${query}`,
+  },
+  [Endpoints.createExpense]: {
+    url: `${getExpenseApiUrl()}/expense`,
+    method: HTTTPMethods.POST,
+  },
+  [Endpoints.editExpense]: {
+    url: `${getExpenseApiUrl()}/expense`,
+    method: HTTTPMethods.PUT,
+    getUrl: (expenseId: NumberString) => `${getExpenseApiUrl()}/expense/${expenseId}`,
+  },
+  [Endpoints.deleteExpense]: {
+    url: `${getExpenseApiUrl()}/expense`,
+    method: HTTTPMethods.DELETE,
+    getUrl: (expenseId: NumberString) => `${getExpenseApiUrl()}/expense/${expenseId}`,
+  },
+  [Endpoints.getUserExpenses]: {
+    url: `${getUserExpenseApiUrl()}/user-expenses`,
+    method: HTTTPMethods.GET,
+  },
+  [Endpoints.getUsersDebts]: {
+    url: `${getUserExpenseApiUrl()}/group`,
+    method: HTTTPMethods.GET,
+  },
+  [Endpoints.editUserDebt]: {
+    url: `${getUserExpenseApiUrl()}/debt`,
+    method: HTTTPMethods.PUT,
+    getUrl: (expenseId: NumberString) => `${getUserExpenseApiUrl()}/debt/${expenseId}`,
+  },
+
+  // expense categories
+  [Endpoints.getExpenseCategories]: {
+    url: `${getExpenseApiUrl()}/categories`,
+    method: HTTTPMethods.GET,
+  },
+  [Endpoints.createExpenseCategory]: {
+    url: `${getExpenseApiUrl()}/category`,
+    method: HTTTPMethods.POST,
+  },
+
+  // shopping lists
+  [Endpoints.getShoppingList]: {
+    url: `${getShoppingListApiUrl()}/list`,
+    method: HTTTPMethods.GET,
+    getUrl: (listId: NumberString) => `${getShoppingListApiUrl()}/list/${listId}`,
+  },
+  [Endpoints.getShoppingLists]: {
+    url: `${getShoppingListApiUrl()}/lists`,
+    method: HTTTPMethods.GET,
+    getUrl: (query: string) => `${getShoppingListApiUrl()}/lists${query}`,
+  },
+  [Endpoints.createShoppingList]: {
+    url: `${getShoppingListApiUrl()}/list`,
+    method: HTTTPMethods.POST,
+  },
+  [Endpoints.editShoppingList]: {
+    url: `${getShoppingListApiUrl()}/list`,
+    method: HTTTPMethods.PUT,
+    getUrl: (listId: NumberString) => `${getShoppingListApiUrl()}/list/${listId}`,
+  },
+  [Endpoints.deleteShoppingList]: {
+    url: `${getShoppingListApiUrl()}/list`,
+    method: HTTTPMethods.DELETE,
+    getUrl: (listId: NumberString) => `${getShoppingListApiUrl()}/list/${listId}`,
+  },
+
+  // shopping list items
+  [Endpoints.getProducts]: {
+    url: `${getShoppingListApiUrl()}`,
+    method: HTTTPMethods.GET,
+    getUrl: (listId: NumberString) => `${getShoppingListApiUrl()}/${listId}/items`,
+  },
+  [Endpoints.addProduct]: {
+    url: `${getShoppingListApiUrl()}`,
+    method: HTTTPMethods.POST,
+    getUrl: (listId: NumberString) => `${getShoppingListApiUrl()}/${listId}/item`,
+  },
+  [Endpoints.editProduct]: {
+    url: `${getShoppingListApiUrl()}`,
+    method: HTTTPMethods.PUT,
+    getUrl: (listId: NumberString, listItemId: NumberString) =>
+      `${getShoppingListApiUrl()}/${listId}/item/${listItemId}`,
+  },
+  [Endpoints.deleteProduct]: {
+    url: `${getShoppingListApiUrl()}`,
+    method: HTTTPMethods.DELETE,
+    getUrl: (listId: NumberString, listItemId: NumberString) =>
+      `${getShoppingListApiUrl()}/${listId}/item/${listItemId}`,
   },
 } satisfies Record<Endpoints, EndpointConfig>;

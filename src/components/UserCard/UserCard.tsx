@@ -15,6 +15,7 @@ type Props = {
   selected?: boolean;
   disabled?: boolean;
   footer?: React.ReactNode;
+  replaceCurrentUserName?: boolean;
   onClick?: VoidFunction;
 };
 
@@ -23,6 +24,7 @@ const UserCard: React.FC<Props> = ({
   image,
   selected = false,
   disabled = false,
+  replaceCurrentUserName = false,
   footer,
   onClick,
 }) => {
@@ -41,7 +43,7 @@ const UserCard: React.FC<Props> = ({
         )}
       </div>
       <Spacing />
-      <Text className={s.name}>{name}</Text>
+      <Text className={s.name}>{replaceCurrentUserName ? 'Вы' : name}</Text>
       {footer ?? null}
     </button>
   );

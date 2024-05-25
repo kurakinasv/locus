@@ -136,7 +136,7 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
               mode="range"
               max={max}
               selected={range}
-              defaultMonth={currentMonth}
+              defaultMonth={range?.from ?? currentMonth}
               onSelect={setRange}
               footer={<Footer range={range} onClick={onRangeChange} />}
               className={s.datePicker}
@@ -150,7 +150,7 @@ const DatePickerInput: React.FC<InputProps> = forwardRef<HTMLDivElement, InputPr
             <DayPicker
               mode="single"
               selected={selectedDate}
-              defaultMonth={currentMonth}
+              defaultMonth={selectedDate}
               onSelect={setSelectedDate}
               footer={<Footer selectedDate={selectedDate} onClick={onDateChange} />}
               className={s.datePicker}

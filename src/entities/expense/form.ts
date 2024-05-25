@@ -1,14 +1,12 @@
 import { FieldValues } from 'react-hook-form';
 
-import { UUIDString } from 'typings/api';
-
 export type CreateFormValues = FieldValues & {
   name: string;
   category: string;
   description: string;
   amount: number;
   purchaseDate: Date;
-  // userIds: UUIDString;
+  categoryName: string;
 };
 
 export type EditFormValues = FieldValues & {
@@ -17,7 +15,6 @@ export type EditFormValues = FieldValues & {
   description: string;
   amount: number;
   purchaseDate: Date;
-  userIds: UUIDString;
 };
 
 export type DebtFormValues = FieldValues & {
@@ -26,7 +23,6 @@ export type DebtFormValues = FieldValues & {
   description: string;
   amount: number;
   purchaseDate: Date;
-  userIds: UUIDString;
 };
 
 type FieldConfig =
@@ -40,6 +36,7 @@ type FieldConfig =
       placeholder: string;
       type: 'number';
       min: number;
+      step: number;
     };
 
 export const addExpenseMap = {
@@ -53,6 +50,11 @@ export const addExpenseMap = {
     placeholder: 'Категория',
     type: 'text',
   },
+  categoryName: {
+    name: 'categoryName',
+    placeholder: 'Введите название категории',
+    type: 'text',
+  },
   description: {
     name: 'description',
     placeholder: 'Описание',
@@ -63,6 +65,7 @@ export const addExpenseMap = {
     placeholder: 'Сумма',
     type: 'number',
     min: 0,
+    step: 0.01,
   },
   purchaseDate: {
     name: 'purchaseDate',

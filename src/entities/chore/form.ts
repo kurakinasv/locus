@@ -40,7 +40,7 @@ export const fieldsConfigMap = {
   },
   category: {
     name: 'category',
-    placeholder: 'Наазвание категории',
+    placeholder: 'Название категории',
     type: 'text',
   },
 } as const satisfies Record<keyof FormValues, FieldConfig>;

@@ -18,19 +18,13 @@
       transform: translateY(-50%);
 
       color: $turquoiseMain;
-      @include animate(color);
-
-      &:hover {
-        color: rgba($turquoiseMain, 0.8);
-        cursor: pointer;
-      }
     }
 
     & .icon {
       right: 1.8rem;
 
-      max-width: 2rem;
-      max-height: 2rem;
+      @include square(2rem);
+      opacity: 0.7;
     }
 
     & .close-icon {
@@ -38,6 +32,13 @@
 
       max-width: 1.6rem;
       max-height: 1.6rem;
+
+      @include animate(color);
+
+      &:hover {
+        color: rgba($turquoiseMain, 0.8);
+        cursor: pointer;
+      }
     }
   }
 }

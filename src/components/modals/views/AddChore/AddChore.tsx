@@ -38,7 +38,11 @@ const AddChore: React.FC = () => {
     if (createNewCategory && values.category) {
       const category = await createCategory({ name: values.category, icon: selectedIcon });
 
-      categoryId = category?.id;
+      if (!category) {
+        return;
+      }
+
+      categoryId = category.id;
     }
 
     const created = await createChore({
