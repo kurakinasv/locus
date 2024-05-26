@@ -16,6 +16,9 @@ export default defineConfig(({ mode }) => {
       svgr({ include: '**/*.svg?react' }),
       createHtmlPlugin({ minify: IS_PROD }),
     ],
+    server: {
+      host: true,
+    },
     css: {
       modules: {
         generateScopedName: IS_PROD ? '[hash:base64]' : '[name]__[local]__[hash:base64:5]',
