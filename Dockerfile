@@ -11,9 +11,7 @@ RUN yarn install --immutable --immutable-cache --check-cache
 
 COPY . .
 
-RUN yarn build 
-
-CMD ["yarn", "preview"]
+RUN yarn build
 
 # nginx stage
 
@@ -26,5 +24,5 @@ COPY --from=build /usr/app/client/dist .
 RUN rm -rf /etc/nginx/conf.d/default.conf
 COPY --from=build /usr/app/client/nginx/nginx.conf /etc/nginx/conf.d
 
-EXPOSE 4173
+EXPOSE 443
 CMD ["nginx", "-g", "daemon off;"]
