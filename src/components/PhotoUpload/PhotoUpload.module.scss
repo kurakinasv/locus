@@ -5,22 +5,4 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  .avatar {
-    @include square(9rem);
-    border-radius: 50%;
-
-    user-select: none;
-    pointer-events: none;
-
-    @include mediaScreen($desktop) {
-      @include square(13rem);
-    }
-
-    & > img {
-      @include square(100%);
-      border-radius: 50%;
-      object-fit: cover;
-    }
-  }
 }

@@ -5,6 +5,7 @@ import ChoreCategoriesStore from 'store/ChoreCategoriesStore';
 import ChoresStore from 'store/ChoresStore';
 import ExpenseCategoriesStore from 'store/ExpenseCategoriesStore';
 import ExpensesStore from 'store/ExpensesStore';
+import { NotificationsStore } from 'store/global';
 import GroupMemberStore from 'store/GroupMemberStore';
 import GroupStore from 'store/GroupStore';
 import SchedulesStore from 'store/SchedulesStore/SchedulesStore';
@@ -25,6 +26,7 @@ class RootStore {
   readonly expensesStore: ExpensesStore;
   readonly expenseCategoriesStore: ExpenseCategoriesStore;
   readonly shoppingListStore: ShoppingListStore;
+  readonly notificationsStore: NotificationsStore;
 
   readonly isDev: boolean;
 
@@ -45,6 +47,7 @@ class RootStore {
     this.expensesStore = new ExpensesStore(this);
     this.expenseCategoriesStore = new ExpenseCategoriesStore(this);
     this.shoppingListStore = new ShoppingListStore(this);
+    this.notificationsStore = new NotificationsStore(this);
   }
 }
 

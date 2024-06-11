@@ -1,14 +1,15 @@
-import { FC, memo, useCallback } from 'react';
+import { FC, memo, useCallback, useEffect } from 'react';
 
 import cn from 'classnames';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Logo, Spacing, Title } from 'components';
 import { routes } from 'config/routes';
-import { useAuthStore } from 'store/RootStore/hooks';
+import { useAuthStore, useNotificationsStore } from 'store/RootStore/hooks';
 
-import NotificationsIcon from 'img/icons/notifications.svg?react';
 import UserIcon from 'img/icons/user.svg?react';
+
+import { NotificationsMenu } from './NotificationsMenu';
 
 import s from './Header.module.scss';
 
@@ -21,12 +22,19 @@ const Header: FC<Props> = ({ title, hasGroup = false }) => {
   const nav = useNavigate();
   const location = useLocation();
   const { isAuth } = useAuthStore();
+  const { loadNotifications } = useNotificationsStore();
 
   const onProfileClick = useCallback(() => {
     nav(routes.profileSettings.full);
   }, []);
 
   const isProfileSettings = location.pathname === routes.profileSettings.full;
+
+  useEffect(() => {
+    if (isAuth && hasGroup) {
+      loadNotifications();
+    }
+  }, [isAuth, hasGroup]);
 
   return (
     <div className={cn(s.wrapper, (isProfileSettings || !isAuth) && s.wrapper_center)}>
@@ -35,7 +43,7 @@ const Header: FC<Props> = ({ title, hasGroup = false }) => {
         <div className={s.icons}>
           {hasGroup && (
             <>
-              <NotificationsIcon className={s.icon} />
+              <NotificationsMenu />
               <Spacing size={1.5} horizontal />
             </>
           )}

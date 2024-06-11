@@ -85,7 +85,7 @@ class AuthStore {
       );
 
       if (responseIsOk(response)) {
-        this.initUser(response.data);
+        await this.initUser(response.data);
       }
 
       this.meta.stopLoading();
@@ -112,7 +112,7 @@ class AuthStore {
       );
 
       if (responseIsOk(response)) {
-        this.initUser(response.data);
+        await this.initUser(response.data);
       }
 
       this.meta.stopLoading();

@@ -1,8 +1,7 @@
 import * as React from 'react';
 
+import { Avatar, Button, Spacing } from 'components';
 import { SizeEnum } from 'typings/ui';
-
-import { Button, Spacing } from '..';
 
 import s from './PhotoUpload.module.scss';
 
@@ -31,10 +30,7 @@ const PhotoUpload: React.FC<Props> = ({ image, stub, name, setValue }) => {
 
   return (
     <div className={s.photo}>
-      <div className={s.avatar}>
-        {image && <img src={image} alt="avatar" />}
-        {!image && stub && stub}
-      </div>
+      <Avatar image={image} stub={stub} />
       <Spacing size={1.2} />
       <Button size={SizeEnum.s} type="button" onClick={uploadPhoto}>
         Загрузить фото
