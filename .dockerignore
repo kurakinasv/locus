@@ -1,6 +1,7 @@
 node_modules
 
 dist
+dev-dist
 build
 
 Dockerfile
@@ -15,6 +16,7 @@ Dockerfile.dev
 .eslintrc.cjs
 .prettierrc
 .stylelintrc.json
+.env.development
 
 netlify.toml
 README.md
