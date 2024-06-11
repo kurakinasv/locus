@@ -26,7 +26,7 @@ const ScheduleTab: FC = () => {
     <div>
       <Controls setDisplayAllTasks={setDisplayAllTasks} />
 
-      {empty && <Stub />}
+      {(empty || !taskDatesEntries.length) && <Stub />}
 
       <Spacing size={2.6} />
 

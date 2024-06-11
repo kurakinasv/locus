@@ -1,15 +1,32 @@
 @import 'styles/mixins';
 
 .stub {
+  $p: &;
+
   width: 100%;
-  padding: 5rem;
 
   @include flexCenter;
   flex-direction: column;
 
-  &__icon {
-    @include square(12rem);
+  &_size {
+    &-s {
+      padding: 2rem;
 
+      #{$p}__icon {
+        @include square(8rem);
+      }
+    }
+
+    &-m {
+      padding: 5rem;
+
+      #{$p}__icon {
+        @include square(12rem);
+      }
+    }
+  }
+
+  &__icon {
     color: $grey400;
     opacity: 0.6;
   }
