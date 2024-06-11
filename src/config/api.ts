@@ -24,6 +24,8 @@ const getUserExpenseApiUrl = () => `${getBaseUrl()}/user-expense`;
 
 const getShoppingListApiUrl = () => `${getBaseUrl()}/shopping-list`;
 
+const getNotificationsApiUrl = () => `${getBaseUrl()}/notification`;
+
 enum Endpoints {
   // auth
   login = 'login',
@@ -95,6 +97,10 @@ enum Endpoints {
   addProduct = 'addProduct',
   editProduct = 'editProduct',
   deleteProduct = 'deleteProduct',
+
+  // notifications
+  getNotifications = 'getNotifications',
+  markAsRead = 'markAsRead',
 }
 
 enum HTTTPMethods {
@@ -357,5 +363,17 @@ export const ENDPOINTS = {
     method: HTTTPMethods.DELETE,
     getUrl: (listId: NumberString, listItemId: NumberString) =>
       `${getShoppingListApiUrl()}/${listId}/item/${listItemId}`,
+  },
+
+  // notifications
+  [Endpoints.getNotifications]: {
+    url: `${getNotificationsApiUrl()}/notifications`,
+    method: HTTTPMethods.GET,
+  },
+  [Endpoints.markAsRead]: {
+    url: `${getNotificationsApiUrl()}/notification`,
+    method: HTTTPMethods.PUT,
+    getUrl: (notificationId: NumberString) =>
+      `${getNotificationsApiUrl()}/notification/${notificationId}`,
   },
 } satisfies Record<Endpoints, EndpointConfig>;
