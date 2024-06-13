@@ -6,4 +6,7 @@ export type UserServer = {
   surname?: string;
   username: string;
   email: string;
+  image: string | null;
+  phone: string | null;
+  birthday: string | null;
 } & AutomaticFields;

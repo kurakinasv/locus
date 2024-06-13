@@ -20,16 +20,22 @@ type UserRequestType = {
   username: string;
   email: string;
   password: string;
+  photo: File | null;
 };
 
 const SettingsForm: React.FC = () => {
   const screen = useScreenType();
-  const { user } = useUserStore();
+  const { user, editUser } = useUserStore();
+
+  const [photo, setPhoto] = React.useState<string | null>(null);
 
   const submitHandler = async (data: UserRequestType) => {
     try {
-      console.log('login', data);
-      // await login(data);
+      await editUser({
+        name: (user?.name ?? '') !== data.name ? data.name : undefined,
+        surname: (user?.surname ?? '') !== data.surname ? data.surname : undefined,
+        photo: data.photo ? data.photo : undefined,
+      });
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error('submit error', error.message);
@@ -62,9 +68,23 @@ const SettingsForm: React.FC = () => {
           <Field name="photo">
             {({ field, form }: FormikRenderProps<File, FieldValues>) => (
               <PhotoUpload
-                image="https://placebear.com/200/300"
+                image={(field.value ? photo : user.image) ?? undefined}
                 name={field.name}
-                setValue={(file: File) => form.setValues({ ...form.values, photo: file })}
+                setValue={async (file: File) => {
+                  const base64Image: string | null | ArrayBuffer = await new Promise(
+                    (resolve, reject) => {
+                      const reader = new FileReader();
+                      reader.readAsDataURL(file);
+                      reader.onload = () => resolve(reader.result);
+                      reader.onerror = reject;
+                    }
+                  );
+
+                  if (typeof base64Image === 'string' || base64Image === null) {
+                    setPhoto(base64Image);
+                  }
+                  form.setValues({ ...form.values, photo: file });
+                }}
               />
             )}
           </Field>

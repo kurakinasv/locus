@@ -9,6 +9,7 @@ export enum SnackbarType {
   passwordsDoNotMatch = 'passwordsDoNotMatch',
   chooseOneUser = 'chooseOneUser',
   groupEdited = 'groupEdited',
+  profileEdited = 'profileEdited',
   copyInviteCode = 'copyInviteCode',
   choreCreated = 'choreCreated',
   choreUpdated = 'choreUpdated',
@@ -40,6 +41,10 @@ export const SNACKBAR_CONFIG: Record<SnackbarType, { message: string; theme: Sna
   },
   [SnackbarType.groupEdited]: {
     message: 'Настройки группы успешно изменены',
+    theme: SnackbarTheme.success,
+  },
+  [SnackbarType.profileEdited]: {
+    message: 'Настройки профиля успешно изменены',
     theme: SnackbarTheme.success,
   },
   [SnackbarType.choreCreated]: {
