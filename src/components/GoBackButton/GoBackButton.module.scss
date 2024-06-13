@@ -1,0 +1,13 @@
+@import 'styles/mixins';
+
+.arrow-button {
+  .arrow {
+    @include animate(transform);
+  }
+
+  @include hover {
+    .arrow {
+      transform: translateX(-4px);
+    }
+  }
+}

@@ -1,9 +1,8 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { useNavigate } from 'react-router-dom';
 
-import { Spacing, Button, Title } from 'components';
+import { Spacing, Title, GoBackButton } from 'components';
 import { useUserStore } from 'store/RootStore/hooks';
 
 import { SettingsForm, ButtonGroup } from './components';
@@ -11,13 +10,7 @@ import { SettingsForm, ButtonGroup } from './components';
 import s from './ProfileSettings.module.scss';
 
 const ProfileSettings: FC = () => {
-  const nav = useNavigate();
-
   const { user } = useUserStore();
-
-  const onGoBack = useCallback(() => {
-    nav(-1);
-  }, []);
 
   if (!user) {
     return;
@@ -29,11 +22,9 @@ const ProfileSettings: FC = () => {
       <Title size="h1">Настройки</Title>
       <Spacing size={3} />
       <SettingsForm />
-      <Spacing size={1.5} />
-      <Button onClick={onGoBack} stretched>
-        Назад
-      </Button>
       <Spacing size={4.5} />
+      <GoBackButton />
+      <Spacing size={1.5} />
       <ButtonGroup />
     </div>
   );

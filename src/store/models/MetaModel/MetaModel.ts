@@ -10,6 +10,7 @@ class MetaModel {
 
   startLoading = () => {
     this.loading = true;
+    this.setIsError(false);
   };
 
   stopLoading = () => {
@@ -18,6 +19,7 @@ class MetaModel {
 
   setIsError = (error: boolean) => {
     this.error = error;
+    this.stopLoading();
   };
 }
 

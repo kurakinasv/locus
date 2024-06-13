@@ -6,7 +6,6 @@ import { axiosInstance } from 'config/api/requests';
 import { SnackbarType } from 'config/snackbar';
 import { GroupServer } from 'entities/group';
 import { GroupMemberServer } from 'entities/groupMember';
-import { User } from 'entities/user';
 import { EditProfileParams } from 'entities/user/params';
 import { UserServer } from 'entities/user/server';
 import GroupMemberModel from 'store/models/GroupMemberModel';
@@ -40,8 +39,8 @@ class UserStore {
     return this.userDebtInGroup;
   }
 
-  setUser(user: User | null) {
-    this.user = user ? new UserModel(user) : null;
+  setUser(user: UserModel | null) {
+    this.user = user;
   }
 
   setInGroup = (inGroup: boolean) => {
@@ -55,7 +54,7 @@ class UserStore {
       });
 
       if (responseIsOk(response)) {
-        this.setUser(response.data);
+        this.setUser(new UserModel(response.data));
 
         await this.getUserDebtInGroup();
 
@@ -74,35 +73,40 @@ class UserStore {
 
       const toSend = new FormData();
 
-      if (photo) {
-        toSend.append('files', photo);
+      if (photo !== undefined) {
+        toSend.append('files', photo ?? '');
       }
-      if (name) {
+      if (name !== undefined) {
         toSend.append('name', name.trim());
       }
-      if (surname) {
+      if (surname !== undefined) {
         toSend.append('surname', surname.trim());
       }
 
-      const response = await axiosInstance.put<UserServer>(ENDPOINTS.editProfile.url, toSend, {
-        withCredentials: true,
-      });
+      const response = await axiosInstance.put<UserServer | null>(
+        ENDPOINTS.editProfile.url,
+        toSend,
+        { withCredentials: true }
+      );
 
       if (!responseIsOk(response)) {
-        this.meta.editProfile.stopLoading();
         this.meta.editProfile.setIsError(true);
         return;
       }
 
-      // const image = response.data.image
-      // ? `${STATIC_URL}/${response.data.image}`
-      //   : response.data.image;
+      // If no changes were made
+      if (!response.data) {
+        this.setUser(this.user);
+        this.meta.editProfile.stopLoading();
+        return;
+      }
 
-      this.setUser({ ...response.data });
+      this.setUser(new UserModel(response.data));
       this._rootStore.uiStore.snackbar.open(SnackbarType.profileEdited);
       this.meta.editProfile.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+      this.meta.editProfile.setIsError(true);
     }
   };
 

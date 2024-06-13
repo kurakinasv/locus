@@ -6,6 +6,7 @@ import { Input, Button, Spacing, PhotoUpload } from 'components';
 import { FieldValues, fieldsConfig, initialValues, validationSchema } from 'entities/profile';
 import { useScreenType } from 'store';
 import { useUserStore } from 'store/RootStore/hooks';
+import { toBase64 } from 'utils/imageHandling';
 
 import s from './SettingsForm.module.scss';
 
@@ -27,21 +28,16 @@ const SettingsForm: React.FC = () => {
   const screen = useScreenType();
   const { user, editUser } = useUserStore();
 
-  const [photo, setPhoto] = React.useState<string | null>(null);
+  const [photo, setPhoto] = React.useState<string | null>(user?.image ?? null);
 
-  const submitHandler = async (data: UserRequestType) => {
-    try {
-      await editUser({
-        name: (user?.name ?? '') !== data.name ? data.name : undefined,
-        surname: (user?.surname ?? '') !== data.surname ? data.surname : undefined,
-        photo: data.photo ? data.photo : undefined,
-      });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('submit error', error.message);
-        // handlePopup(error.message);
-      }
-    }
+  const submitHandler = async (data: UserRequestType, submitProps: FormikHelpers<FieldValues>) => {
+    await editUser({
+      name: (user?.name ?? '') !== data.name ? data.name : undefined,
+      surname: (user?.surname ?? '') !== data.surname ? data.surname : undefined,
+      photo: user?.image !== photo ? data.photo : undefined,
+    });
+
+    submitProps.resetForm({ values: { ...data, photo: null } });
   };
 
   if (!user) {
@@ -57,6 +53,15 @@ const SettingsForm: React.FC = () => {
     photo: null,
   };
 
+  const setPhotoValue = async (file: File, form: FormikRenderProps<File, FieldValues>['form']) => {
+    const base64Image: string | null | ArrayBuffer = await toBase64(file);
+
+    if (typeof base64Image === 'string' || base64Image === null) {
+      setPhoto(base64Image);
+      form.setValues({ ...form.values, photo: file });
+    }
+  };
+
   return (
     <Formik
       initialValues={updatedInitialValues}
@@ -69,22 +74,9 @@ const SettingsForm: React.FC = () => {
             {({ field, form }: FormikRenderProps<File, FieldValues>) => (
               <PhotoUpload
                 image={(field.value ? photo : user.image) ?? undefined}
+                disabled={isSubmitting}
                 name={field.name}
-                setValue={async (file: File) => {
-                  const base64Image: string | null | ArrayBuffer = await new Promise(
-                    (resolve, reject) => {
-                      const reader = new FileReader();
-                      reader.readAsDataURL(file);
-                      reader.onload = () => resolve(reader.result);
-                      reader.onerror = reject;
-                    }
-                  );
-
-                  if (typeof base64Image === 'string' || base64Image === null) {
-                    setPhoto(base64Image);
-                  }
-                  form.setValues({ ...form.values, photo: file });
-                }}
+                setValue={async (file: File) => setPhotoValue(file, form)}
               />
             )}
           </Field>
@@ -98,6 +90,7 @@ const SettingsForm: React.FC = () => {
                     {...rest}
                     touched={touched[name]}
                     errorMessage={errors[name]}
+                    disabled={isSubmitting}
                     {...getFieldProps(name)}
                   />
                 )}

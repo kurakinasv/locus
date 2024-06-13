@@ -72,7 +72,7 @@ class GroupStore {
     }
   };
 
-  editGroup = async ({ name, image, userToDeleteId, changeRights }: GroupEditParams) => {
+  editGroup = async ({ name, image }: GroupEditParams) => {
     try {
       const toSend = new FormData();
 
@@ -83,21 +83,15 @@ class GroupStore {
         toSend.append('name', name);
       }
       // todo: delete group member
-      console.log('deleteUser', userToDeleteId);
 
       // todo: change group member rights
-      console.log('changeRights', changeRights);
 
       const response = await axios.put<GroupServer>(ENDPOINTS.editGroup.url, toSend, {
         withCredentials: true,
       });
-      console.log('editGroup', response.data);
 
       if (responseIsOk(response)) {
-        const image = response.data.image
-          ? `${STATIC_URL}/${response.data.image}`
-          : response.data.image;
-        this.setGroup({ ...response.data, image });
+        this.setGroup(response.data);
         this._rootStore.uiStore.snackbar.open(SnackbarType.groupEdited);
       }
     } catch (error) {
