@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 
 import { Button, Input, Spacing, Text, Title } from 'components';
+import { MAX_MEMBERS } from 'config/group';
 import { SnackbarType } from 'config/snackbar';
 import { useGroupStore, useUIStore } from 'store/RootStore/hooks';
 import { SizeEnum } from 'typings/ui';
@@ -27,8 +27,6 @@ const AddMember: React.FC = () => {
     return null;
   }
 
-  console.log('group', group, toJS(group.users));
-
   // todo: invite link
   return (
     <>
@@ -40,7 +38,9 @@ const AddMember: React.FC = () => {
         Скопировать
       </Button>
       <Spacing size={2.2} /> */}
-      <Text color="gray">Пригласите нового участника, отправив ему код-приглашение</Text>
+      <Text color="gray" size={SizeEnum.l}>
+        Пригласите нового участника, отправив ему код-приглашение
+      </Text>
       <Spacing size={1.2} />
       {inviteCode && (
         <>
@@ -56,9 +56,21 @@ const AddMember: React.FC = () => {
           <Spacing size={1.2} />
         </>
       )}
-      <Button size={SizeEnum.s} onClick={generateInviteCode} disabled={group.users.length >= 10}>
+      <Button
+        size={SizeEnum.s}
+        onClick={generateInviteCode}
+        disabled={group.users.length >= MAX_MEMBERS}
+      >
         Сгенерировать код
       </Button>
+      {group.users.length >= MAX_MEMBERS && (
+        <>
+          <Spacing size={0.8} />
+          <Text className={s.text}>
+            Достигнуто максимальное число участников&nbsp;&mdash; {MAX_MEMBERS}
+          </Text>
+        </>
+      )}
     </>
   );
 };

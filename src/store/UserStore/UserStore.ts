@@ -19,14 +19,15 @@ import { responseIsOk } from 'utils/responseIsOk';
 class UserStore {
   private readonly _rootStore: RootStore;
 
-  private readonly meta = {
+  readonly meta = {
     editProfile: new MetaModel(),
+    joinGroup: new MetaModel(),
   };
 
   user: UserModel | null = null;
   inGroup = false;
   userDebtInGroup: number | null = null;
-  userGroups: GroupMemberModel[] = [];
+  userMemberships: GroupMemberModel[] = [];
 
   constructor(rootStore: RootStore) {
     this._rootStore = rootStore;
@@ -39,12 +40,20 @@ class UserStore {
     return this.userDebtInGroup;
   }
 
+  get userGroups() {
+    return this.userMemberships.map((membership) => membership.groupId);
+  }
+
   setUser(user: UserModel | null) {
     this.user = user;
   }
 
   setInGroup = (inGroup: boolean) => {
     this.inGroup = inGroup;
+  };
+
+  setUserMemberships = (memberships: GroupMemberServer[]) => {
+    this.userMemberships = memberships.map((membership) => new GroupMemberModel(membership));
   };
 
   getUser = async () => {
@@ -166,11 +175,11 @@ class UserStore {
 
   joinGroup = async (code: UUIDString) => {
     try {
-      const response = await axios.post<{ group: GroupServer; userInGroup: GroupMemberServer }>(
-        ENDPOINTS.joinGroup.url,
-        { code },
-        { withCredentials: true }
-      );
+      const response = await axios.post<{
+        group: GroupServer;
+        userInGroup: GroupMemberServer;
+        userMemberships: GroupMemberServer[];
+      }>(ENDPOINTS.joinGroup.url, { code }, { withCredentials: true });
 
       if (responseIsOk(response)) {
         this.setInGroup(true);
@@ -179,6 +188,7 @@ class UserStore {
           ...this._rootStore.groupMemberStore.groupMembers,
           response.data.userInGroup,
         ]);
+        this.setUserMemberships(response.data.userMemberships);
 
         return;
       }
@@ -196,7 +206,7 @@ class UserStore {
 
       if (responseIsOk(response)) {
         runInAction(() => {
-          this.userGroups = response.data;
+          this.setUserMemberships(response.data);
         });
 
         return response.data;

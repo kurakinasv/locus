@@ -3,8 +3,10 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 import { ENDPOINTS } from 'config/api';
 import { SnackbarType } from 'config/snackbar';
+import { GroupServer } from 'entities/group';
 import { GroupMemberClient, GroupMemberServer } from 'entities/groupMember';
 import GroupMemberModel from 'store/models/GroupMemberModel';
+import MetaModel from 'store/models/MetaModel';
 import RootStore from 'store/RootStore';
 import { DefaultId, UUIDString } from 'typings/api';
 import { getErrorMsg } from 'utils/getErrorMsg';
@@ -12,6 +14,10 @@ import { responseIsOk } from 'utils/responseIsOk';
 
 class GroupMemberStore {
   private readonly _rootStore: RootStore;
+
+  readonly meta = {
+    switchGroup: new MetaModel(),
+  };
 
   groupMembers: GroupMemberModel[] = [];
 
@@ -135,6 +141,33 @@ class GroupMemberStore {
       this._rootStore.uiStore.snackbar.open(SnackbarType.error);
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
+
+  switchGroup = async (groupId: UUIDString) => {
+    try {
+      this.meta.switchGroup.startLoading();
+
+      const response = await axios.put<{
+        group: GroupServer;
+        userInGroup: GroupMemberServer;
+        members: GroupMemberServer[];
+      }>(ENDPOINTS.switchGroup.url, { groupId }, { withCredentials: true });
+
+      if (responseIsOk(response)) {
+        this._rootStore.userStore.setInGroup(true);
+        this._rootStore.groupStore.setGroup(response.data.group);
+        this.setGroupMembers(response.data.members);
+
+        runInAction(() => {
+          this.currentMember = new GroupMemberModel(response.data.userInGroup);
+        });
+
+        this.meta.switchGroup.stopLoading();
+      }
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+      this.meta.switchGroup.setIsError(true);
     }
   };
 }

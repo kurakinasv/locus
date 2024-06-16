@@ -9,8 +9,6 @@ import { useGroupStore } from 'store/RootStore/hooks';
 import { SizeEnum } from 'typings/ui';
 import { sleep } from 'utils/sleep';
 
-import s from './CommonSettings.module.scss';
-
 const CommonSettings: React.FC = () => {
   const { editGroup, group } = useGroupStore();
 
@@ -35,21 +33,19 @@ const CommonSettings: React.FC = () => {
     return null;
   }
 
-  // todo: edit avatar
   return (
     <>
       <Title size="h2">Общие</Title>
       <Spacing size={2} />
-      <PhotoUpload
-        image={group?.image ?? ImageStub}
-        // todo: first letter
-        stub={<div className={s.avatar__stub}>Н</div>}
-        setValue={onUploadPhoto}
-      />
+      <PhotoUpload image={group?.image ?? ImageStub} setValue={onUploadPhoto} />
       <Spacing size={3.3} />
       <Input placeholder="Название группы" value={name} onChange={onNameChange} />
       <Spacing size={1.2} />
-      <Button size={SizeEnum.s} onClick={onSaveClick}>
+      <Button
+        size={SizeEnum.s}
+        onClick={onSaveClick}
+        disabled={!name.trim() || name.trim() === group.name}
+      >
         Сохранить
       </Button>
     </>

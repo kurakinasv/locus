@@ -50,6 +50,7 @@ enum Endpoints {
   getGroupMembers = 'getGroupMembers',
   joinGroup = 'joinGroup',
   exitGroup = 'exitGroup',
+  switchGroup = 'switchGroup',
 
   // chore
   getChore = 'getChore',
@@ -192,6 +193,10 @@ export const ENDPOINTS = {
   [Endpoints.exitGroup]: {
     url: `${getUserGroupApiUrl()}/leave`,
     method: HTTTPMethods.DELETE,
+  },
+  [Endpoints.switchGroup]: {
+    url: `${getUserGroupApiUrl()}/switch`,
+    method: HTTTPMethods.PUT,
   },
 
   // chores

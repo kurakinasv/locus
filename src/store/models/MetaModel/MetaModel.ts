@@ -10,7 +10,6 @@ class MetaModel {
 
   startLoading = () => {
     this.loading = true;
-    this.setIsError(false);
   };
 
   stopLoading = () => {

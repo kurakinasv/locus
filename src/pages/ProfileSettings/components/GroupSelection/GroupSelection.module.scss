@@ -1,0 +1,18 @@
+@import 'styles/mixins';
+
+.cards {
+  display: flex;
+  justify-content: space-between;
+
+  @include mobile {
+    flex-direction: column;
+    @include flexGap(0.6rem);
+  }
+}
+
+.text {
+  font-family: $avenirNext;
+  line-height: 1.8rem;
+  color: $greyMain;
+  text-align: center;
+}

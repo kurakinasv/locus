@@ -53,7 +53,13 @@ const Router: FC = () => {
           <Route element={<EnterLayout />} errorElement={<div>EnterLayout error</div>}>
             {!isAuth && <Route path={RouterPaths.auth} element={<Auth />} />}
             {isAuth && !inGroup && authNoGroupRoutes}
-            {isAuth && <Route path={RouterPaths.profileSettings} element={<ProfileSettings />} />}
+            {isAuth && (
+              <>
+                <Route path={RouterPaths.profileSettings} element={<ProfileSettings />} />
+                <Route path={RouterPaths.createGroup} element={<CreateGroup />} />
+                <Route path={RouterPaths.enterGroup} element={<EnterGroup />} />
+              </>
+            )}
             {isDev && <Route path={RouterPaths.faq} element={<Faq />} />}
           </Route>
           {isAuth && inGroup && (

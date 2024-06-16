@@ -7,6 +7,7 @@ import { GroupEditParams } from 'entities/group';
 import { GroupServer } from 'entities/group/server';
 import { GroupMemberServer } from 'entities/groupMember';
 import GroupModel from 'store/models/GroupModel';
+import MetaModel from 'store/models/MetaModel';
 import RootStore from 'store/RootStore/RootStore';
 import { UUIDString } from 'typings/api';
 import { getErrorMsg } from 'utils/getErrorMsg';
@@ -14,6 +15,11 @@ import { responseIsOk } from 'utils/responseIsOk';
 
 class GroupStore {
   private readonly _rootStore: RootStore;
+
+  readonly meta = {
+    createGroup: new MetaModel(),
+    switchGroup: new MetaModel(),
+  };
 
   group: GroupModel | null = null;
 
@@ -29,7 +35,8 @@ class GroupStore {
     this.group = group ? new GroupModel(group) : null;
   };
 
-  getGroup = async (groupId: UUIDString) => {
+  /** Gets group by id and set group and members */
+  loadGroup = async (groupId: UUIDString): Promise<GroupModel | void> => {
     try {
       const response = await axios.get<GroupServer>(ENDPOINTS.getGroup.getUrl!(groupId), {
         withCredentials: true,
@@ -39,16 +46,28 @@ class GroupStore {
         return;
       }
 
-      const image = response.data.image
-        ? `${STATIC_URL}/${response.data.image}`
-        : response.data.image;
-      this.setGroup({ ...response.data, image });
+      this.setGroup(response.data);
 
       this._rootStore.groupMemberStore.setGroupMembers(
         response.data.users.map((u) => u?.UserGroup)
       );
 
-      return response.data;
+      return new GroupModel(response.data);
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
+
+  /** Gets group by id */
+  getGroup = async (groupId: UUIDString): Promise<GroupModel | void> => {
+    try {
+      const response = await axios.get<GroupServer>(ENDPOINTS.getGroup.getUrl!(groupId), {
+        withCredentials: true,
+      });
+
+      if (responseIsOk(response)) {
+        return new GroupModel(response.data);
+      }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
     }
@@ -56,19 +75,25 @@ class GroupStore {
 
   createGroup = async (name: string) => {
     try {
-      const response = await axios.post<{ group: GroupServer; userInGroup: GroupMemberServer }>(
-        ENDPOINTS.createGroup.url,
-        { name },
-        { withCredentials: true }
-      );
+      this.meta.createGroup.startLoading();
+
+      const response = await axios.post<{
+        group: GroupServer;
+        userInGroup: GroupMemberServer;
+        userMemberships: GroupMemberServer[];
+      }>(ENDPOINTS.createGroup.url, { name }, { withCredentials: true });
 
       if (responseIsOk(response)) {
         this._rootStore.userStore.setInGroup(true);
         this.setGroup(response.data.group);
         this._rootStore.groupMemberStore.setGroupMembers([response.data.userInGroup]);
+        this._rootStore.userStore.setUserMemberships(response.data.userMemberships);
+
+        this.meta.createGroup.stopLoading();
       }
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+      this.meta.createGroup.setIsError(true);
     }
   };
 

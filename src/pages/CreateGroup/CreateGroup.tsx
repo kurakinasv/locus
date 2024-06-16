@@ -1,21 +1,18 @@
 import * as React from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { Button, ButtonTheme, Input, Spacing, Title } from 'components';
+import { Button, GoBackButton, Input, Spacing, Title } from 'components';
+import { routes } from 'config/routes';
 import { useGroupStore } from 'store/RootStore/hooks';
-
-import ArrowSVG from 'img/icons/arrow-left.svg?react';
 
 import s from './CreateGroup.module.scss';
 
 const CreateGroup: React.FC = () => {
-  const { createGroup } = useGroupStore();
+  const location = useLocation();
   const nav = useNavigate();
 
-  const goBack = () => {
-    nav(-1);
-  };
+  const { meta, createGroup } = useGroupStore();
 
   const [value, setValue] = React.useState('');
 
@@ -23,22 +20,29 @@ const CreateGroup: React.FC = () => {
     setValue(e.currentTarget.value);
   };
 
-  const onCreateGroup = () => {
-    createGroup(value);
+  const onCreateGroup = async () => {
+    await createGroup(value);
+
+    if (location.pathname === routes.createAnotherGroup.full) {
+      nav(routes.group.full);
+    }
   };
 
   return (
     <div className={s.wrapper}>
-      <Title size="h1">Создать Группу</Title>
+      <Title size="h1">Создать группу</Title>
       <Spacing size={4} />
-      <Input placeholder="Название" value={value} onChange={onChange} />
+      <Input
+        placeholder="Название"
+        value={value}
+        onChange={onChange}
+        disabled={meta.createGroup.loading}
+      />
       <Spacing size={5.2} />
       <div className={s.buttons}>
-        <Button theme={ButtonTheme.outlined} onClick={goBack} icon={<ArrowSVG />}>
-          Назад
-        </Button>
+        <GoBackButton disabled={meta.createGroup.loading} />
         <Spacing size={1} horizontal />
-        <Button onClick={onCreateGroup} disabled={!value}>
+        <Button onClick={onCreateGroup} disabled={!value || meta.createGroup.loading}>
           Создать
         </Button>
       </div>

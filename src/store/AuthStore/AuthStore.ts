@@ -38,7 +38,7 @@ class AuthStore {
     const currentMember = this._rootStore.groupMemberStore.currentGroupMember;
 
     if (currentMember) {
-      await this._rootStore.groupStore.getGroup(currentMember.groupId);
+      await this._rootStore.groupStore.loadGroup(currentMember.groupId);
     }
 
     this.setAuth(true);
@@ -62,7 +62,7 @@ class AuthStore {
       const currentMember = this._rootStore.groupMemberStore.currentGroupMember;
 
       if (currentMember) {
-        await this._rootStore.groupStore.getGroup(currentMember.groupId);
+        await this._rootStore.groupStore.loadGroup(currentMember.groupId);
       }
 
       this.setAuth(true);

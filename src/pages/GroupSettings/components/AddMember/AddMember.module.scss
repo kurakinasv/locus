@@ -11,3 +11,9 @@
     @include animate(background-color);
   }
 }
+
+.text {
+  font-family: $avenirNext;
+  line-height: 1.8rem;
+  color: $greyMain;
+}

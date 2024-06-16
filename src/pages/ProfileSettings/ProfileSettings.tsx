@@ -5,12 +5,12 @@ import { observer } from 'mobx-react-lite';
 import { Spacing, Title, GoBackButton } from 'components';
 import { useUserStore } from 'store/RootStore/hooks';
 
-import { SettingsForm, ButtonGroup } from './components';
+import { SettingsForm, ButtonGroup, GroupSelection } from './components';
 
 import s from './ProfileSettings.module.scss';
 
 const ProfileSettings: FC = () => {
-  const { user } = useUserStore();
+  const { user, inGroup } = useUserStore();
 
   if (!user) {
     return;
@@ -21,10 +21,16 @@ const ProfileSettings: FC = () => {
       <Spacing size={6} />
       <Title size="h1">Настройки</Title>
       <Spacing size={3} />
-      <SettingsForm />
-      <Spacing size={4.5} />
       <GoBackButton />
-      <Spacing size={1.5} />
+      <Spacing size={2} />
+      <SettingsForm />
+      {inGroup && (
+        <>
+          <Spacing size={2.5} />
+          <GroupSelection />
+        </>
+      )}
+      <Spacing size={4.5} />
       <ButtonGroup />
     </div>
   );
