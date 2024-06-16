@@ -35,7 +35,7 @@ const Auth: FC = () => {
         <Spacing size={4.5} />
         {hasAccount ? <LoginForm /> : <RegisterForm />}
         <Spacing size={1} />
-        <div>
+        <div className={s['link-wrapper']}>
           {hasAccount ? 'Еще не зарегистрированы?' : 'Уже есть аккаунт?'}{' '}
           <button className={s.baselink} onClick={() => setHasAccount((v) => !v)}>
             {hasAccount ? 'Создать аккаунт' : 'Войти'}

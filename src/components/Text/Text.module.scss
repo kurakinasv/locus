@@ -4,6 +4,12 @@
   font-family: $sourceSans3;
 
   &_size {
+    &-l {
+      font-size: 1.6rem;
+      line-height: 1.8rem;
+      font-weight: 400;
+    }
+
     &-m {
       font-size: 1.4rem;
       line-height: 1.6rem;

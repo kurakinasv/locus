@@ -41,3 +41,5 @@ export * from './Stub';
 export * from './Spinner';
 
 export * from './GoBackButton';
+
+export * from './ThematicBlock';

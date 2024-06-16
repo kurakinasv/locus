@@ -2,15 +2,16 @@ import * as React from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { Button } from 'components/Button';
+import { Button, ButtonTheme } from 'components/Button';
 
 import ArrowIcon from 'img/icons/arrow-left.svg?react';
 
 import s from './GoBackButton.module.scss';
 
-const GoBackButton: React.FC<{ label?: string; stretched?: boolean }> = ({
+const GoBackButton: React.FC<{ label?: string; stretched?: boolean; disabled?: boolean }> = ({
   label = 'Назад',
   stretched = true,
+  disabled = false,
 }) => {
   const nav = useNavigate();
 
@@ -24,6 +25,8 @@ const GoBackButton: React.FC<{ label?: string; stretched?: boolean }> = ({
       onClick={onGoBack}
       icon={<ArrowIcon className={s.arrow} />}
       stretched={stretched}
+      theme={ButtonTheme.outlined}
+      disabled={disabled}
     >
       {label}
     </Button>
