@@ -48,6 +48,7 @@
   width: 100%;
   padding: 0.9rem 1.8rem;
 
+  text-align: left;
   border-radius: 0.6rem;
   outline: 1px solid $turquoise400;
   background-color: $white;
@@ -80,6 +81,10 @@
     &::placeholder {
       color: $grey400;
     }
+  }
+
+  &[type='button'] {
+    cursor: pointer;
   }
 
   &_error {

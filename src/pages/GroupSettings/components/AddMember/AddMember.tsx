@@ -45,7 +45,7 @@ const AddMember: React.FC = () => {
       {inviteCode && (
         <>
           <Input
-            type="text"
+            type="button"
             value={inviteCode}
             placeholder=""
             readOnly

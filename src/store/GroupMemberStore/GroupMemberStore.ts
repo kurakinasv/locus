@@ -102,6 +102,8 @@ class GroupMemberStore {
     }
   };
 
+  // todo: remove?
+  /** Get expenses (debts) of all group members */
   getGroupUserExpenses = async () => {
     if (!this.groupMembersIds.length) {
       return;
@@ -111,9 +113,7 @@ class GroupMemberStore {
       // { userId: { expenseId: debtAmount }, userId2: { expenseId: debtAmount }, ...}
       const response = await axios.get<Record<UUIDString, Record<DefaultId, number>>>(
         ENDPOINTS.getGroupUserExpenses.url,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
 
       if (responseIsOk(response)) {

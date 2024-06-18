@@ -13,13 +13,17 @@ type Props = {
 const RightsSettings: React.FC<Props> = ({ usersInGroup, userId, editGroup }) => {
   const [touched, setTouched] = React.useState(false);
 
-  const [users, setUsers] = React.useState<Array<User & { selected: boolean }>>(() =>
-    usersInGroup.reduce(
-      // todo: set other admins
-      (prev, user) => [...prev, { ...user, selected: user.id === userId }],
-      [] as Array<User & { selected: boolean }>
-    )
-  );
+  const [users, setUsers] = React.useState<Array<User & { selected: boolean }>>([]);
+
+  React.useEffect(() => {
+    setUsers(
+      usersInGroup.reduce(
+        // todo: set other admins
+        (prev, user) => [...prev, { ...user, selected: user.id === userId }],
+        [] as Array<User & { selected: boolean }>
+      )
+    );
+  }, [usersInGroup, userId]);
 
   const onUserClick = React.useCallback(
     (id: User['id']) => () => {

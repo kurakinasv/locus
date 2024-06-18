@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import { ENDPOINTS, STATIC_URL } from 'config/api';
+import { ENDPOINTS } from 'config/api';
 import { SnackbarType } from 'config/snackbar';
 import { GroupEditParams } from 'entities/group';
 import { GroupServer } from 'entities/group/server';
@@ -19,6 +19,7 @@ class GroupStore {
   readonly meta = {
     createGroup: new MetaModel(),
     switchGroup: new MetaModel(),
+    editGroup: new MetaModel(),
   };
 
   group: GroupModel | null = null;
@@ -124,6 +125,36 @@ class GroupStore {
     }
   };
 
+  deleteUserFromGroup = async (userToDeleteId: GroupEditParams['userToDeleteId']) => {
+    try {
+      this.meta.editGroup.setIsError(false);
+      this.meta.editGroup.startLoading();
+
+      const response = await axios.put<GroupServer>(
+        ENDPOINTS.editGroup.url,
+        { userToDeleteId },
+        { withCredentials: true }
+      );
+
+      if (!responseIsOk(response)) {
+        this.meta.editGroup.setIsError(true);
+
+        return;
+      }
+
+      this.setGroup(response.data);
+      this._rootStore.groupMemberStore.setGroupMembers(
+        this._rootStore.groupMemberStore.groupMembers.filter((u) => u.id !== userToDeleteId)
+      );
+
+      this.meta.editGroup.stopLoading();
+      this._rootStore.uiStore.snackbar.open(SnackbarType.userRemovedFromGroup);
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+      this.meta.editGroup.setIsError(true);
+    }
+  };
+
   // todo: implement to ui
   deleteGroup = async () => {
     try {
@@ -145,13 +176,7 @@ class GroupStore {
       const response = await axios.put<{
         inviteCode: GroupServer['inviteCode'];
         inviteExpiresAt: GroupServer['inviteExpiresAt'];
-      }>(
-        ENDPOINTS.generateInviteCode.url,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
+      }>(ENDPOINTS.generateInviteCode.url, {}, { withCredentials: true });
 
       if (responseIsOk(response)) {
         runInAction(() => {

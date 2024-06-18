@@ -1,18 +1,21 @@
 import * as React from 'react';
 
+import { observer } from 'mobx-react-lite';
+
 import { Button, Dropdown, Spacing, Title } from 'components';
 import { User } from 'entities/user';
+import { useGroupStore } from 'store/RootStore/hooks';
 import { UUIDString } from 'typings/api';
 import { OptionType, SizeEnum } from 'typings/ui';
-import { noop } from 'utils/noop';
 
 type Props = {
   userId: User['id'];
   users: User[];
-  editGroup: (userId: User['id']) => void;
 };
 
 const RemoveMember: React.FC<Props> = ({ userId, users }) => {
+  const { deleteUserFromGroup, meta } = useGroupStore();
+
   const [option, setOption] = React.useState('');
 
   const userOptions: OptionType<UUIDString>[] = React.useMemo(
@@ -39,6 +42,14 @@ const RemoveMember: React.FC<Props> = ({ userId, users }) => {
     [userId, users]
   );
 
+  const deleteUser = async () => {
+    await deleteUserFromGroup(option);
+
+    if (!meta.editGroup.error) {
+      setOption('');
+    }
+  };
+
   return (
     <>
       <Title size="h2">Удалить участника</Title>
@@ -50,11 +61,11 @@ const RemoveMember: React.FC<Props> = ({ userId, users }) => {
         onChange={setOption}
       />
       <Spacing size={1.2} />
-      <Button size={SizeEnum.s} onClick={noop} disabled={!option}>
+      <Button size={SizeEnum.s} onClick={deleteUser} disabled={!option || meta.editGroup.loading}>
         Удалить
       </Button>
     </>
   );
 };
 
-export default RemoveMember;
+export default observer(RemoveMember);
