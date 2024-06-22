@@ -155,6 +155,36 @@ class GroupStore {
     }
   };
 
+  editAdmins = async (admins: GroupEditParams['admins']) => {
+    try {
+      this.meta.editGroup.setIsError(false);
+      this.meta.editGroup.startLoading();
+
+      const response = await axios.put<GroupServer>(
+        ENDPOINTS.editGroup.url,
+        { admins },
+        { withCredentials: true }
+      );
+
+      if (!responseIsOk(response)) {
+        this.meta.editGroup.setIsError(true);
+
+        return;
+      }
+
+      this.setGroup(response.data);
+      this._rootStore.groupMemberStore.setGroupMembers(
+        response.data.users.map((u) => u?.UserGroup)
+      );
+
+      this.meta.editGroup.stopLoading();
+      this._rootStore.uiStore.snackbar.open(SnackbarType.adminsEdited);
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+      this.meta.editGroup.setIsError(true);
+    }
+  };
+
   // todo: implement to ui
   deleteGroup = async () => {
     try {

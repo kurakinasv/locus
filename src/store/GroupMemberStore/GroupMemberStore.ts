@@ -5,6 +5,7 @@ import { ENDPOINTS } from 'config/api';
 import { SnackbarType } from 'config/snackbar';
 import { GroupServer } from 'entities/group';
 import { GroupMemberClient, GroupMemberServer } from 'entities/groupMember';
+import { User } from 'entities/user';
 import GroupMemberModel from 'store/models/GroupMemberModel';
 import MetaModel from 'store/models/MetaModel';
 import RootStore from 'store/RootStore';
@@ -37,13 +38,23 @@ class GroupMemberStore {
     return foundUser ? new GroupMemberModel(foundUser) : null;
   }
 
-  get userGroupIdByUserId() {
+  get userGroupIdByUserId(): Record<User['id'], GroupMemberClient['id']> {
     return this.groupMembers.reduce(
       (acc, groupMember) => ({
         ...acc,
         [groupMember.userId]: groupMember.id,
       }),
       {} as Record<UUIDString, UUIDString>
+    );
+  }
+
+  get groupMemberByUserId(): Record<User['id'], GroupMemberModel> {
+    return this.groupMembers.reduce(
+      (acc, groupMember) => ({
+        ...acc,
+        [groupMember.userId]: groupMember,
+      }),
+      {} as Record<UUIDString, GroupMemberModel>
     );
   }
 
