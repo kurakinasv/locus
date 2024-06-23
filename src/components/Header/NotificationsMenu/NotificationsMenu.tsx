@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 
 import { Spacing } from 'components/Spacing';
 import { Stub } from 'components/Stub';
+import { useScreenType } from 'store';
 import { useNotificationsStore } from 'store/RootStore/hooks';
 import { SizeEnum } from 'typings/ui';
 
@@ -19,6 +20,7 @@ type PointerDownOutsideEvent = CustomEvent<{ originalEvent: PointerEvent }>;
 type FocusOutsideEvent = CustomEvent<{ originalEvent: FocusEvent }>;
 
 const NotificationsMenu: React.FC = () => {
+  const isMobile = useScreenType() === 'mobile';
   const { notifications, markAsRead } = useNotificationsStore();
 
   const triggerRef = React.useRef<HTMLButtonElement>(null);
@@ -48,10 +50,10 @@ const NotificationsMenu: React.FC = () => {
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           className={s.content}
-          side="right"
-          align="start"
-          sideOffset={-34}
-          alignOffset={34}
+          side={isMobile ? undefined : 'right'}
+          align={isMobile ? undefined : 'start'}
+          sideOffset={isMobile ? undefined : -34}
+          alignOffset={isMobile ? undefined : 34}
           onInteractOutside={closeDropdown}
         >
           {!notifications.length && <Stub size={SizeEnum.s} />}
