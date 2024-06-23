@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { makeAutoObservable } from 'mobx';
 
-import { ENDPOINTS } from 'config/api';
+import { ENDPOINTS } from 'config/api/endpoints';
 import { USER_STORAGE } from 'config/localStorage';
 import { SnackbarType } from 'config/snackbar';
 import { User } from 'entities/user';
@@ -38,7 +38,7 @@ class AuthStore {
     const currentMember = this._rootStore.groupMemberStore.currentGroupMember;
 
     if (currentMember) {
-      await this._rootStore.groupStore.getGroup(currentMember.groupId);
+      await this._rootStore.groupStore.loadGroup(currentMember.groupId);
     }
 
     this.setAuth(true);
@@ -62,7 +62,7 @@ class AuthStore {
       const currentMember = this._rootStore.groupMemberStore.currentGroupMember;
 
       if (currentMember) {
-        await this._rootStore.groupStore.getGroup(currentMember.groupId);
+        await this._rootStore.groupStore.loadGroup(currentMember.groupId);
       }
 
       this.setAuth(true);

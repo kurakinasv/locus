@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { makeAutoObservable } from 'mobx';
 
-import { ENDPOINTS } from 'config/api';
+import { ENDPOINTS } from 'config/api/endpoints';
 import { NotificationClient, normalizeNotification } from 'entities/notification';
 import { GetNotificationsSingleResponse } from 'entities/notification/types';
 import MetaModel from 'store/models/MetaModel';

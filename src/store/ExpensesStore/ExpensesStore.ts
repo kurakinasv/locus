@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { compareAsc, format } from 'date-fns';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import { ENDPOINTS } from 'config/api';
+import { ENDPOINTS } from 'config/api/endpoints';
 import { axiosInstance } from 'config/api/requests';
 import { SnackbarType } from 'config/snackbar';
 import {

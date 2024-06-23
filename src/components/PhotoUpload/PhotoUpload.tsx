@@ -9,10 +9,11 @@ type Props = {
   image?: string;
   stub?: React.ReactNode;
   name?: string;
+  disabled?: boolean;
   setValue?: (value: File) => void;
 };
 
-const PhotoUpload: React.FC<Props> = ({ image, stub, name, setValue }) => {
+const PhotoUpload: React.FC<Props> = ({ image, stub, name, disabled = false, setValue }) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const uploadPhoto = () => {
@@ -32,7 +33,7 @@ const PhotoUpload: React.FC<Props> = ({ image, stub, name, setValue }) => {
     <div className={s.photo}>
       <Avatar image={image} stub={stub} />
       <Spacing size={1.2} />
-      <Button size={SizeEnum.s} type="button" onClick={uploadPhoto}>
+      <Button size={SizeEnum.s} disabled={disabled} type="button" onClick={uploadPhoto}>
         Загрузить фото
       </Button>
       <input type="file" name={name} hidden ref={inputRef} onChange={onFileChange} />

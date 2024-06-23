@@ -26,11 +26,13 @@ const DefaultConfirm: React.FC<Props> = ({
       <Spacing size={3} />
       <div className={s['confirm__buttons']}>
         {cancelButton && cancelAction && (
-          <Button theme={ButtonTheme.outlined} closesModal stretched onClick={cancelAction}>
-            {cancelButton}
-          </Button>
+          <>
+            <Button theme={ButtonTheme.outlined} closesModal stretched onClick={cancelAction}>
+              {cancelButton}
+            </Button>
+            <Spacing size={1} horizontal />
+          </>
         )}
-        <Spacing size={1} horizontal />
         <Button closesModal stretched onClick={confirmAction}>
           {confirmButton}
         </Button>

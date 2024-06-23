@@ -4,6 +4,5 @@ export type GroupEditParams = {
   name?: string;
   image?: File | null;
   userToDeleteId?: UUIDString;
-  changeRights?: UUIDString[];
-  // TODO: add more fields
+  admins?: UUIDString[];
 };

@@ -1,10 +1,11 @@
 @import 'styles/mixins';
 
+$modal-border-radius: 24px;
+
 .dialog-content {
   position: fixed; // !
   overflow: auto; // Allow scrolling within the modal if content overflows
 
-  @include centerAbsolute;
   z-index: calc(#{$modalZIndex} + 2);
 
   @include square(100%);
@@ -24,6 +25,15 @@
   &__title {
     text-align: center;
   }
+
+  @include mobile {
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  @include mediaScreen($tablet) {
+    @include centerAbsolute;
+  }
 }
 
 .dialog-modal {
@@ -33,12 +43,14 @@
   height: fit-content;
   padding: 3rem 3.6rem;
 
-  border-radius: 24px;
+  border-radius: $modal-border-radius;
 
   @include mobile {
-    height: 100%;
-    padding: 2rem 1.2rem calc(#{$maxMobileHeaderHeight} + 4rem);
-    top: calc(50% + #{$maxMobileHeaderHeight});
+    height: calc(100% - #{$maxMobileHeaderHeight});
+    padding: 2rem 1.2rem calc(#{$modal-border-radius} + 4rem);
+
+    bottom: -#{$modal-border-radius};
+    transform-origin: bottom;
     animation: contentShowMobile 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -105,10 +117,10 @@
 @keyframes contentShowMobile {
   from {
     opacity: 0.5;
-    transform: translate(-50%, 0%);
+    transform: translate(-50%, 50%);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0%);
   }
 }

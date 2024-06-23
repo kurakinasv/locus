@@ -2,21 +2,16 @@ import * as React from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { Button, ButtonTheme, Input, Spacing, Text, Title } from 'components';
+import { Button, GoBackButton, Input, Spacing, Text, Title } from 'components';
+import { routes } from 'config/routes';
 import { useUserStore } from 'store/RootStore/hooks';
-
-import ArrowSVG from 'img/icons/arrow-left.svg?react';
 
 import s from './EnterGroup.module.scss';
 
 const EnterGroup: React.FC = () => {
-  const { joinGroup } = useUserStore();
-
   const nav = useNavigate();
 
-  const goBack = () => {
-    nav(-1);
-  };
+  const { joinGroup, meta } = useUserStore();
 
   const [value, setValue] = React.useState('');
 
@@ -24,15 +19,24 @@ const EnterGroup: React.FC = () => {
     setValue(e.currentTarget.value);
   };
 
-  const onJoinGroup = () => {
-    joinGroup(value);
+  const onJoinGroup = async () => {
+    await joinGroup(value);
+
+    if (location.pathname === routes.joinAnotherGroup.full) {
+      nav(routes.group.full);
+    }
   };
 
   return (
     <div className={s.wrapper}>
       <Title size="h1">Войти в группу</Title>
       <Spacing size={4} />
-      <Input placeholder="Код приглашения" value={value} onChange={onChange} />
+      <Input
+        placeholder="Код приглашения"
+        value={value}
+        onChange={onChange}
+        disabled={meta.joinGroup.loading}
+      />
       <Spacing size={1} />
       <Text className={s.text}>
         Введите код, который вы&nbsp;могли получить от&nbsp;пользователя locus, являющегося
@@ -40,11 +44,9 @@ const EnterGroup: React.FC = () => {
       </Text>
       <Spacing size={5.2} />
       <div className={s.buttons}>
-        <Button theme={ButtonTheme.outlined} onClick={goBack} icon={<ArrowSVG />}>
-          Назад
-        </Button>
+        <GoBackButton disabled={meta.joinGroup.loading} />
         <Spacing size={1} horizontal />
-        <Button onClick={onJoinGroup} disabled={!value}>
+        <Button onClick={onJoinGroup} disabled={!value || meta.joinGroup.loading}>
           Войти
         </Button>
       </div>

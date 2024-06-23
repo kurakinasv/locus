@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import { ENDPOINTS } from 'config/api';
+import { ENDPOINTS } from 'config/api/endpoints';
 import { SnackbarType } from 'config/snackbar';
 import { Chore } from 'entities/chore';
 import { ChoreCreateParams, ChoreEditParams, ChoresGetParams } from 'entities/chore/params';

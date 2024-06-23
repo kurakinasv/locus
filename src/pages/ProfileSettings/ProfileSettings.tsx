@@ -1,23 +1,28 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useEffect } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-import { Spacing, Button, Title } from 'components';
+import { Spacing, Title, GoBackButton } from 'components';
+import { routes } from 'config/routes';
 import { useUserStore } from 'store/RootStore/hooks';
 
-import { SettingsForm, ButtonGroup } from './components';
+import { SettingsForm, ButtonGroup, GroupSelection } from './components';
 
 import s from './ProfileSettings.module.scss';
 
 const ProfileSettings: FC = () => {
-  const nav = useNavigate();
+  const location = useLocation();
 
-  const { user } = useUserStore();
+  const ref = React.useRef<HTMLDivElement>(null);
 
-  const onGoBack = useCallback(() => {
-    nav(-1);
+  useEffect(() => {
+    if (location.state?.from === routes.entry.full && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+    }
   }, []);
+
+  const { user, userGroups } = useUserStore();
 
   if (!user) {
     return;
@@ -28,11 +33,16 @@ const ProfileSettings: FC = () => {
       <Spacing size={6} />
       <Title size="h1">Настройки</Title>
       <Spacing size={3} />
+      <GoBackButton />
+      <Spacing size={2} />
       <SettingsForm />
-      <Spacing size={1.5} />
-      <Button onClick={onGoBack} stretched>
-        Назад
-      </Button>
+      {!!userGroups.length && (
+        <>
+          <Spacing size={2.5} />
+          <div ref={ref} />
+          <GroupSelection />
+        </>
+      )}
       <Spacing size={4.5} />
       <ButtonGroup />
     </div>

@@ -52,6 +52,9 @@ export default defineConfig((({ mode }) => {
     ],
     server: {
       host: true,
+      proxy: {
+        '/static': 'http://localhost:3000',
+      },
     },
     css: {
       modules: {

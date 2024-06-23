@@ -11,3 +11,9 @@ export type LoginParams = {
   email: User['email'];
   password: string;
 };
+
+export type EditProfileParams = {
+  name?: User['name'];
+  surname?: User['surname'];
+  photo?: File | null;
+};

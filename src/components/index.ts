@@ -39,3 +39,7 @@ export * from './WarningBlock';
 export * from './Stub';
 
 export * from './Spinner';
+
+export * from './GoBackButton';
+
+export * from './ThematicBlock';

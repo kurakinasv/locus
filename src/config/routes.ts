@@ -4,6 +4,8 @@ export enum RouterPaths {
   entry = 'entry',
   createGroup = 'createGroup',
   enterGroup = 'enterGroup',
+  createAnotherGroup = 'createAnotherGroup',
+  joinAnotherGroup = 'joinAnotherGroup',
   group = 'group',
   chores = 'chores',
   expenses = 'expenses',
@@ -37,6 +39,14 @@ export const routes: {
   enterGroup: {
     mask: RouterPaths.enterGroup,
     full: `/${RouterPaths.entry}/${RouterPaths.enterGroup}`,
+  },
+  createAnotherGroup: {
+    mask: RouterPaths.createGroup,
+    full: `/${RouterPaths.createGroup}`,
+  },
+  joinAnotherGroup: {
+    mask: RouterPaths.enterGroup,
+    full: `/${RouterPaths.enterGroup}`,
   },
   group: {
     mask: RouterPaths.group,

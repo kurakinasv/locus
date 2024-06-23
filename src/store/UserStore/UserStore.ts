@@ -1,14 +1,15 @@
 import axios from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import { ENDPOINTS } from 'config/api';
+import { ENDPOINTS } from 'config/api/endpoints';
 import { axiosInstance } from 'config/api/requests';
 import { SnackbarType } from 'config/snackbar';
 import { GroupServer } from 'entities/group';
 import { GroupMemberServer } from 'entities/groupMember';
-import { User } from 'entities/user';
+import { EditProfileParams } from 'entities/user/params';
 import { UserServer } from 'entities/user/server';
 import GroupMemberModel from 'store/models/GroupMemberModel';
+import MetaModel from 'store/models/MetaModel';
 import { UserModel } from 'store/models/UserModel';
 import RootStore from 'store/RootStore';
 import { UUIDString } from 'typings/api';
@@ -18,10 +19,15 @@ import { responseIsOk } from 'utils/responseIsOk';
 class UserStore {
   private readonly _rootStore: RootStore;
 
+  readonly meta = {
+    editProfile: new MetaModel(),
+    joinGroup: new MetaModel(),
+  };
+
   user: UserModel | null = null;
   inGroup = false;
   userDebtInGroup: number | null = null;
-  userGroups: GroupMemberModel[] = [];
+  userMemberships: GroupMemberModel[] = [];
 
   constructor(rootStore: RootStore) {
     this._rootStore = rootStore;
@@ -34,12 +40,20 @@ class UserStore {
     return this.userDebtInGroup;
   }
 
-  setUser(user: User | null) {
-    this.user = user ? new UserModel(user) : null;
+  get userGroups() {
+    return this.userMemberships.map((membership) => membership.groupId);
+  }
+
+  setUser(user: UserModel | null) {
+    this.user = user;
   }
 
   setInGroup = (inGroup: boolean) => {
     this.inGroup = inGroup;
+  };
+
+  setUserMemberships = (memberships: GroupMemberServer[]) => {
+    this.userMemberships = memberships.map((membership) => new GroupMemberModel(membership));
   };
 
   getUser = async () => {
@@ -49,7 +63,7 @@ class UserStore {
       });
 
       if (responseIsOk(response)) {
-        this.setUser(response.data);
+        this.setUser(new UserModel(response.data));
 
         await this.getUserDebtInGroup();
 
@@ -59,6 +73,49 @@ class UserStore {
       this._rootStore.uiStore.snackbar.open(SnackbarType.error);
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
+
+  editUser = async ({ name, surname, photo }: EditProfileParams) => {
+    try {
+      this.meta.editProfile.startLoading();
+
+      const toSend = new FormData();
+
+      if (photo !== undefined) {
+        toSend.append('files', photo ?? '');
+      }
+      if (name !== undefined) {
+        toSend.append('name', name.trim());
+      }
+      if (surname !== undefined) {
+        toSend.append('surname', surname.trim());
+      }
+
+      const response = await axiosInstance.put<UserServer | null>(
+        ENDPOINTS.editProfile.url,
+        toSend,
+        { withCredentials: true }
+      );
+
+      if (!responseIsOk(response)) {
+        this.meta.editProfile.setIsError(true);
+        return;
+      }
+
+      // If no changes were made
+      if (!response.data) {
+        this.setUser(this.user);
+        this.meta.editProfile.stopLoading();
+        return;
+      }
+
+      this.setUser(new UserModel(response.data));
+      this._rootStore.uiStore.snackbar.open(SnackbarType.profileEdited);
+      this.meta.editProfile.stopLoading();
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+      this.meta.editProfile.setIsError(true);
     }
   };
 
@@ -118,11 +175,13 @@ class UserStore {
 
   joinGroup = async (code: UUIDString) => {
     try {
-      const response = await axios.post<{ group: GroupServer; userInGroup: GroupMemberServer }>(
-        ENDPOINTS.joinGroup.url,
-        { code },
-        { withCredentials: true }
-      );
+      const response = await axios.post<{
+        group: GroupServer;
+        userInGroup: GroupMemberServer;
+        userMemberships: GroupMemberServer[];
+      }>(ENDPOINTS.joinGroup.url, { code }, { withCredentials: true });
+
+      console.log('joinGroup', response.data.userMemberships);
 
       if (responseIsOk(response)) {
         this.setInGroup(true);
@@ -131,6 +190,7 @@ class UserStore {
           ...this._rootStore.groupMemberStore.groupMembers,
           response.data.userInGroup,
         ]);
+        this.setUserMemberships(response.data.userMemberships);
 
         return;
       }
@@ -148,7 +208,7 @@ class UserStore {
 
       if (responseIsOk(response)) {
         runInAction(() => {
-          this.userGroups = response.data;
+          this.setUserMemberships(response.data);
         });
 
         return response.data;

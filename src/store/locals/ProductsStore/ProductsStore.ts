@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { makeAutoObservable } from 'mobx';
 
-import { ENDPOINTS } from 'config/api';
+import { ENDPOINTS } from 'config/api/endpoints';
 import { axiosInstance } from 'config/api/requests';
 import { Product, ProductServer } from 'entities/product';
 import { normalizeProduct } from 'entities/product/normalize';

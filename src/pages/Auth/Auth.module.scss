@@ -15,7 +15,12 @@
 
   @include mobile {
     width: 100%;
+    padding: 3rem 1.4rem 3.6rem;
   }
+}
+
+.link-wrapper {
+  text-align: center;
 }
 
 .baselink {

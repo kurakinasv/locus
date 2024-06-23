@@ -9,3 +9,16 @@
 .wrapper {
   max-width: 47.4rem;
 }
+
+.enter-button {
+  .arrow-icon {
+    transform: rotate(180deg);
+    @include animate(transform);
+  }
+
+  @include hover {
+    .arrow-icon {
+      transform: translateX(4px) rotate(180deg);
+    }
+  }
+}

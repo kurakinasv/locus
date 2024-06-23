@@ -18,6 +18,7 @@ class MetaModel {
 
   setIsError = (error: boolean) => {
     this.error = error;
+    this.stopLoading();
   };
 }
 

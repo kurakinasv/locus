@@ -6,5 +6,6 @@ export type OptionType<TValue extends string | number> = {
 export enum SizeEnum {
   s = 's',
   m = 'm',
+  l = 'l',
   xl = 'xl',
 }

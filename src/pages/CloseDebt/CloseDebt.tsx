@@ -3,9 +3,9 @@ import * as React from 'react';
 import { format } from 'date-fns';
 import { enUS, ru } from 'date-fns/locale';
 import { observer } from 'mobx-react-lite';
-import { useNavigate } from 'react-router-dom';
 
 import { Button, ButtonTheme } from 'components/Button';
+import { GoBackButton } from 'components/GoBackButton';
 import { ModalEnum } from 'components/modals';
 import { Price } from 'components/Price';
 import { Spacing } from 'components/Spacing';
@@ -19,7 +19,6 @@ import { useScreenType } from 'store';
 import { useExpensesStore, useUIStore } from 'store/RootStore/hooks';
 import { SizeEnum } from 'typings/ui';
 
-import ArrowIcon from 'img/icons/arrow-left.svg?react';
 import MoneyIcon from 'img/icons/money.svg?react';
 
 import { ExpenseItem } from './ExpenseItem';
@@ -27,7 +26,6 @@ import { ExpenseItem } from './ExpenseItem';
 import s from './CloseDebt.module.scss';
 
 const CloseDebt: React.FC = () => {
-  const nav = useNavigate();
   const { openModal } = useUIStore();
 
   const {
@@ -46,19 +44,13 @@ const CloseDebt: React.FC = () => {
     getUsersDebts();
   }, []);
 
-  const onGoBack = () => {
-    nav(-1);
-  };
-
   const onCloseDebt = (expense: ExpenseWithDebt) => () => {
     openModal(ModalEnum.expensesCloseDebt, { expense });
   };
 
   return (
     <div>
-      <Button icon={<ArrowIcon />} onClick={onGoBack} stretched={!isDesktop}>
-        На страницу расходов
-      </Button>
+      <GoBackButton label="На страницу расходов" stretched={!isDesktop} />
       <Spacing size={isDesktop ? 3.2 : 2} />
 
       <Title size="h2">Статистика группы</Title>

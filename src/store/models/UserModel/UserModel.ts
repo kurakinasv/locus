@@ -3,17 +3,15 @@ import { makeAutoObservable } from 'mobx';
 import { User } from 'entities/user';
 import { UUIDString } from 'typings/api';
 
-// todo: add more fields
 class UserModel implements User {
   id: UUIDString;
   name?: string;
   surname?: string;
   username: string;
   email: string;
-  // image?: string;
-  // phone?: string;
-  // birthday?: string;
-  // createdAt: string;
+  image: string | null;
+  phone: string | null;
+  birthday: string | null;
   // adminInGroups: number[];
 
   constructor(user: User) {
@@ -24,10 +22,9 @@ class UserModel implements User {
     this.surname = user.surname;
     this.username = user.username;
     this.email = user.email;
-    // this.image = user.image;
-    // this.phone = user.phone;
-    // this.birthday = user.birthday;
-    // this.createdAt = user.createdAt;
+    this.image = user.image;
+    this.phone = user.phone;
+    this.birthday = user.birthday;
     // this.adminInGroups = user.adminInGroups || [];
   }
 }

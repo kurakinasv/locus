@@ -1,4 +1,4 @@
-import { UUIDString } from 'typings/api';
+import { DateString, UUIDString } from 'typings/api';
 
 export type User = {
   id: UUIDString;
@@ -6,9 +6,8 @@ export type User = {
   surname?: string;
   username: string;
   email: string;
-  // image?: string;
-  // phone?: string;
-  // birthday?: string;
-  // createdAt: string;
+  image: string | null;
+  phone: string | null;
+  birthday: DateString | null;
   // adminInGroups?: number[];
 };

@@ -1,13 +1,17 @@
 @import 'styles/mixins';
 
 .copy {
-  & > input {
+  & input {
     &:hover {
       background-color: $turquoise100;
     }
 
-    cursor: pointer;
-
     @include animate(background-color);
   }
+}
+
+.text {
+  font-family: $avenirNext;
+  line-height: 1.8rem;
+  color: $greyMain;
 }

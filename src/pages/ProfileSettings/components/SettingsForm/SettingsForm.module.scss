@@ -6,3 +6,8 @@
   flex-direction: column;
   width: 100%;
 }
+
+.stub {
+  @include square(100%);
+  color: $turquoiseMain;
+}

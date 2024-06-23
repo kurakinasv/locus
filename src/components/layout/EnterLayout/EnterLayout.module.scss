@@ -27,7 +27,7 @@
   &::after {
     content: '';
     display: block;
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100vh;
     background: radial-gradient(circle, rgba(208, 241, 242, 0.8) 0%, rgba($white, 0) 50%);
@@ -44,7 +44,7 @@
 
   .content {
     width: 100%;
-    padding-bottom: 25%;
+    padding-bottom: 20%;
 
     @include flexCenter;
     flex-direction: column;

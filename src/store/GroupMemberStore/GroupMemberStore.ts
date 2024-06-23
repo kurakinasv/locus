@@ -1,17 +1,26 @@
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import { ENDPOINTS } from 'config/api';
+import { ENDPOINTS } from 'config/api/endpoints';
+import { CustomErrorCode } from 'config/api/errorCodes';
 import { SnackbarType } from 'config/snackbar';
+import { GroupServer } from 'entities/group';
 import { GroupMemberClient, GroupMemberServer } from 'entities/groupMember';
+import { User } from 'entities/user';
 import GroupMemberModel from 'store/models/GroupMemberModel';
+import MetaModel from 'store/models/MetaModel';
 import RootStore from 'store/RootStore';
 import { DefaultId, UUIDString } from 'typings/api';
 import { getErrorMsg } from 'utils/getErrorMsg';
+import { logError } from 'utils/logError';
 import { responseIsOk } from 'utils/responseIsOk';
 
 class GroupMemberStore {
   private readonly _rootStore: RootStore;
+
+  readonly meta = {
+    switchGroup: new MetaModel(),
+  };
 
   groupMembers: GroupMemberModel[] = [];
 
@@ -31,13 +40,23 @@ class GroupMemberStore {
     return foundUser ? new GroupMemberModel(foundUser) : null;
   }
 
-  get userGroupIdByUserId() {
+  get userGroupIdByUserId(): Record<User['id'], GroupMemberClient['id']> {
     return this.groupMembers.reduce(
       (acc, groupMember) => ({
         ...acc,
         [groupMember.userId]: groupMember.id,
       }),
       {} as Record<UUIDString, UUIDString>
+    );
+  }
+
+  get groupMemberByUserId(): Record<User['id'], GroupMemberModel> {
+    return this.groupMembers.reduce(
+      (acc, groupMember) => ({
+        ...acc,
+        [groupMember.userId]: groupMember,
+      }),
+      {} as Record<UUIDString, GroupMemberModel>
     );
   }
 
@@ -74,7 +93,11 @@ class GroupMemberStore {
         });
       }
     } catch (error) {
-      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+      if (isAxiosError(error) && error.response?.data.code === CustomErrorCode.userNotInAnyGroup) {
+        return;
+      }
+
+      logError(error);
     }
   };
 
@@ -92,10 +115,17 @@ class GroupMemberStore {
         return response.data;
       }
     } catch (error) {
-      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+      // userNotInAnyGroup error
+      if (isAxiosError(error) && error.response?.status === 400) {
+        return;
+      }
+
+      logError(error);
     }
   };
 
+  // todo: remove?
+  /** Get expenses (debts) of all group members */
   getGroupUserExpenses = async () => {
     if (!this.groupMembersIds.length) {
       return;
@@ -105,9 +135,7 @@ class GroupMemberStore {
       // { userId: { expenseId: debtAmount }, userId2: { expenseId: debtAmount }, ...}
       const response = await axios.get<Record<UUIDString, Record<DefaultId, number>>>(
         ENDPOINTS.getGroupUserExpenses.url,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
 
       if (responseIsOk(response)) {
@@ -135,6 +163,33 @@ class GroupMemberStore {
       this._rootStore.uiStore.snackbar.open(SnackbarType.error);
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+    }
+  };
+
+  switchGroup = async (groupId: UUIDString) => {
+    try {
+      this.meta.switchGroup.startLoading();
+
+      const response = await axios.put<{
+        group: GroupServer;
+        userInGroup: GroupMemberServer;
+        members: GroupMemberServer[];
+      }>(ENDPOINTS.switchGroup.url, { groupId }, { withCredentials: true });
+
+      if (responseIsOk(response)) {
+        this._rootStore.userStore.setInGroup(true);
+        this._rootStore.groupStore.setGroup(response.data.group);
+        this.setGroupMembers(response.data.members);
+
+        runInAction(() => {
+          this.currentMember = new GroupMemberModel(response.data.userInGroup);
+        });
+
+        this.meta.switchGroup.stopLoading();
+      }
+    } catch (error) {
+      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+      this.meta.switchGroup.setIsError(true);
     }
   };
 }
