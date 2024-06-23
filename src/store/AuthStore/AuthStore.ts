@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { makeAutoObservable } from 'mobx';
 
-import { ENDPOINTS } from 'config/api';
+import { ENDPOINTS } from 'config/api/endpoints';
 import { USER_STORAGE } from 'config/localStorage';
 import { SnackbarType } from 'config/snackbar';
 import { User } from 'entities/user';

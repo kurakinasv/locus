@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import { ENDPOINTS } from 'config/api';
+import { ENDPOINTS } from 'config/api/endpoints';
 import { axiosInstance } from 'config/api/requests';
 import { SnackbarType } from 'config/snackbar';
 import { GroupServer } from 'entities/group';
@@ -180,6 +180,8 @@ class UserStore {
         userInGroup: GroupMemberServer;
         userMemberships: GroupMemberServer[];
       }>(ENDPOINTS.joinGroup.url, { code }, { withCredentials: true });
+
+      console.log('joinGroup', response.data.userMemberships);
 
       if (responseIsOk(response)) {
         this.setInGroup(true);
