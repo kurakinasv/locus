@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { Spacing } from 'components';
 import { useGroupMemberStore, useGroupStore, useUserStore } from 'store/RootStore/hooks';
 
-import { AddMember, CommonSettings, RemoveMember, RightsSettings } from './components';
+import { AddMember, CommonSettings, Footer, RemoveMember, RightsSettings } from './components';
 
 import s from './GroupSettings.module.scss';
 
@@ -18,7 +18,6 @@ const GroupSettings: FC = () => {
     return null;
   }
 
-  // todo: delete group, exit from group
   return (
     <div className={s.wrapper}>
       <CommonSettings />
@@ -36,8 +35,8 @@ const GroupSettings: FC = () => {
           )}
         </>
       )}
-      {/* <Spacing size={3.5} /> */}
-      {/* <Footer /> */}
+      <Spacing size={3.5} />
+      <Footer />
       <Spacing size={6} />
     </div>
   );

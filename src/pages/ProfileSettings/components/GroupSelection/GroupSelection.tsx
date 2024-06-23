@@ -1,11 +1,13 @@
 import * as React from 'react';
 
+import cn from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
 
 import { Button, ButtonTheme, Spacing, Text, ThematicBlock } from 'components';
 import { MAX_GROUPS } from 'config/group';
 import { routes } from 'config/routes';
+import { useScreenType } from 'store';
 import GroupModel from 'store/models/GroupModel';
 import { useGroupMemberStore, useGroupStore, useUserStore } from 'store/RootStore/hooks';
 
@@ -15,6 +17,7 @@ import s from './GroupSelection.module.scss';
 
 const GroupSelection: React.FC = () => {
   const nav = useNavigate();
+  const isDesktop = useScreenType() === 'desktop';
 
   const { group, getGroup } = useGroupStore();
   const { userGroups } = useUserStore();
@@ -40,21 +43,17 @@ const GroupSelection: React.FC = () => {
     });
   }, [userGroups]);
 
-  if (!group) {
-    return null;
-  }
-
   return (
     <ThematicBlock title="Изменить текущую группу">
-      <div className={s.cards}>
+      <div className={cn(s.cards, groups.length === 3 && isDesktop && s.cards_stretch)}>
         {groups.map(({ id, name, image }) => (
           <GroupCard
             key={id}
             name={name}
             image={image ?? undefined}
             onClick={() => switchGroup(id)}
-            disabled={meta.switchGroup.loading || group.id === id}
-            selected={group.id === id}
+            disabled={meta.switchGroup.loading || group?.id === id}
+            selected={group?.id === id}
           />
         ))}
       </div>

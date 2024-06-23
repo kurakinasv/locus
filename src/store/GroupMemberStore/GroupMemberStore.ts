@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import { ENDPOINTS } from 'config/api/endpoints';
+import { CustomErrorCode } from 'config/api/errorCodes';
 import { SnackbarType } from 'config/snackbar';
 import { GroupServer } from 'entities/group';
 import { GroupMemberClient, GroupMemberServer } from 'entities/groupMember';
@@ -11,6 +12,7 @@ import MetaModel from 'store/models/MetaModel';
 import RootStore from 'store/RootStore';
 import { DefaultId, UUIDString } from 'typings/api';
 import { getErrorMsg } from 'utils/getErrorMsg';
+import { logError } from 'utils/logError';
 import { responseIsOk } from 'utils/responseIsOk';
 
 class GroupMemberStore {
@@ -91,7 +93,11 @@ class GroupMemberStore {
         });
       }
     } catch (error) {
-      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+      if (isAxiosError(error) && error.response?.data.code === CustomErrorCode.userNotInAnyGroup) {
+        return;
+      }
+
+      logError(error);
     }
   };
 
@@ -109,7 +115,12 @@ class GroupMemberStore {
         return response.data;
       }
     } catch (error) {
-      this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+      // userNotInAnyGroup error
+      if (isAxiosError(error) && error.response?.status === 400) {
+        return;
+      }
+
+      logError(error);
     }
   };
 

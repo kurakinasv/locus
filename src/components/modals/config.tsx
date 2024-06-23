@@ -8,6 +8,7 @@ import { ExpensesAdd } from './views/ExpensesAdd';
 import { ExpensesCloseDebt } from './views/ExpensesCloseDebt';
 import { ExpensesDelete } from './views/ExpensesDelete';
 import { ExpensesEdit } from './views/ExpensesEdit';
+import { GroupAdminAlert } from './views/GroupAdminAlert';
 import { GroupDebtsAlert } from './views/GroupDebtsAlert';
 import { GroupDelete } from './views/GroupDelete';
 import { GroupExit } from './views/GroupExit';
@@ -45,6 +46,8 @@ export enum ModalEnum {
   groupExit = 'group-exit',
   groupDelete = 'group-delete',
   groupDebtsAlert = 'group-debts-alert',
+  groupAdminAlert = 'group-admin-alert',
+
   archiveChore = 'archive-chore',
   deleteSchedule = 'delete-schedule',
 }
@@ -115,6 +118,10 @@ export const ModalConfig: Record<ModalEnum, ModalConfigType> = {
   },
   [ModalEnum.groupDebtsAlert]: {
     component: <GroupDebtsAlert />,
+    confirm: true,
+  },
+  [ModalEnum.groupAdminAlert]: {
+    component: <GroupAdminAlert />,
     confirm: true,
   },
   [ModalEnum.archiveChore]: {

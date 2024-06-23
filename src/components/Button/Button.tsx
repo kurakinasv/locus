@@ -14,6 +14,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   children?: ReactNode;
   className?: string;
   icon?: ReactNode;
+  after?: ReactNode;
   disabled?: boolean;
   loading?: boolean;
   stretched?: boolean;
@@ -30,6 +31,7 @@ const Button: FC<Props> = React.forwardRef<HTMLButtonElement, Props>(
       children,
       className,
       icon,
+      after,
       disabled,
       loading,
       stretched,
@@ -65,6 +67,8 @@ const Button: FC<Props> = React.forwardRef<HTMLButtonElement, Props>(
         {icon && <div className={s.icon}>{icon}</div>}
         {icon && children && <Spacing horizontal />}
         <span className={s.label}>{children}</span>
+        {after && <Spacing horizontal />}
+        {after && <div className={s.icon}>{after}</div>}
       </>
     );
 

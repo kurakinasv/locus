@@ -1,8 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 
 import { observer } from 'mobx-react-lite';
+import { useLocation } from 'react-router-dom';
 
 import { Spacing, Title, GoBackButton } from 'components';
+import { routes } from 'config/routes';
 import { useUserStore } from 'store/RootStore/hooks';
 
 import { SettingsForm, ButtonGroup, GroupSelection } from './components';
@@ -10,7 +12,17 @@ import { SettingsForm, ButtonGroup, GroupSelection } from './components';
 import s from './ProfileSettings.module.scss';
 
 const ProfileSettings: FC = () => {
-  const { user, inGroup } = useUserStore();
+  const location = useLocation();
+
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (location.state?.from === routes.entry.full && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
+
+  const { user, userGroups } = useUserStore();
 
   if (!user) {
     return;
@@ -24,9 +36,10 @@ const ProfileSettings: FC = () => {
       <GoBackButton />
       <Spacing size={2} />
       <SettingsForm />
-      {inGroup && (
+      {!!userGroups.length && (
         <>
           <Spacing size={2.5} />
+          <div ref={ref} />
           <GroupSelection />
         </>
       )}

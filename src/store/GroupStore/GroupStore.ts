@@ -20,6 +20,7 @@ class GroupStore {
     createGroup: new MetaModel(),
     switchGroup: new MetaModel(),
     editGroup: new MetaModel(),
+    deleteGroup: new MetaModel(),
   };
 
   group: GroupModel | null = null;
@@ -185,10 +186,11 @@ class GroupStore {
     }
   };
 
-  // todo: implement to ui
   deleteGroup = async () => {
     try {
-      const response = await axios.delete<GroupServer>(ENDPOINTS.deleteGroup.url, {
+      this.meta.deleteGroup.startLoading();
+
+      const response = await axios.delete<{ message: string }>(ENDPOINTS.deleteGroup.url, {
         withCredentials: true,
       });
 
@@ -196,8 +198,11 @@ class GroupStore {
         this._rootStore.userStore.setInGroup(false);
         this.setGroup(null);
       }
+
+      this.meta.deleteGroup.stopLoading();
     } catch (error) {
       this._rootStore.uiStore.snackbar.openError(getErrorMsg(error));
+      this.meta.deleteGroup.setIsError(true);
     }
   };
 
